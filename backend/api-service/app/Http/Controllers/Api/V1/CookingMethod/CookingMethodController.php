@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\Api\V1\CookingMethod;
+namespace app\Http\Controllers\Api\V1\CookingMethod;
 
-use App\Http\Controllers\Controller;
+use app\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\CookingMethod\StoreCookingMethodRequest;
 use App\Http\Requests\Api\V1\CookingMethod\UpdateCookingMethodRequest;
 use App\Http\Resources\Api\V1\CookingMethod\CookingMethodCollection;

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\Api\V1\Fridge;
+namespace app\Http\Controllers\Api\V1\Fridge;
 
-use App\Http\Controllers\Controller;
+use app\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\Fridge\StoreFridgeRequest;
 use App\Http\Requests\Api\V1\Fridge\UpdateFridgeRequest;
 use App\Http\Resources\Api\V1\Fridge\FridgeCollection;

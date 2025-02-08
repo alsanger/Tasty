@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\Api\V1\CookingPlan;
+namespace app\Http\Controllers\Api\V1\CookingPlan;
 
-use App\Http\Controllers\Controller;
+use app\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\CookingPlan\StoreCookingPlanRequest;
 use App\Http\Requests\Api\V1\CookingPlan\UpdateCookingPlanRequest;
 use App\Http\Resources\Api\V1\CookingPlan\CookingPlanCollection;

@@ -1,20 +1,20 @@
 <?php
 
-use App\Http\Controllers\Api\V1\Category\CategoryController;
-use App\Http\Controllers\Api\V1\CookingMethod\CookingMethodController;
-use App\Http\Controllers\Api\V1\CookingPlan\CookingPlanController;
-use App\Http\Controllers\Api\V1\Country\CountryController;
-use App\Http\Controllers\Api\V1\Fridge\FridgeController;
-use App\Http\Controllers\Api\V1\Ingredient\IngredientController;
-use App\Http\Controllers\Api\V1\Recipe\RecipeController;
-use App\Http\Controllers\Api\V1\Recipe\RecipeSearchController;
-use App\Http\Controllers\Api\V1\RecipeStep\RecipeStepController;
-use App\Http\Controllers\Api\V1\Review\ReviewController;
-use App\Http\Controllers\Api\V1\Unit\UnitController;
-use App\Http\Controllers\Api\V1\User\AuthController;
-use App\Http\Controllers\Api\V1\User\EmailVerificationController;
-use App\Http\Controllers\Api\V1\User\FollowController;
-use App\Http\Controllers\Api\V1\User\UserController;
+use app\Http\Controllers\Api\V1\Category\CategoryController;
+use app\Http\Controllers\Api\V1\CookingMethod\CookingMethodController;
+use app\Http\Controllers\Api\V1\CookingPlan\CookingPlanController;
+use app\Http\Controllers\Api\V1\Country\CountryController;
+use app\Http\Controllers\Api\V1\Fridge\FridgeController;
+use app\Http\Controllers\Api\V1\Ingredient\IngredientController;
+use app\Http\Controllers\Api\V1\Recipe\RecipeController;
+use app\Http\Controllers\Api\V1\Recipe\RecipeSearchController;
+use app\Http\Controllers\Api\V1\RecipeStep\RecipeStepController;
+use app\Http\Controllers\Api\V1\Review\ReviewController;
+use app\Http\Controllers\Api\V1\Unit\UnitController;
+use app\Http\Controllers\Api\V1\User\AuthController;
+use app\Http\Controllers\Api\V1\User\EmailVerificationController;
+use app\Http\Controllers\Api\V1\User\FollowController;
+use app\Http\Controllers\Api\V1\User\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'v1'], function () {
