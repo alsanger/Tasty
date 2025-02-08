@@ -1,8 +1,8 @@
 <?php
 
-namespace app\Http\Controllers\Api\V1\Review;
+namespace App\Http\Controllers\Api\V1\Review;
 
-use app\Http\Controllers\Controller;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\Review\StoreReviewRequest;
 use App\Http\Requests\Api\V1\Review\UpdateReviewRequest;
 use App\Http\Resources\Api\V1\Review\ReviewCollection;

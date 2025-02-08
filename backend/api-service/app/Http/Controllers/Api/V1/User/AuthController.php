@@ -1,8 +1,8 @@
 <?php
 
-namespace app\Http\Controllers\Api\V1\User;
+namespace App\Http\Controllers\Api\V1\User;
 
-use app\Http\Controllers\Controller;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\PasswordRecovery\ForgotPasswordRequest;
 use App\Http\Requests\Api\V1\PasswordRecovery\ResetPasswordRequest;
 use App\Http\Requests\Api\V1\User\LoginRequest;

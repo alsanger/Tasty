@@ -1,8 +1,8 @@
 <?php
 
-namespace app\Http\Controllers\Api\V1\RecipeStep;
+namespace App\Http\Controllers\Api\V1\RecipeStep;
 
-use app\Http\Controllers\Controller;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\RecipeStep\StoreRecipeStepRequest;
 use App\Http\Requests\Api\V1\RecipeStep\UpdateRecipeStepRequest;
 use App\Http\Resources\Api\V1\RecipeStep\RecipeStepCollection;

@@ -1,8 +1,8 @@
 <?php
 
-namespace app\Http\Controllers\Api\V1\Ingredient;
+namespace App\Http\Controllers\Api\V1\Ingredient;
 
-use app\Http\Controllers\Controller;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\Ingredient\StoreIngredientRequest;
 use App\Http\Requests\Api\V1\Ingredient\UpdateIngredientRequest;
 use App\Http\Resources\Api\V1\Ingredient\IngredientCollection;
