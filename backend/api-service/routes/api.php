@@ -23,6 +23,12 @@ Route::group(['prefix' => 'v1'], function () {
     Route::post('/login', [AuthController::class, 'login'])  // Аутентификация пользователя
         ->name('login');
 
+    // Маршруты для полученния данных для отображения на главной странице
+    Route::get('/recipes/top-by-period', [RecipeSearchController::class, 'topByPeriod']); // Получение списка топовых рецептов за определенный период
+    Route::get('/recipes/newest', [RecipeSearchController::class, 'newest']); // Получение списка самых новых рецептов
+    Route::get('/recipes/top-rated', [RecipeSearchController::class, 'topRated']); // Получение списка самых рейтинговых рецептов
+    Route::get('/top-authors', [RecipeSearchController::class, 'topAuthors']); // Получение списка пользователей с наибольшим количеством подписок
+
     // Маршруты для работы с категориями рецептов:
     Route::get('/categories', [CategoryController::class, 'index']);  // Получение списка категорий
     Route::get('/categories/{category}', [CategoryController::class, 'show']); // Получение одной категории

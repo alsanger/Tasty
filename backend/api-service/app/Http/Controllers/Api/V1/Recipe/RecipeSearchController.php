@@ -12,6 +12,7 @@ use App\Http\Resources\Api\V1\User\UserCollection;
 use App\Models\Recipe;
 use App\Models\User;
 use App\Services\RecipeService;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class RecipeSearchController extends Controller
 {
@@ -150,52 +151,65 @@ class RecipeSearchController extends Controller
         return new RecipeCollection($recipes);
     }
 
-    public function topDay(TopRecipesRequest $request): RecipeCollection
+    public function topByPeriod(TopRecipesRequest $request): RecipeCollection
     {
-        $query = Recipe::query()
-            ->with(['user', 'category', 'cookingMethod', 'country', 'ingredients', 'ingredients.unit', 'recipeSteps', 'reviews'])
-            ->whereHas('reviews', function($query) {
-                $query->where('created_at', '>=', now()->subDay());
-            })
-            ->get()
-            ->sortByDesc(function($recipe) {
-                return RecipeService::calculateRating($recipe);
-            })
-            ->take(1);
+        $limit = $request->input('limit', 1);
+        $requestedDays = $request->input('days');
 
-        return new RecipeCollection($query);
-    }
+        $recipes = collect();
+        $days = $requestedDays;
 
-    public function topWeek(TopRecipesRequest $request): RecipeCollection
-    {
-        $query = Recipe::query()
-            ->with(['user', 'category', 'cookingMethod', 'country', 'ingredients', 'ingredients.unit', 'recipeSteps', 'reviews'])
-            ->whereHas('reviews', function($query) {
-                $query->where('created_at', '>=', now()->subWeek());
-            })
-            ->get()
-            ->sortByDesc(function($recipe) {
-                return RecipeService::calculateRating($recipe);
-            })
-            ->take(1);
+        // Будем расширять период поиска, пока не найдем хотя бы один рецепт
+        while ($recipes->isEmpty() && $days <= 365) {
+            $recipes = Recipe::query()
+                ->with(['user', 'category', 'cookingMethod', 'country', 'ingredients', 'ingredients.unit', 'recipeSteps', 'reviews'])
+                ->whereHas('reviews', function($query) use ($days) {
+                    $query->where('created_at', '>=', now()->subDays($days));
+                })
+                ->get()
+                ->sortByDesc(function($recipe) {
+                    return RecipeService::calculateRating($recipe);
+                })
+                ->take($limit)
+                ->values();
 
-        return new RecipeCollection($query);
-    }
+            // Если ничего не нашли, удваиваем период
+            if ($recipes->isEmpty()) {
+                $days *= 2;
+            }
+        }
 
-    public function topMonth(TopRecipesRequest $request): RecipeCollection
-    {
-        $query = Recipe::query()
-            ->with(['user', 'category', 'cookingMethod', 'country', 'ingredients', 'ingredients.unit', 'recipeSteps', 'reviews'])
-            ->whereHas('reviews', function($query) {
-                $query->where('created_at', '>=', now()->subMonth());
-            })
-            ->get()
-            ->sortByDesc(function($recipe) {
-                return RecipeService::calculateRating($recipe);
-            })
-            ->take(1);
+        // Если всё ещё пусто после всех попыток, берем лучшие рецепты за всё время
+        if ($recipes->isEmpty()) {
+            $recipes = Recipe::query()
+                ->with(['user', 'category', 'cookingMethod', 'country', 'ingredients', 'ingredients.unit', 'recipeSteps', 'reviews'])
+                ->whereHas('reviews')
+                ->get()
+                ->sortByDesc(function($recipe) {
+                    return RecipeService::calculateRating($recipe);
+                })
+                ->take($limit)
+                ->values();
+        }
 
-        return new RecipeCollection($query);
+        // Если и это не помогло (вообще нет рецептов с отзывами), берем просто последние рецепты
+        if ($recipes->isEmpty()) {
+            $recipes = Recipe::query()
+                ->with(['user', 'category', 'cookingMethod', 'country', 'ingredients', 'ingredients.unit', 'recipeSteps', 'reviews'])
+                ->latest()
+                ->take($limit)
+                ->get()
+                ->values();
+        }
+
+        $paginator = new LengthAwarePaginator(
+            $recipes,
+            $recipes->count(),
+            $limit,
+            1
+        );
+
+        return new RecipeCollection($paginator);
     }
 
     public function newest(NewestRecipesRequest $request): RecipeCollection
@@ -206,9 +220,17 @@ class RecipeSearchController extends Controller
             ->with(['user', 'category', 'cookingMethod', 'country', 'ingredients', 'ingredients.unit', 'recipeSteps', 'reviews'])
             ->latest()
             ->limit($limit)
-            ->get();
+            ->get()
+            ->values();
 
-        return new RecipeCollection($recipes);
+        $paginator = new LengthAwarePaginator(
+            $recipes,
+            $recipes->count(),
+            $limit,
+            1
+        );
+
+        return new RecipeCollection($paginator);
     }
 
     public function topRated(TopRecipesRequest $request): RecipeCollection
@@ -222,9 +244,17 @@ class RecipeSearchController extends Controller
             ->sortByDesc(function($recipe) {
                 return RecipeService::calculateRating($recipe);
             })
-            ->take($limit);
+            ->take($limit)
+            ->values();
 
-        return new RecipeCollection($recipes);
+        $paginator = new LengthAwarePaginator(
+            $recipes,
+            $recipes->count(),
+            $limit,
+            1
+        );
+
+        return new RecipeCollection($paginator);
     }
 
     public function topAuthors(TopAuthorsRequest $request): UserCollection
@@ -235,8 +265,16 @@ class RecipeSearchController extends Controller
             ->withCount('followers')
             ->orderBy('followers_count', 'desc')
             ->limit($limit)
-            ->get();
+            ->get()
+            ->values();
 
-        return new UserCollection($users);
+        $paginator = new LengthAwarePaginator(
+            $users,
+            $users->count(),
+            $limit,
+            1
+        );
+
+        return new UserCollection($paginator);
     }
 }
