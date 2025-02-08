@@ -1,0 +1,183 @@
+version: '3'
+services:
+
+  front.admin:
+    build:
+      dockerfile: Dockerfile
+      context: ./front/admin
+    container_name: front.admin
+    volumes:
+      - ./front/admin/src:/usr/src/app
+    ports:
+      - '5173:5173'
+    env_file:
+      - ./.env
+    networks:
+      - sne
+    depends_on:
+      - laravel.api
+
+  front.public:
+    build:
+      dockerfile: Dockerfile
+      context: ./front/public
+    container_name: front.public
+    volumes:
+      - ./front/public/src:/usr/src/app
+#    ports:
+#      - '3000:3000'
+    env_file:
+      - ./.env
+    networks:
+      - sne
+    depends_on:
+      - laravel.api
+
+  laravel.api:
+    build:
+      dockerfile: Dockerfile_api
+      context: ./back/api
+    container_name: laravel.api
+    volumes:
+      - ./back/api/src:/var/www/html
+      # Можно монтировать внешнюю папку в место хранилища
+      # - ./volumes/api/storage:/var/www/html/storage
+    ports:
+      - '8000:8000'
+    env_file:
+      - ./.env
+    networks:
+      - sne
+    depends_on:
+      - db.mysql.main
+      - db.redis.cache
+
+# -----------------------------------------------------------------
+  laravel.jobs.avatars:
+    build:
+      dockerfile: Dockerfile_avatars
+      context: ./back/api
+    container_name: laravel.jobs.avatars
+    volumes:
+      - ./back/api/src:/var/www/html
+    env_file:
+      - ./.env
+    networks:
+      - sne
+    depends_on:
+      - db.mysql.main
+      - db.redis.cache
+      - db.redis.jobs
+
+
+
+# -----------------------------------------------------------------
+# Параллельная  нагрузка
+#  laravel.api.jonny:
+#    build:
+#      dockerfile: Dockerfile_api
+#      context: ./back/api
+#    container_name: laravel.api.jonny
+#    networks:
+#      - sne
+#    depends_on:
+#      - db.mysql.main
+#      - db.redis.cache
+#
+#  laravel.api.sunny:
+#    build:
+#      dockerfile: Dockerfile_api
+#      context: ./back/api
+#    container_name: laravel.api.sunny
+#    networks:
+#      - sne
+#    depends_on:
+#      - db.mysql.main
+#      - db.redis.cache
+# -----------------------------------------------------------------
+
+  db.mysql.main:
+    build:
+      dockerfile: ./services/mysql/Dockerfile
+      context: .
+    container_name: db.mysql.main
+    volumes:
+      - ./volumes/db/mysql/main:/var/lib/mysql
+    env_file:
+      - .env
+    ports:
+      - '3306:3306'
+    networks:
+      - sne
+
+  # Этот сервер будет содержать данные для обмена сообщениями по WebSocket
+  db.redis.sockets:
+    build:
+      dockerfile: ./services/redis/Dockerfile
+      context: .
+    container_name: db.redis.sockets
+    volumes:
+      - ./volumes/db/redis/sockets:/data
+    networks:
+      - sne
+
+  socket.sunny:
+    build:
+      dockerfile: Dockerfile
+      context: ./back/sockets
+    container_name: socket.sunny
+    volumes:
+      - ./back/sockets/src:/usr/src/app
+    env_file:
+      - ./.env
+    environment:
+      - SERVER_NAME=socketJonny
+      - SERVER_PORT=3000
+    networks:
+      - sne
+    depends_on:
+      - laravel.api
+      - db.redis.sockets
+
+  # Этот сервер будет содержать кеш сайта
+  db.redis.cache:
+    build:
+      dockerfile: ./services/redis/Dockerfile
+      context: .
+    container_name: db.redis.cache
+    volumes:
+      - ./volumes/db/redis/cache:/data
+    networks:
+      - sne
+
+  # На этом сервере будет информация для jobs
+  db.redis.jobs:
+    build:
+      dockerfile: ./services/redis/Dockerfile
+      context: .
+    container_name: db.redis.jobs
+    volumes:
+      - ./volumes/db/redis/jobs:/data
+    networks:
+      - sne
+
+  nginx.router:
+    build:
+      dockerfile: ./services/nginx/Dockerfile
+      context: .
+    volumes:
+      - ./services/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - '80:80'
+    networks:
+      - sne
+    depends_on:
+      - laravel.api
+      # - laravel.api.jonny
+      # - laravel.api.sunny
+      - db.redis.cache
+      - db.mysql.main
+
+networks:
+  sne:
+    driver: bridge
