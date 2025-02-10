@@ -1,183 +1,87 @@
-version: '3'
 services:
-
-  front.admin:
-    build:
-      dockerfile: Dockerfile
-      context: ./front/admin
-    container_name: front.admin
-    volumes:
-      - ./front/admin/src:/usr/src/app
-    ports:
-      - '5173:5173'
-    env_file:
-      - ./.env
-    networks:
-      - sne
-    depends_on:
-      - laravel.api
-
-  front.public:
-    build:
-      dockerfile: Dockerfile
-      context: ./front/public
-    container_name: front.public
-    volumes:
-      - ./front/public/src:/usr/src/app
+#  frontend:
+#    build:
+#      context: ./frontend
+#      dockerfile: Dockerfile
+#    container_name: tasty_frontend
 #    ports:
-#      - '3000:3000'
-    env_file:
-      - ./.env
-    networks:
-      - sne
-    depends_on:
-      - laravel.api
-
-  laravel.api:
-    build:
-      dockerfile: Dockerfile_api
-      context: ./back/api
-    container_name: laravel.api
-    volumes:
-      - ./back/api/src:/var/www/html
-      # Можно монтировать внешнюю папку в место хранилища
-      # - ./volumes/api/storage:/var/www/html/storage
-    ports:
-      - '8000:8000'
-    env_file:
-      - ./.env
-    networks:
-      - sne
-    depends_on:
-      - db.mysql.main
-      - db.redis.cache
-
-# -----------------------------------------------------------------
-  laravel.jobs.avatars:
-    build:
-      dockerfile: Dockerfile_avatars
-      context: ./back/api
-    container_name: laravel.jobs.avatars
-    volumes:
-      - ./back/api/src:/var/www/html
-    env_file:
-      - ./.env
-    networks:
-      - sne
-    depends_on:
-      - db.mysql.main
-      - db.redis.cache
-      - db.redis.jobs
-
-
-
-# -----------------------------------------------------------------
-# Параллельная  нагрузка
-#  laravel.api.jonny:
-#    build:
-#      dockerfile: Dockerfile_api
-#      context: ./back/api
-#    container_name: laravel.api.jonny
+#      - "3000:3000"
+#    volumes:
+#      - ./frontend:/app
+#      - /app/node_modules
 #    networks:
-#      - sne
-#    depends_on:
-#      - db.mysql.main
-#      - db.redis.cache
-#
-#  laravel.api.sunny:
-#    build:
-#      dockerfile: Dockerfile_api
-#      context: ./back/api
-#    container_name: laravel.api.sunny
-#    networks:
-#      - sne
-#    depends_on:
-#      - db.mysql.main
-#      - db.redis.cache
-# -----------------------------------------------------------------
+#      - tasty_network
 
-  db.mysql.main:
+  api-service:
     build:
-      dockerfile: ./services/mysql/Dockerfile
-      context: .
-    container_name: db.mysql.main
-    volumes:
-      - ./volumes/db/mysql/main:/var/lib/mysql
-    env_file:
-      - .env
-    ports:
-      - '3306:3306'
-    networks:
-      - sne
-
-  # Этот сервер будет содержать данные для обмена сообщениями по WebSocket
-  db.redis.sockets:
-    build:
-      dockerfile: ./services/redis/Dockerfile
-      context: .
-    container_name: db.redis.sockets
-    volumes:
-      - ./volumes/db/redis/sockets:/data
-    networks:
-      - sne
-
-  socket.sunny:
-    build:
+      context: ./backend/api-service
       dockerfile: Dockerfile
-      context: ./back/sockets
-    container_name: socket.sunny
+    container_name: tasty_api
+    restart: unless-stopped
+    working_dir: /var/www/html
     volumes:
-      - ./back/sockets/src:/usr/src/app
-    env_file:
-      - ./.env
-    environment:
-      - SERVER_NAME=socketJonny
-      - SERVER_PORT=3000
-    networks:
-      - sne
-    depends_on:
-      - laravel.api
-      - db.redis.sockets
-
-  # Этот сервер будет содержать кеш сайта
-  db.redis.cache:
-    build:
-      dockerfile: ./services/redis/Dockerfile
-      context: .
-    container_name: db.redis.cache
-    volumes:
-      - ./volumes/db/redis/cache:/data
-    networks:
-      - sne
-
-  # На этом сервере будет информация для jobs
-  db.redis.jobs:
-    build:
-      dockerfile: ./services/redis/Dockerfile
-      context: .
-    container_name: db.redis.jobs
-    volumes:
-      - ./volumes/db/redis/jobs:/data
-    networks:
-      - sne
-
-  nginx.router:
-    build:
-      dockerfile: ./services/nginx/Dockerfile
-      context: .
-    volumes:
-      - ./services/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./backend/api-service:/var/www/html
     ports:
-      - '80:80'
-    networks:
-      - sne
+      - "8000:8000"
     depends_on:
-      - laravel.api
-      # - laravel.api.jonny
-      # - laravel.api.sunny
-      - db.redis.cache
-      - db.mysql.main
+      - mysql
+      - redis
+    networks:
+      - tasty_network
+
+  queue-service:
+    build:
+      context: ./backend/queue-service
+      dockerfile: Dockerfile
+    container_name: tasty_queue
+    restart: unless-stopped
+    working_dir: /var/www/html
+    command: ["php", "artisan", "queue:work"]
+    volumes:
+      - ./backend/queue-service:/var/www/html
+    depends_on:
+      - redis
+    networks:
+      - tasty_network
+
+  mysql:
+    image: mysql:8.0
+    container_name: tasty_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - tasty_network
+
+  phpmyadmin:
+    image: phpmyadmin
+    restart: always
+    ports:
+      - 8080:80
+    environment:
+      PMA_HOST: tasty_mysql
+    networks:
+      - tasty_network
+
+  redis:
+    image: redis:latest
+    container_name: tasty_redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    networks:
+      - tasty_network
 
 networks:
-  sne:
+  tasty_network:
     driver: bridge
+
+volumes:
+  mysql_data:

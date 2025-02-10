@@ -17,18 +17,16 @@ use Illuminate\Support\Facades\Gate;
 
 class UserController extends Controller
 {
-    /**
-     * Метод index с КЕШИРОВАНИЕМ ДАННЫХ
-     */
+    // Метод index с КЕШИРОВАНИЕМ ДАННЫХ
     /*public function index()
     {
         $this->authorize('viewAny', User::class);
 
-        $users = Cache::remember('users_index', 600, function () {
+        $users = Cache::remember('users_index', 60, function () {
             return User::with(['roles'])->paginate(20); // Жадная загрузка ролей
         });
 
-        return new UserCollection($users); // Возвращаем коллекцию ��ользователей
+        return new UserCollection($users); // Возвращаем коллекцию пользователей
     }*/
     public function index(): UserCollection
     {
@@ -75,15 +73,13 @@ class UserController extends Controller
         return new UserResource($user->load('roles')); // Используем UserResource для возвращения созданного пользователя с ролями
     }
 
-    /**
-     * МЕТОД show с КЕШИРОВАНИЕМ ДАННЫХ
-     */
+    // МЕТОД show с КЕШИРОВАНИЕМ ДАННЫХ
 
     /*public function show(User $user)
     {
         //$this->authorize('view', $user);
 
-        $user = Cache::remember("user_{$user->id}", 600, function () use ($user) {
+        $user = Cache::remember("user_{$user->id}", 60, function () use ($user) {
             return $user->load('roles');
         });
 

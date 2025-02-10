@@ -56,20 +56,6 @@ class FollowController extends Controller
     }
 
     // Отписаться от пользователя
-    /*public function unfollow(FollowRequest $request): JsonResponse
-    {
-        $follower = User::findOrFail($request->follower_id);
-        $following = User::findOrFail($request->following_id);
-
-        $this->authorize('unfollow', $following);
-
-        if (!$follower->following()->where('following_id', $following->id)->exists()) {
-            return response()->json(['message' => 'Ви не підписані на цю особу'], 400);
-        }
-
-        $follower->following()->detach($following->id);
-        return response()->json(['message' => 'Ви успішно відписалися']);
-    }*/
     public function unfollow(FollowRequest $request): JsonResponse
     {
         $follower = User::findOrFail($request->follower_id);
