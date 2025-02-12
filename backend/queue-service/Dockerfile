@@ -1,8 +1,6 @@
-FROM php:8-fpm
+FROM php:8.3-fpm
 
-WORKDIR /var/www/html
-
-# Установка системных зависимостей
+# Устанавливаем системные зависимости
 RUN apt-get update && apt-get install -y \
     git \
     curl \
@@ -10,18 +8,48 @@ RUN apt-get update && apt-get install -y \
     libonig-dev \
     libxml2-dev \
     zip \
-    unzip
+    unzip \
+    supervisor \
+    libmagickwand-dev
 
-# Установка PHP расширений
+# Очищаем кэш apt
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Устанавливаем расширения PHP
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 
-# Установка Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+# Устанавливаем composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-COPY . .
+# Устанавливаем Redis
+RUN pecl install redis && docker-php-ext-enable redis
 
+# Устанавливаем Imagick
+RUN pecl install imagick && docker-php-ext-enable imagick
+
+WORKDIR /var/www/html
+
+# Копируем исходный код приложения
+COPY . /var/www/html
+
+# Устанавливаем зависимости composer
 RUN composer install
 
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+# Публикуем JWT конфигурацию
+RUN php artisan vendor:publish --provider="PHPOpenSourceSaver\JWTAuth\Providers\LaravelServiceProvider"
 
-CMD ["php", "artisan", "queue:work"]
+# Копируем supervisor конфигурацию
+COPY ./docker/supervisor/queue.conf /etc/supervisor/conf.d/supervisord.conf
+
+CMD ["supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+
+
+#Если содавать базовый образ Dockerfile
+
+#FROM tasty_php:latest
+#WORKDIR /var/www/html
+#COPY src /var/www/html
+#RUN composer install
+#RUN php artisan vendor:publish --provider="PHPOpenSourceSaver\JWTAuth\Providers\LaravelServiceProvider"
+#COPY docker/supervisor/queue.conf /etc/supervisor/conf.d/supervisord.conf
+#CMD ["supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]

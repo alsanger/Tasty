@@ -1,7 +1,6 @@
-FROM php:8-fpm
+FROM php:8.3-fpm
 
-WORKDIR /var/www/html
-
+# Устанавливаем системные зависимости
 RUN apt-get update && apt-get install -y \
     git \
     curl \
@@ -9,24 +8,55 @@ RUN apt-get update && apt-get install -y \
     libonig-dev \
     libxml2-dev \
     zip \
-    unzip
+    unzip \
+    supervisor \
+    libmagickwand-dev
 
-RUN docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath gd
+# Очищаем кэш apt
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+# Устанавливаем расширения PHP
+RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 
-COPY composer.* ./
+# Устанавливаем composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-RUN composer install --no-scripts --no-autoloader --no-interaction
+# Устанавливаем Redis
+RUN pecl install redis && docker-php-ext-enable redis
 
-COPY . .
+# Устанавливаем Imagick
+RUN pecl install imagick && docker-php-ext-enable imagick
 
-RUN php artisan key:generate
+WORKDIR /var/www/html
 
-RUN composer dump-autoload --optimize
+# Копируем исходный код приложения
+COPY . /var/www/html
 
-RUN chown -R www-data:www-data /var/www/html
+# Устанавливаем зависимости composer
+RUN composer install
+
+# Публикуем JWT конфигурацию
+RUN php artisan vendor:publish --provider="PHPOpenSourceSaver\JWTAuth\Providers\LaravelServiceProvider"
+
+# Копируем supervisor конфигурацию
+COPY ./docker/supervisor/api.conf /etc/supervisor/conf.d/supervisord.conf
 
 EXPOSE 8000
+EXPOSE 9000
 
-CMD ["php-fpm"]
+# Запуск supervisor, который будет управлять процессами
+CMD ["supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+
+
+
+#Если содавать базовый образ Dockerfile
+
+#FROM tasty_php:latest
+#WORKDIR /var/www/html
+#COPY src /var/www/html
+#RUN composer install
+#RUN php artisan vendor:publish --provider="PHPOpenSourceSaver\JWTAuth\Providers\LaravelServiceProvider"
+#COPY docker/supervisor/api.conf /etc/supervisor/conf.d/supervisord.conf
+#EXPOSE 8000
+#EXPOSE 9000
+#CMD ["supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
