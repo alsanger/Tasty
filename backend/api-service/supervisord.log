@@ -1177,3 +1177,7 @@
 2025-02-12 19:37:12,337 INFO gave up: laravel-worker_00 entered FATAL state, too many start retries too quickly
 2025-02-12 19:37:12,337 WARN exited: laravel-worker_03 (exit status 1; not expected)
 2025-02-12 19:37:13,340 INFO gave up: laravel-worker_03 entered FATAL state, too many start retries too quickly
+2025-02-12 19:58:30,387 WARN received SIGQUIT indicating exit request
+2025-02-12 19:58:30,392 INFO waiting for laravel-serve, php-fpm to die
+2025-02-12 19:58:30,408 INFO stopped: php-fpm (exit status 0)
+2025-02-12 19:58:31,446 INFO stopped: laravel-serve (exit status 0)
