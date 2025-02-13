@@ -1,0 +1,50 @@
+FROM php:8.4-cli
+
+# Устанавливаем системные зависимости
+RUN apt-get update && apt-get install -y \
+    git mc curl wget zip unzip supervisor\
+    libpng-dev libonig-dev libxml2-dev \
+    libmagickwand-dev
+
+# Очищаем кэш apt
+RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Устанавливаем расширения PHP
+RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
+
+# Устанавливаем composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+# Устанавливаем Redis
+RUN pecl install redis && docker-php-ext-enable redis
+
+# Устанавливаем Imagick
+RUN git clone https://github.com/Imagick/imagick.git --depth 1 /tmp/imagick && \
+    cd /tmp/imagick && \
+    git fetch origin master && \
+    git switch master && \
+    cd /tmp/imagick && \
+    phpize && \
+    ./configure && \
+    make && \
+    make install && \
+    docker-php-ext-enable imagick
+
+WORKDIR /var/www/html
+
+# Копируем исходный код приложения
+COPY ./src /var/www/html
+
+# Устанавливаем зависимости composer
+RUN composer install
+
+# Публикуем JWT конфигурацию
+RUN php artisan vendor:publish --provider="PHPOpenSourceSaver\JWTAuth\Providers\LaravelServiceProvider"
+
+# Копируем supervisor конфигурацию
+COPY supervisor_api.conf /etc/supervisor/conf.d/supervisord.conf
+
+EXPOSE 8000
+
+# Запуск supervisor, который будет управлять процессами
+CMD ["supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
