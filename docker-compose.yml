@@ -32,6 +32,16 @@ services:
     networks:
       - tasty_network
 
+  tasty.admin:
+    build:
+      context: frontend/admin
+      dockerfile: Dockerfile
+    container_name: tasty.admin
+    ports:
+      - "5177:5173"
+    networks:
+      - tasty_network
+
   tasty.api:
     build:
       context: backend
@@ -66,6 +76,7 @@ services:
     depends_on:
       - tasty.api
       - tasty.queue
+      - tasty.admin
     networks:
       - tasty_network
 
