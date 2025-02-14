@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Api\V1\User;
 
+use App\Events\PasswordResetRequested;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\PasswordRecovery\ForgotPasswordRequest;
 use App\Http\Requests\Api\V1\PasswordRecovery\ResetPasswordRequest;
 use App\Http\Requests\Api\V1\User\LoginRequest;
 use App\Http\Resources\Api\V1\User\UserResource;
+use App\Jobs\SendPasswordResetLinkJob;
 use App\Models\User;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
@@ -59,39 +61,27 @@ class AuthController extends Controller
         ]);
     }
 
-    // МЕТОДЫ ДЛЯ ВЕРИФИКАЦИИ EMAIL
-
-    // Метод для отображения страницы с подтверждением email
-    public function showVerifyEmailPage()
-    {
-        return view('users.verify-email');
-    }
-
-    // Метод для обработки подтверждения email
-    public function verifyEmail(EmailVerificationRequest $request)
-    {
-        $request->fulfill();
-        return redirect()->route('index');
-    }
-
-    // Метод для отправки повторного уведомления на email
-    public function sendVerificationNotification(Request $request)
-    {
-        $request->user()->sendEmailVerificationNotification();
-        return back()->with('message', 'Посилання для підтвердження реєстрації направлено!');
-    }
-
     //МЕТОДЫ ДЛЯ СБРОСА ПАРОЛЯ
 
     // Метод отправки ссылки для сброса пароля
     public function forgotPassword(ForgotPasswordRequest $request) {
-        $status = Password::sendResetLink(
+        /*$status = Password::sendResetLink(
             $request->only('email')
         );
 
         return $status === Password::RESET_LINK_SENT
             ? response()->json(['message' => __($status)], 200)
-            : response()->json(['error' => __($status)], 400);
+            : response()->json(['error' => __($status)], 400);*/
+
+        $user = User::where('email', $request->email)->first();
+        if (!$user) {
+            return response()->json(['error' => 'Користувача з таким email не знайдено'], 404);
+        }
+
+        //dispatch(new SendPasswordResetLinkJob($user));
+        event(new PasswordResetRequested($user));
+
+        return response()->json(['message' => 'Посилання для відновлення паролю відправлено'], 200);
     }
 
     // Метод для сброса пароля и получения ссылки на email

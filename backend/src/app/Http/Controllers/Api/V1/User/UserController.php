@@ -8,12 +8,11 @@ use App\Http\Requests\Api\V1\User\UpdateUserRequest;
 use App\Http\Resources\Api\V1\Role\RoleResource;
 use App\Http\Resources\Api\V1\User\UserCollection;
 use App\Http\Resources\Api\V1\User\UserResource;
+use App\Jobs\SendWelcomeEmailJob;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Gate;
 
 class UserController extends Controller
 {
@@ -65,6 +64,7 @@ class UserController extends Controller
 
         // Запускаем событие регистрации (для отправки письма с верификацией)
         event(new Registered($user));
+        //dispatch(new SendWelcomeEmailJob($user));
 
         // Создаем токен для пользователя
         $tokenName = $user->email . " API Token";

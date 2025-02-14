@@ -52,7 +52,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://localhost'),
+    'url' => env('APP_URL', 'http://localhost:8000'),
 
     /*
     |--------------------------------------------------------------------------
@@ -164,6 +164,7 @@ return [
         App\Providers\AuthServiceProvider::class,
         App\Providers\ResetPasswordServiceProvider::class,
 
+        App\Providers\EventServiceProvider::class,
     ],
 
     'aliases' => [

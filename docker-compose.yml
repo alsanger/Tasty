@@ -42,6 +42,18 @@ services:
     networks:
       - tasty_network
 
+  # !!! ДОБАВИЛ !!! #########################################################################
+  tasty.public:
+    build:
+      context: frontend/public
+      dockerfile: Dockerfile
+    container_name: tasty.public
+    ports:
+      - "5173:5173"
+    networks:
+      - tasty_network
+  ##########################################################################################
+
   tasty.api:
     build:
       context: backend
@@ -72,11 +84,13 @@ services:
     ports:
       - "8080:80"
     volumes:
+      - ./_docker/nginx/conf.d/frontend.conf:/etc/nginx/conf.d/frontend.conf:ro
       - ./services/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
     depends_on:
       - tasty.api
       - tasty.queue
       - tasty.admin
+      - tasty.public
     networks:
       - tasty_network
 
