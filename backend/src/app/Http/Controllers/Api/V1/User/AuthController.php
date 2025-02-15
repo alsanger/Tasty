@@ -79,7 +79,7 @@ class AuthController extends Controller
             return response()->json(['error' => 'Користувача з таким email не знайдено'], 404);
         }
 
-        //dispatch(new SendPasswordResetLinkJob($user));
+        // dispatch(new SendPasswordResetLinkJob($user));
         event(new PasswordResetRequestedEvent($user));
         Log::info("Controller");
 

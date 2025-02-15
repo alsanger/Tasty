@@ -26,7 +26,7 @@ use Illuminate\Support\Facades\Password;
 
 class SendPasswordResetLinkListener implements ShouldQueue
 {
-    use InteractsWithQueue;
+    // use InteractsWithQueue;
 
     public function handle(PasswordResetRequestedEvent $event)
     {

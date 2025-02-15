@@ -3,10 +3,11 @@
 namespace App\Events;
 
 use App\Models\User;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class UserRegisteredEvent
+class UserRegisteredEvent implements ShouldQueue
 {
     use Dispatchable, SerializesModels;
 

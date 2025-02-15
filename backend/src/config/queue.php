@@ -63,6 +63,8 @@ return [
             'after_commit' => false,
         ],
 
+        /*
+         *
         'redis' => [
             'driver' => 'redis',
             'connection' => env('REDIS_QUEUE_CONNECTION', 'default'),
@@ -71,6 +73,7 @@ return [
             'block_for' => null,
             'after_commit' => false,
         ],
+        */
 
     ],
 

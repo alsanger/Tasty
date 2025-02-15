@@ -15,6 +15,7 @@ use App\Listeners\SendWelcomeEmailListeners;
 
 class EventServiceProvider extends ServiceProvider
 {
+/*
     protected $listen = [
         Registered::class => [
             SendEmailVerificationNotification::class,
@@ -26,6 +27,7 @@ class EventServiceProvider extends ServiceProvider
             SendPasswordResetLinkListener::class,
         ],
     ];
+*/
 
     public function boot(): void
     {
