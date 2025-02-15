@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1\User;
 
-use App\Events\PasswordResetRequested;
+use App\Events\PasswordResetRequestedEvent;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\PasswordRecovery\ForgotPasswordRequest;
 use App\Http\Requests\Api\V1\PasswordRecovery\ResetPasswordRequest;
@@ -15,6 +15,7 @@ use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 
@@ -79,7 +80,8 @@ class AuthController extends Controller
         }
 
         //dispatch(new SendPasswordResetLinkJob($user));
-        event(new PasswordResetRequested($user));
+        event(new PasswordResetRequestedEvent($user));
+        Log::info("Controller");
 
         return response()->json(['message' => 'Посилання для відновлення паролю відправлено'], 200);
     }

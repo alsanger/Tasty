@@ -10,8 +10,9 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
-class PasswordResetRequested
+class PasswordResetRequestedEvent
 {
     use Dispatchable, SerializesModels;
 
@@ -20,5 +21,6 @@ class PasswordResetRequested
     public function __construct(?User $user)
     {
         $this->user = $user;
+        Log::info('Event');
     }
 }

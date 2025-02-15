@@ -11,10 +11,10 @@ use App\Http\Controllers\Api\V1\Recipe\RecipeSearchController;
 use App\Http\Controllers\Api\V1\RecipeStep\RecipeStepController;
 use App\Http\Controllers\Api\V1\Review\ReviewController;
 use App\Http\Controllers\Api\V1\Unit\UnitController;
-use app\Http\Controllers\Api\V1\User\AuthController;
-use app\Http\Controllers\Api\V1\User\EmailVerificationController;
-use app\Http\Controllers\Api\V1\User\FollowController;
-use app\Http\Controllers\Api\V1\User\UserController;
+use App\Http\Controllers\Api\V1\User\AuthController;
+use App\Http\Controllers\Api\V1\User\EmailVerificationController;
+use App\Http\Controllers\Api\V1\User\FollowController;
+use App\Http\Controllers\Api\V1\User\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'v1'], function () {
