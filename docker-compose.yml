@@ -42,7 +42,6 @@ services:
     networks:
       - tasty_network
 
-  # !!! ДОБАВИЛ !!! #########################################################################
   tasty.public:
     build:
       context: frontend/public
@@ -52,7 +51,6 @@ services:
       - "5175:5175"
     networks:
       - tasty_network
-  ##########################################################################################
 
   tasty.api:
     build:

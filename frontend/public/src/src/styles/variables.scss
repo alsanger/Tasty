@@ -1,0 +1,14 @@
+$primary-color: #06A561;
+$text-color: #333;
+$background-color: #fff;
+$border-radius: 8px;
+$transition: all 0.3s ease;
+
+// Миксины для повторяющихся стилей
+@mixin card-hover {
+  transition: $transition;
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  }
+}
