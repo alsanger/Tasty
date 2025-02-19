@@ -84,7 +84,7 @@
     justify-content: center;
 
     img {
-      height: 40px;
+      height: 44px;
       width: auto;
     }
   }
@@ -94,20 +94,11 @@
     min-width: 200px; // Минимальная ширина поисковой строки
   }
 
-  .auth-buttons {
+  .auth-buttons-container {
     flex-shrink: 0;
     display: flex;
     align-items: center;
     gap: 10px;
-
-    .btn {
-      padding: 8px;
-      color: #454545;
-      white-space: nowrap; // Предотвращаем перенос текста кнопок
-
-      &:hover {
-        color: #202020;
-      }
-    }
+    padding-right: 15px;
   }
 }

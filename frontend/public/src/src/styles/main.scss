@@ -12,7 +12,7 @@ body {
   min-height: 100vh;
 }
 
-.scrollable-list {
+/*.scrollable-list {
   position: relative;
   overflow: hidden;
 
@@ -48,9 +48,9 @@ body {
       display: none;
     }
   }
-}
+}*/
 
-.recipe-card {
+/*.recipe-card {
   @include card-hover;
   margin: 10px;
   border-radius: $border-radius;
@@ -61,4 +61,6 @@ body {
     height: 200px;
     object-fit: cover;
   }
-}
+}*/
+
+

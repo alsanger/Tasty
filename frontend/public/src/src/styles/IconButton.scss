@@ -1,0 +1,14 @@
+.site-header {
+  .btn {
+    padding: 5px;
+    color: #454545;
+    white-space: nowrap;
+    //transform: scale(1);
+    transition: all 0.2s ease;
+
+    &:hover {
+      color: #202020;
+      //transform: scale(1.05);
+    }
+  }
+}
