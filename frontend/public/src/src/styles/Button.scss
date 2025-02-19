@@ -2,28 +2,28 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 4px;
   border: 1px solid #06A561;
   background-color: transparent;
   color: #06A561;
   font-weight: 500;
-  border-radius: 8px;
+  border-radius: 6px;
   transform: scale(1);
   transition: all 0.2s ease;
-  padding: 8px 16px;
+  padding: 8px 12px;
   margin: 0 4px;
 
   // Минимальные размеры
-  min-width: 36px;
-  min-height: 36px;
+  min-width: 32px;
+  min-height: 32px;
+  font-size: 14px;
   line-height: 1;
 
   &:not(.header-icon-button) {
     border: 1px solid #06A561;
     background-color: transparent;
     color: #06A561;
-    border-radius: 8px;
-    padding: 9px 14px;
+    border-radius: 6px;
 
     &:hover, &:focus {
       background-color: #06A561;
@@ -42,55 +42,26 @@
       padding: 8px;
       width: 36px;
       height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
 
       .button-icon {
-        margin: auto; // Центрируем плюсик
+        width: 1em;
+        height: 1em;
       }
-    }
 
-    // Размеры
-    &.size-sm {
-      font-size: 14px;
-      padding: 8px 12px;
-      min-width: 32px;
-      min-height: 32px;
-
-      &.icon-only {
-        width: 32px;
-        height: 32px;
-      }
-    }
-
-    &.size-sm {
-      font-size: 14px;
-      padding: 8px 12px;
-      min-width: 32px;
-      min-height: 32px;
-
-      &.icon-only {
-        width: 32px;
-        height: 32px;
-      }
-    }
-
-    &.size-lg {
-      font-size: 18px;
-      padding: 10px 16px;
-      min-width: 44px;
-      min-height: 44px;
-
-      &.icon-only {
-        width: 44px;
-        height: 44px;
+      .button-icon {
+        margin: auto;
       }
     }
   }
 
   &.header-icon-button {
     color: #454545;
-    padding: 8px;
-    width: 40px;
-    height: 40px;
+    padding: 0;
+    width: 30px;
+    height: 30px;
 
     &:hover {
       color: #202020;
@@ -98,8 +69,8 @@
     }
 
     .button-icon {
-      width: 24px; // Фиксированный размер для иконок хедера
-      height: 24px;
+      width: 20px;
+      height: 20px;
     }
   }
 

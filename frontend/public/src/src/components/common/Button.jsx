@@ -9,27 +9,25 @@ const Button = ({
                     onClick,
                     isActive = false,
                     variant = 'default',  // 'default' | 'icon-only' | 'header-icon'
-                    size = 'md', // 'sm' | 'md' | 'lg'
                 }) => {
     const buttonClasses = [
         'custom-button', // Базовый класс всегда будет
         variant === 'header-icon' ? 'header-icon-button' : '',
         variant === 'icon-only' ? 'icon-only' : '',
-        isActive ? 'active' : '',
-        `size-${size}`
+        isActive ? 'active' : ''
     ].filter(Boolean).join(' ');
 
     return (
         <BootstrapButton
             className={buttonClasses}
             onClick={onClick}
-            variant="link" // Убираем условие, всегда используем 'link'
+            variant="link"
         >
             {icon && (
                 <FontAwesomeIcon
                     icon={icon}
                     className="button-icon"
-                    size={variant === 'header-icon' ? 'lg' : undefined} // Увеличиваем размер иконок в хедере
+                    size={variant === 'header-icon' ? 'lg' : undefined}
                 />
             )}
             {text && <span className="button-text">{text}</span>}
@@ -43,7 +41,6 @@ Button.propTypes = {
     onClick: PropTypes.func.isRequired,
     isActive: PropTypes.bool,
     variant: PropTypes.oneOf(['default', 'icon-only', 'header-icon']),
-    size: PropTypes.oneOf(['sm', 'md', 'lg'])
 };
 
 export default Button;

@@ -36,24 +36,21 @@ const Header = () => {
 
                     <Button
                         icon={faPlus}
-                        /*variant="icon-only"*/
+                        variant="icon-only"
                         onClick={() => console.log('Plus clicked')}
                         isActive={true}
-                        size="sm"
                     />
 
                     <Button
                         icon={faBell}
                         variant="header-icon"
                         onClick={() => console.log('Bell clicked')}
-                        size="sm"
                     />
 
                     <Button
                         icon={faUser}
                         variant="header-icon"
                         onClick={() => setShowLogin(true)}
-                        size="sm"
                     />
                 </div>
             </div>
