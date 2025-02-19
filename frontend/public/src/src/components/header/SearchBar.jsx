@@ -3,6 +3,7 @@ import { Form, InputGroup, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import PropTypes from "prop-types";
+import "../../styles/SearchBar.scss";
 
 const SearchBar = ({ onSearch }) => {
     const [searchQuery, setSearchQuery] = useState('');

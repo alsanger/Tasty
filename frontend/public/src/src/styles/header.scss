@@ -1,67 +1,3 @@
-.search-bar {
-  width: 100%;
-
-  .custom-focus {
-    position: relative;
-
-    .form-control {
-      height: 44px;
-      border: 1px solid #dee2e6;
-      border-right: none;
-      padding: 10px 15px;
-      font-size: 16px;
-      transition: all 0.2s ease;
-
-      &:focus {
-        box-shadow: none;
-        border-color: #06A561;
-
-        & + .btn {
-          border-color: #06A561;
-        }
-      }
-
-      &::placeholder {
-        color: #6c757d;
-      }
-    }
-
-    .btn {
-      background-color: white;
-      border: 1px solid #dee2e6;
-      color: #06A561;
-      width: 44px;
-      height: 44px;
-      padding: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.2s ease;
-
-      &:hover {
-        background-color: #06A561;
-        border-color: #06A561;
-        color: white;
-      }
-
-      &:focus {
-        box-shadow: none;
-        border-color: #06A561;
-      }
-    }
-
-    &:hover {
-      .form-control {
-        border-color: #06A561;
-      }
-
-      .btn {
-        border-color: #06A561;
-      }
-    }
-  }
-}
-
 .site-header {
   width: 100vw;
   padding: 10px 0;
@@ -94,11 +30,9 @@
     min-width: 200px; // Минимальная ширина поисковой строки
   }
 
-  .auth-buttons-container {
-    flex-shrink: 0;
+  .buttons-container {
     display: flex;
     align-items: center;
-    gap: 10px;
     padding-right: 15px;
   }
 }

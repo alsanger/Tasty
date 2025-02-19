@@ -1,0 +1,118 @@
+.custom-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid #06A561;
+  background-color: transparent;
+  color: #06A561;
+  font-weight: 500;
+  border-radius: 8px;
+  transform: scale(1);
+  transition: all 0.2s ease;
+  padding: 8px 16px;
+  margin: 0 4px;
+
+  // Минимальные размеры
+  min-width: 36px;
+  min-height: 36px;
+  line-height: 1;
+
+  &:not(.header-icon-button) {
+    border: 1px solid #06A561;
+    background-color: transparent;
+    color: #06A561;
+    border-radius: 8px;
+    padding: 9px 14px;
+
+    &:hover, &:focus {
+      background-color: #06A561;
+      border-color: #06A561;
+      color: white;
+      box-shadow: none;
+      transform: scale(1.05);
+    }
+
+    &.active {
+      background-color: #06A561;
+      color: white;
+    }
+
+    &.icon-only {
+      padding: 8px;
+      width: 36px;
+      height: 36px;
+
+      .button-icon {
+        margin: auto; // Центрируем плюсик
+      }
+    }
+
+    // Размеры
+    &.size-sm {
+      font-size: 14px;
+      padding: 8px 12px;
+      min-width: 32px;
+      min-height: 32px;
+
+      &.icon-only {
+        width: 32px;
+        height: 32px;
+      }
+    }
+
+    &.size-sm {
+      font-size: 14px;
+      padding: 8px 12px;
+      min-width: 32px;
+      min-height: 32px;
+
+      &.icon-only {
+        width: 32px;
+        height: 32px;
+      }
+    }
+
+    &.size-lg {
+      font-size: 18px;
+      padding: 10px 16px;
+      min-width: 44px;
+      min-height: 44px;
+
+      &.icon-only {
+        width: 44px;
+        height: 44px;
+      }
+    }
+  }
+
+  &.header-icon-button {
+    color: #454545;
+    padding: 8px;
+    width: 40px;
+    height: 40px;
+
+    &:hover {
+      color: #202020;
+      transform: scale(1.2);
+    }
+
+    .button-icon {
+      width: 24px; // Фиксированный размер для иконок хедера
+      height: 24px;
+    }
+  }
+
+  .button-icon {
+    transition: inherit;
+    width: 1em;
+    height: 1em;
+  }
+
+  .button-text {
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
