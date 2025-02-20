@@ -1,5 +1,5 @@
-@import 'variables';
-@import 'bootstrap/scss/bootstrap';
+@use 'variables' as vars;
+@use 'bootstrap/scss/bootstrap';
 
 body {
   margin: 0;
@@ -11,56 +11,3 @@ body {
 .app {
   min-height: 100vh;
 }
-
-/*.scrollable-list {
-  position: relative;
-  overflow: hidden;
-
-  .scroll-button {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 2;
-    background: rgba(255, 255, 255, 0.9);
-    border: none;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-
-    &.prev {
-      left: 0;
-    }
-
-    &.next {
-      right: 0;
-    }
-  }
-
-  .items-container {
-    display: flex;
-    overflow-x: auto;
-    scroll-behavior: smooth;
-    &::-webkit-scrollbar {
-      display: none;
-    }
-  }
-}*/
-
-/*.recipe-card {
-  @include card-hover;
-  margin: 10px;
-  border-radius: $border-radius;
-  overflow: hidden;
-
-  img {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-  }
-}*/
-
-

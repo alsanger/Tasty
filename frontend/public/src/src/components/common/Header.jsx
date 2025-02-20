@@ -8,7 +8,11 @@ import '../../styles/header.scss';
 import Button from "./Button.jsx";
 
 const Header = () => {
-    const [showLogin, setShowLogin] = useState(false);
+    const [showLoginModal, setShowLoginModal] = useState(false);
+    const handleLoginSuccess = (userData) => {
+        // Handle successful login
+        console.log('Logged in:', userData);
+    };
 
     const handleSearch = (searchQuery) => {
         console.log('Search query:', searchQuery);
@@ -50,12 +54,16 @@ const Header = () => {
                     <Button
                         icon={faUser}
                         variant="header-icon"
-                        onClick={() => setShowLogin(true)}
+                        onClick={() => setShowLoginModal(true)}
                     />
                 </div>
             </div>
 
-            <LoginModal show={showLogin} onHide={() => setShowLogin(false)}/>
+            <LoginModal
+                show={showLoginModal}
+                onHide={() => setShowLoginModal(false)}
+                onLoginSuccess={handleLoginSuccess}
+            />
         </header>
     );
 };
