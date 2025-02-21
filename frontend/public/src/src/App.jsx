@@ -1,18 +1,19 @@
 import Header from './components/common/Header';
 import './styles/main.scss';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import {UserProvider} from "./contexts/UserContext.jsx";
 
 function App() {
     return (
-        <div className="app">
-            <Header />
-        </div>
+        <UserProvider>
+            <div className="app">
+                <Header/>
+            </div>
+        </UserProvider>
     );
 }
 
 export default App;
-
-
 
 
 /*import React, { useState, useEffect } from 'react';

@@ -1,5 +1,5 @@
 import {useState} from 'react';
-import SearchBar from '../header/SearchBar.jsx';
+import SearchBar from './SearchBar.jsx';
 import LoginModal from '../header/LoginModal';
 import logo from '../../assets/images/logo.svg';
 import {faUser, faBell} from '@fortawesome/free-regular-svg-icons';

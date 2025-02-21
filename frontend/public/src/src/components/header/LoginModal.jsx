@@ -1,12 +1,17 @@
 import {useState} from 'react';
+import { userApi } from '../../utils/fetchApi';
 import {Modal, Form, Spinner} from 'react-bootstrap';
 import {API_BASE_URL, ENDPOINTS} from '../../utils/constants';
 import Input from '../common/Input';
 import Button from '../common/Button';
 import '../../styles/LoginModal.scss';
 import logo from '../../assets/images/logo.svg';
+import {useUser} from "../../contexts/UserContext.jsx";
 
 const LoginModal = ({show, onHide, onLoginSuccess}) => {
+
+    const { login } = useUser();
+
     const [formData, setFormData] = useState({
         email: '',
         password: ''
@@ -16,6 +21,7 @@ const LoginModal = ({show, onHide, onLoginSuccess}) => {
 
     const handleChange = (e) => {
         const {name, value} = e.target;
+console.log(`Field ${name} changed to: ${value}`);
         setFormData(prev => ({
             ...prev,
             [name]: value
@@ -24,30 +30,24 @@ const LoginModal = ({show, onHide, onLoginSuccess}) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+console.log('Form submitted with data:', formData);
         setLoading(true);
         setError('');
 
         try {
-            const response = await fetch(`${API_BASE_URL}${ENDPOINTS.LOGIN}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData),
-            });
+console.log('Attempting to login...');
+            const data = await userApi.login(formData);
+console.log('Login response:', data);
+            login(data);
+            //localStorage.setItem('token', data.token);
+            //localStorage.setItem('user', JSON.stringify(data.user));
+console.log('Data saved to localStorage');
 
-            const data = await response.json();
-
-            if (!response.ok) {
-                throw new Error(data.message || 'Помилка входу');
-            }
-
-            localStorage.setItem('token', data.token);
-            localStorage.setItem('user', JSON.stringify(data.user));
-            onLoginSuccess?.(data);
+            //onLoginSuccess?.(data);
             onHide();
         } catch (err) {
-            setError(err.message);
+console.error('Login error:', err);
+            setError(err.message || 'Помилка входу');
         } finally {
             setLoading(false);
         }
@@ -66,7 +66,10 @@ const LoginModal = ({show, onHide, onLoginSuccess}) => {
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <Form onSubmit={handleSubmit}>
+                <Form onSubmit={(e) => {
+                    console.log('Form submit event triggered');
+                    handleSubmit(e);
+                }}>
                     <Input
                         type="email"
                         name="email"
@@ -89,6 +92,7 @@ const LoginModal = ({show, onHide, onLoginSuccess}) => {
 
                         <div className="forgot-password-container">
                             <button className="forgot-password" onClick={() => {
+console.log('Forgot password clicked');
                             }}>
                                 Забули пароль?
                             </button>
@@ -127,6 +131,7 @@ const LoginModal = ({show, onHide, onLoginSuccess}) => {
                 <div className="text-center mt-3 d-flex align-items-center justify-content-center">
                     <span>Ще не маєте аккаунт?</span>
                     <button className="register-link" onClick={() => {
+console.log('Register clicked');
                     }}>
                         Зареєструйтесь!
                     </button>

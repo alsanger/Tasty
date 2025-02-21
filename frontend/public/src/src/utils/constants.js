@@ -1,4 +1,4 @@
-export const API_BASE_URL = 'http://localhost:5173/api';
+export const API_BASE_URL = 'http://localhost:8000/api';
 
 export const ENDPOINTS = {
     LOGIN: '/v1/login',

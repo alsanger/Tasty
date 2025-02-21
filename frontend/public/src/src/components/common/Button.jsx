@@ -9,6 +9,7 @@ const Button = ({
                     onClick,
                     isActive = false,
                     variant = 'default',  // 'default' | 'icon-only' | 'header-icon'
+                    type = 'button',     // 'button' | 'submit' | 'reset'
                 }) => {
     const buttonClasses = [
         'custom-button', // Базовый класс всегда будет
@@ -22,6 +23,7 @@ const Button = ({
             className={buttonClasses}
             onClick={onClick}
             variant="link"
+            type={type}
         >
             {icon && (
                 <FontAwesomeIcon
@@ -41,6 +43,7 @@ Button.propTypes = {
     onClick: PropTypes.func.isRequired,
     isActive: PropTypes.bool,
     variant: PropTypes.oneOf(['default', 'icon-only', 'header-icon']),
+    type: PropTypes.oneOf(['button', 'submit', 'reset']),
 };
 
 export default Button;
