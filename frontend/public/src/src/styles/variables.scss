@@ -1,14 +1,132 @@
+// Цвета
 $primary-color: #06A561;
+$secondary-color: #454545;
 $text-color: #333;
+$placeholder-color: #6c757d;
 $background-color: #fff;
-$border-radius: 8px;
-$transition: all 0.3s ease;
+$border-color: #dee2e6;
+$hover-color: #202020;
 
-// Миксины для повторяющихся стилей
-@mixin card-hover {
+// Радиусы и размеры
+$border-radius: 6px;
+$border-radius-large: 8px;
+$button-min-width: 32px;
+$button-min-height: 32px;
+$icon-size: 1em;
+$button-padding: 8px 12px;
+$font-size-small: 14px;
+
+// Переходы
+$transition: all 0.2s ease;
+
+// Миксины
+@mixin button-base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  border: 1px solid $primary-color;
+  background-color: transparent;
+  color: $primary-color;
+  font-weight: 500;
+  border-radius: $border-radius;
+  transform: scale(1);
   transition: $transition;
-  &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  padding: $button-padding;
+  margin: 0 4px;
+  font-size: $font-size-small;
+  line-height: 1;
+}
+
+@mixin button-hover {
+  &:hover, &:focus {
+    background-color: $primary-color;
+    border-color: $primary-color;
+    color: white;
+    box-shadow: none;
+    transform: scale(1.05);
+  }
+}
+
+@mixin button-active {
+  &.active {
+    background-color: $primary-color;
+    color: white;
+  }
+}
+
+@mixin button-icon {
+  padding: 8px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .button-icon {
+    width: $icon-size;
+    height: $icon-size;
+  }
+}
+
+@mixin search-bar-focus {
+  .form-control {
+    height: 38px;
+    border: 1px solid $border-color;
+    border-right: none;
+    padding: 6px 12px;
+    font-size: $font-size-small;
+    transition: $transition;
+
+    &:focus {
+      box-shadow: none;
+      border-color: $primary-color;
+    }
+
+    &::placeholder {
+      color: $placeholder-color;
+    }
+  }
+
+  .btn {
+    background-color: $background-color;
+    border: 1px solid $border-color;
+    color: $primary-color;
+    width: 38px;
+    height: 38px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: $transition;
+
+    &:hover {
+      background-color: $primary-color;
+      border-color: $primary-color;
+      color: white;
+    }
+
+    &:focus {
+      box-shadow: none;
+      border-color: $primary-color;
+    }
+  }
+}
+
+@mixin form-control-base {
+  height: 38px;
+  border: 1px solid $border-color;
+  padding: 6px 12px;
+  font-size: $font-size-small;
+  border-radius: $border-radius-large;
+  transition: $transition;
+
+  &:focus {
+    box-shadow: none;
+    border-color: $primary-color;
+  }
+
+  &::placeholder {
+    color: $placeholder-color;
   }
 }

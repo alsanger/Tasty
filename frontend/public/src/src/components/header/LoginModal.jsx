@@ -1,11 +1,12 @@
-import { useState } from 'react';
-import { Modal, Form, Button, Spinner } from 'react-bootstrap';
-import { API_BASE_URL, ENDPOINTS } from '../../utils/constants';
+import {useState} from 'react';
+import {Modal, Form, Spinner} from 'react-bootstrap';
+import {API_BASE_URL, ENDPOINTS} from '../../utils/constants';
+import Input from '../common/Input';
+import Button from '../common/Button';
 import '../../styles/LoginModal.scss';
 import logo from '../../assets/images/logo.svg';
 
-// eslint-disable-next-line react/prop-types
-const LoginModal = ({ show, onHide, onLoginSuccess }) => {
+const LoginModal = ({show, onHide, onLoginSuccess}) => {
     const [formData, setFormData] = useState({
         email: '',
         password: ''
@@ -14,7 +15,7 @@ const LoginModal = ({ show, onHide, onLoginSuccess }) => {
     const [error, setError] = useState('');
 
     const handleChange = (e) => {
-        const { name, value } = e.target;
+        const {name, value} = e.target;
         setFormData(prev => ({
             ...prev,
             [name]: value
@@ -61,24 +62,23 @@ const LoginModal = ({ show, onHide, onLoginSuccess }) => {
         >
             <Modal.Header closeButton>
                 <Modal.Title className="w-100 text-center">
-                    <img src={logo} alt="Tasty" className="tasty-logo" />
+                    <img src={logo} alt="Tasty" className="tasty-logo"/>
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <Form onSubmit={handleSubmit}>
-                    <Form.Group className="mb-3">
-                        <Form.Control
-                            type="email"
-                            name="email"
-                            placeholder="Електронна пошта"
-                            value={formData.email}
-                            onChange={handleChange}
-                            required
-                        />
-                    </Form.Group>
+                    <Input
+                        type="email"
+                        name="email"
+                        placeholder="Електронна пошта"
+                        value={formData.email}
+                        onChange={handleChange}
+                        required
+                        className="mb-3"
+                    />
 
-                    <Form.Group className="mb-3">
-                        <Form.Control
+                    <div className="mb-3">
+                        <Input
                             type="password"
                             name="password"
                             placeholder="Пароль"
@@ -86,54 +86,50 @@ const LoginModal = ({ show, onHide, onLoginSuccess }) => {
                             onChange={handleChange}
                             required
                         />
-                        <div className="text-end mt-1">
-                            <Button
-                                variant="link"
-                                className="forgot-password"
-                            >
+
+                        <div className="forgot-password-container">
+                            <button className="forgot-password" onClick={() => {
+                            }}>
                                 Забули пароль?
-                            </Button>
+                            </button>
                         </div>
-                    </Form.Group>
+                    </div>
 
                     {error && (
                         <div className="alert alert-danger py-2">{error}</div>
                     )}
-
-                    <Button
-                        variant="success"
-                        type="submit"
-                        className="w-100"
-                        disabled={loading}
-                    >
-                        {loading ? (
-                            <>
-                                <Spinner
-                                    as="span"
-                                    animation="border"
-                                    size="sm"
-                                    role="status"
-                                    aria-hidden="true"
-                                    className="me-2"
-                                />
-                                Завантаження...
-                            </>
-                        ) : 'Увійти'}
-                    </Button>
+                    <div className="enter-password-container">
+                        <Button
+                            variant="success"
+                            type="submit"
+                            disabled={loading}
+                            text={loading ? (
+                                <>
+                                    <Spinner
+                                        as="span"
+                                        animation="border"
+                                        size="sm"
+                                        role="status"
+                                        aria-hidden="true"
+                                        className="me-2"
+                                    />
+                                    Завантаження...
+                                </>
+                            ) : '\u00A0\u00A0\u00A0Увійти\u00A0\u00A0\u00A0'}
+                            onClick={() => {
+                            }}
+                            isActive={true}
+                            className="login-button"
+                        />
+                    </div>
                 </Form>
 
-                <div className="text-center mt-3">
-                    <span>Вже маєте аккаунт? </span>
-                    <Button
-                        variant="link"
-                        className="register-link"
-                        onClick={() => {
-                            onHide();
-                            // Здесь добавить логику открытия модального окна регистрации
-                        }}
-                    >
+                <div className="text-center mt-3 d-flex align-items-center justify-content-center">
+                    <span>Ще не маєте аккаунт?</span>
+                    <button className="register-link" onClick={() => {
+                    }}>
                         Зареєструйтесь!
-                    </Button>
+                    </button>
                 </div>
             </Modal.Body>
         </Modal>

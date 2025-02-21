@@ -1,3 +1,5 @@
+@use 'variables' as *;
+
 .search-bar {
   width: 100%;
 
@@ -5,58 +7,47 @@
     position: relative;
 
     .form-control {
-      height: 38px;
-      border: 1px solid #dee2e6;
-      border-right: none;
-      padding: 6px 12px;
-      font-size: 14px;
-      transition: all 0.2s ease;
+      @include form-control-base; // Подключаем общий стиль
 
       &:focus {
-        box-shadow: none;
-        border-color: #06A561;
-
         & + .btn {
-          border-color: #06A561;
+          border-color: $primary-color;
+          color: $primary-color;
         }
-      }
-
-      &::placeholder {
-        color: #6c757d;
       }
     }
 
     .btn {
-      background-color: white;
-      border: 1px solid #dee2e6;
-      color: #06A561;
+      background-color: $background-color;
+      border: 1px solid $border-color;
+      color: $primary-color;
       width: 38px;
       height: 38px;
       padding: 0;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: all 0.2s ease;
+      transition: $transition;
 
       &:hover {
-        background-color: #06A561;
-        border-color: #06A561;
+        background-color: $primary-color;
+        border-color: $primary-color;
         color: white;
       }
 
       &:focus {
         box-shadow: none;
-        border-color: #06A561;
+        border-color: $primary-color;
       }
     }
 
     &:hover {
       .form-control {
-        border-color: #06A561;
+        border-color: $primary-color;
       }
 
       .btn {
-        border-color: #06A561;
+        border-color: $primary-color;
       }
     }
   }

@@ -1,0 +1,14 @@
+@use 'variables' as *;
+
+.custom-input {
+  position: relative;
+  width: 100%;
+
+  .form-control {
+    @include form-control-base; // Подключаем общий стиль
+
+    &:hover {
+      border-color: $primary-color;
+    }
+  }
+}

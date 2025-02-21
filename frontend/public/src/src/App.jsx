@@ -1,5 +1,6 @@
 import Header from './components/common/Header';
 import './styles/main.scss';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
     return (

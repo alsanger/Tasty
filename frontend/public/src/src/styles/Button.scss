@@ -1,70 +1,25 @@
-.custom-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  border: 1px solid #06A561;
-  background-color: transparent;
-  color: #06A561;
-  font-weight: 500;
-  border-radius: 6px;
-  transform: scale(1);
-  transition: all 0.2s ease;
-  padding: 8px 12px;
-  margin: 0 4px;
+@use 'variables' as *;
 
-  // Минимальные размеры
-  min-width: 32px;
-  min-height: 32px;
-  font-size: 14px;
-  line-height: 1;
+.custom-button {
+  @include button-base;
 
   &:not(.header-icon-button) {
-    border: 1px solid #06A561;
-    background-color: transparent;
-    color: #06A561;
-    border-radius: 6px;
-
-    &:hover, &:focus {
-      background-color: #06A561;
-      border-color: #06A561;
-      color: white;
-      box-shadow: none;
-      transform: scale(1.05);
-    }
-
-    &.active {
-      background-color: #06A561;
-      color: white;
-    }
+    @include button-hover;
+    @include button-active;
 
     &.icon-only {
-      padding: 8px;
-      width: 36px;
-      height: 36px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-
-      .button-icon {
-        width: 1em;
-        height: 1em;
-      }
-
-      .button-icon {
-        margin: auto;
-      }
+      @include button-icon;
     }
   }
 
   &.header-icon-button {
-    color: #454545;
+    color: $secondary-color;
     padding: 0;
     width: 30px;
     height: 30px;
 
     &:hover {
-      color: #202020;
+      color: $hover-color;
       transform: scale(1.2);
     }
 
@@ -76,8 +31,8 @@
 
   .button-icon {
     transition: inherit;
-    width: 1em;
-    height: 1em;
+    width: $icon-size;
+    height: $icon-size;
   }
 
   .button-text {

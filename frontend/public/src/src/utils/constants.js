@@ -4,15 +4,28 @@ export const ENDPOINTS = {
     LOGIN: '/v1/login',
     REGISTER: '/v1/users',
 
-    FEATURED_RECIPES: '/v1/featured-recipes', // ПРИМЕР: /api/v1/recipes/featured
-    CATEGORIES: '/v1/categories',            // ПРИМЕР: /api/v1/categories
-    NEW_RECIPES: '/v1/recipes/newest',          // ПРИМЕР: /api/v1/recipes/new
-    POPULAR_RECIPES: '/v1/recipes/top-rated',  // ПРИМЕР: /api/v1/recipes/popular
-    BEST_RECIPES: '/v1/recipes/top-rated',        // ПРИМЕР: /api/v1/recipes/best
-    AUTHORS: '/v1/authors',                  // ПРИМЕР: /api/v1/authors
-};
+    FEATURED_RECIPES: '/v1/recipes/top-by-period', // Топ рецепты за период
+    CATEGORIES: '/v1/categories',  // Категории рецептов
+    NEW_RECIPES: '/v1/recipes/newest',  // Новые рецепты
+    POPULAR_RECIPES: '/v1/recipes/top-rated', // Популярные рецепты
+    BEST_RECIPES: '/v1/recipes/top-rated',  // Лучше рецепты (повторяется, может быть удалено)
+    AUTHORS: '/v1/top-authors',  // Топ авторов
 
-export const COLORS = {
-    primary: '#06A561',
-    // другие цвета можем добавить по мере необходимости
+    INGREDIENTS: '/v1/ingredients',  // Список ингредиентов
+    INGREDIENT_DETAIL: (id) => `/v1/ingredients/${id}`,  // Детали ингредиента
+
+    COUNTRIES: '/v1/countries',  // Список стран
+    COUNTRY_DETAIL: (id) => `/v1/countries/${id}`,  // Детали страны
+
+    RECIPE_DETAIL: (id) => `/v1/recipes/${id}`,  // Рецепт по ID
+    SEARCH_RECIPES: '/v1/recipes/search',  // Поиск рецептов
+
+    FRIDGES: '/v1/fridges',  // Список холодильников
+    FRIDGE_DETAIL: (id) => `/v1/fridges/${id}`,  // Детали холодильника
+
+    REVIEWS: '/v1/reviews',  // Список отзывов
+    REVIEW_DETAIL: (id) => `/v1/reviews/${id}`,  // Детали отзыва
+
+    UNITS: '/v1/units',  // Список единиц измерений
+    UNIT_DETAIL: (id) => `/v1/units/${id}`,  // Детали единицы измерения
 };
