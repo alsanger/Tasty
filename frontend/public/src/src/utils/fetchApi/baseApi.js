@@ -113,8 +113,6 @@ export const remove = async (endpoint) => {
     }
 };
 
-
-
 /*import { API_BASE_URL } from '../constants';
 
 // * Выполняет GET-запрос к API.

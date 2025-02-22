@@ -14,11 +14,6 @@ class StoreUserRequest extends FormRequest
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
     public function rules(): array
     {
         return [
@@ -43,28 +38,24 @@ class StoreUserRequest extends FormRequest
         ];
     }
 
-    /**
-     * Get custom messages for validation errors.
-     *
-     * @return array<string, string>
-     */
     public function messages(): array
     {
         return [
-            'display_name.required' => 'Отображаемое имя обязательно для заполнения.',
-            'display_name.unique' => 'Это имя уже занято.',
-            'display_name.max' => 'Имя не должно превышать 255 символов.',
-            'email.required' => 'Email обязателен.',
-            'email.email' => 'Пожалуйста, укажите действующий email.',
-            'email.unique' => 'Этот email уже зарегистрирован.',
-            'password.required' => 'Пароль обязателен.',
-            'password.min' => 'Пароль должен содержать минимум 8 символов.',
-            'password.confirmed' => 'Подтверждение пароля не совпадает.',
-            'phone.unique' => 'Этот номер телефона уже зарегистрирован.',
-            'birthdate.date' => 'Введите действительную дату рождения.',
-            'birthdate.before_or_equal' => 'Дата рождения должна быть не позднее, чем 7 лет назад.',
-            'is_blocked.boolean' => 'Поле блокировки должно быть true или false.',
-            'avatar_url.max' => 'Ссылка на аватар не должна превышать 255 символов.',
+            'display_name.required' => 'Відображуване ім\'я обов\'язкове для заповнення.',
+            'display_name.unique' => 'Це ім\'я вже зайняте.',
+            'display_name.max' => 'Ім\'я не повинно перевищувати 255 символів.',
+            'email.required' => 'Email обов\'язковий.',
+            'email.email' => 'Будь ласка, вкажіть дійсний email.',
+            'email.unique' => 'Цей email вже зареєстрований.',
+            'password.required' => 'Пароль обов\'язковий.',
+            'password.min' => 'Пароль має містити щонайменше 8 символів.',
+            'password.confirmed' => 'Підтвердження пароля не збігається.',
+            'phone.unique' => 'Цей номер телефону вже зареєстрований.',
+            'birthdate.date' => 'Введіть дійсну дату народження.',
+            'birthdate.before_or_equal' => 'Дата народження має бути не пізніше, ніж 7 років тому.',
+            'is_blocked.boolean' => 'Поле блокування має бути true або false.',
+            'avatar_url.max' => 'Посилання на аватар не повинно перевищувати 255 символів.',
         ];
+
     }
 }

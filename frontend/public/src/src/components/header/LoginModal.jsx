@@ -8,7 +8,7 @@ import '../../styles/LoginModal.scss';
 import logo from '../../assets/images/logo.svg';
 import {useUser} from "../../contexts/UserContext.jsx";
 
-const LoginModal = ({show, onHide, onLoginSuccess}) => {
+const LoginModal = ({show, onHide, onLoginSuccess, onShowRegister}) => {
 
     const { login } = useUser();
 
@@ -102,6 +102,7 @@ console.log('Forgot password clicked');
                     {error && (
                         <div className="alert alert-danger py-2">{error}</div>
                     )}
+
                     <div className="enter-password-container">
                         <Button
                             variant="success"
@@ -132,6 +133,7 @@ console.log('Forgot password clicked');
                     <span>Ще не маєте аккаунт?</span>
                     <button className="register-link" onClick={() => {
 console.log('Register clicked');
+                        onShowRegister();
                     }}>
                         Зареєструйтесь!
                     </button>

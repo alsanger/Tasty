@@ -1,0 +1,52 @@
+@use 'variables' as *;
+
+.message-modal {
+  .modal-content {
+    border-radius: 12px;
+    padding: 20px;
+  }
+
+  .modal-header {
+    border-bottom: none;
+    padding-bottom: 0;
+
+    .btn-close {
+      position: absolute;
+      right: 20px;
+      top: 20px;
+    }
+  }
+
+  .tasty-logo {
+    height: 40px;
+    margin-bottom: 20px;
+  }
+
+  .message-content {
+    text-align: center;
+    padding: 20px;
+    border-radius: $border-radius;
+    margin: 10px 0;
+    font-size: $font-size-small;
+
+    &.message-success {
+      background-color: rgba($primary-color, 0.1);
+      color: $primary-color;
+    }
+
+    &.message-error {
+      background-color: rgba(#dc3545, 0.1);
+      color: #dc3545;
+    }
+
+    &.message-warning {
+      background-color: rgba(#ffc107, 0.1);
+      color: #856404;
+    }
+
+    &.message-info {
+      background-color: rgba(#17a2b8, 0.1);
+      color: #17a2b8;
+    }
+  }
+}
