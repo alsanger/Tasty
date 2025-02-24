@@ -1,13 +1,15 @@
 import {useState} from 'react';
-import SearchBar from '../common/SearchBar.jsx';
-import LoginModal from './LoginModal.jsx';
-import RegisterModal from './RegisterModal.jsx';
-import MessageModal from '../common/MessageModal.jsx';
+import SearchBar from '../common/SearchBar/SearchBar.jsx';
+import LoginModal from './LoginModal/LoginModal.jsx';
+import RegisterModal from './RegisterModal/RegisterModal.jsx';
+import MessageModal from '../common/MessageModal/MessageModal.jsx';
 import logo from '../../assets/images/logo.svg';
-import {faUser, faBell} from '@fortawesome/free-regular-svg-icons';
-import {faPlus} from "@fortawesome/free-solid-svg-icons";
-import '../../styles/header.scss';
-import Button from "../common/Button.jsx";
+import { FaPlus } from "react-icons/fa6";
+import { FiUser, FiBell } from "react-icons/fi";
+import './Header.scss';
+import Button from "../common/Button/Button.jsx";
+import {ROUTES} from "../../utils/routes.js";
+import {Link} from "react-router-dom";
 
 const Header = () => {
     const [showLoginModal, setShowLoginModal] = useState(false);
@@ -33,7 +35,9 @@ const Header = () => {
         <header className="site-header">
             <div className="header-content">
                 <div className="logo-container">
-                    <img src={logo} alt="Tasty"/>
+                    <Link to={ROUTES.HOME}>
+                        <img src={logo} alt="Tasty" />
+                    </Link>
                 </div>
 
                 <div className="search-container">
@@ -49,20 +53,20 @@ const Header = () => {
                     />
 
                     <Button
-                        icon={faPlus}
+                        icon={FaPlus}
                         variant="icon-only"
                         onClick={() => console.log('Нажата кнопка плюс')}
                         isActive={true}
                     />
 
                     <Button
-                        icon={faBell}
+                        icon={FiBell}
                         variant="header-icon"
                         onClick={() => console.log('Нажата кнопка уведомлений')}
                     />
 
                     <Button
-                        icon={faUser}
+                        icon={FiUser}
                         variant="header-icon"
                         onClick={() => setShowLoginModal(true)}
                     />
@@ -88,89 +92,8 @@ const Header = () => {
                 }}
                 onShowMessage={handleShowMessage}
             />
-
-            <MessageModal
-                show={showMessageModal}
-                onHide={() => setShowMessageModal(false)}
-                message={message}
-            />
         </header>
     );
 };
 
 export default Header;
-
-
-/*
-import {useState} from 'react';
-import SearchBar from '../common/SearchBar.jsx';
-import LoginModal from './LoginModal.jsx';
-import logo from '../../assets/images/logo.svg';
-import {faUser, faBell} from '@fortawesome/free-regular-svg-icons';
-import {faPlus} from "@fortawesome/free-solid-svg-icons";
-import '../../styles/header.scss';
-import Button from "../common/Button.jsx";
-
-const Header = () => {
-    const [showLoginModal, setShowLoginModal] = useState(false);
-    const handleLoginSuccess = (userData) => {
-        // Handle successful login
-        console.log('Logged in:', userData);
-    };
-
-    const handleSearch = (searchQuery) => {
-        console.log('Search query:', searchQuery);
-        // Здесь будет логика поиска
-    };
-
-    return (
-        <header className="site-header">
-            <div className="header-content">
-                <div className="logo-container">
-                    <img src={logo} alt="Tasty"/>
-                </div>
-
-                <div className="search-container">
-                    <SearchBar onSearch={handleSearch}/>
-                </div>
-
-                <div className="buttons-container">
-                    <Button
-                        text="Розумний холодильник"
-                        onClick={() => console.log('Smart fridge clicked')}
-                        isActive={true}
-                        size="sm"
-                    />
-
-                    <Button
-                        icon={faPlus}
-                        variant="icon-only"
-                        onClick={() => console.log('Plus clicked')}
-                        isActive={true}
-                    />
-
-                    <Button
-                        icon={faBell}
-                        variant="header-icon"
-                        onClick={() => console.log('Bell clicked')}
-                    />
-
-                    <Button
-                        icon={faUser}
-                        variant="header-icon"
-                        onClick={() => setShowLoginModal(true)}
-                    />
-                </div>
-            </div>
-
-            <LoginModal
-                show={showLoginModal}
-                onHide={() => setShowLoginModal(false)}
-                onLoginSuccess={handleLoginSuccess}
-            />
-        </header>
-    );
-};
-
-export default Header;
-*/

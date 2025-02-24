@@ -1,0 +1,55 @@
+@use '../../../styles/variables' as *;
+
+.custom-button {
+  @include button-base;
+  display: inline-flex;
+  flex-direction: row; // Явно указываем горизонтальное направление
+  align-items: center;
+  background-color: $button-color !important; // добавьте !important
+  border-color: $border-color !important;     // добавьте !important
+  color: $text-color !important;              // добавьте !important
+
+  &:not(.header-icon-button) {
+    @include button-hover;
+    @include button-active;
+
+    &.icon-only {
+      @include button-icon;
+    }
+  }
+
+  &.header-icon-button {
+    color: $secondary-color;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    background-color: transparent !important;
+    border: none !important;
+
+    &:hover {
+      color: $hover-color;
+      transform: scale(1.2);
+      background-color: transparent !important;
+    }
+
+    .button-icon {
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  .button-icon {
+    transition: inherit;
+    width: $icon-size;
+    height: $icon-size;
+    vertical-align: middle;
+  }
+
+  .button-text {
+    white-space: nowrap;
+    vertical-align: middle;
+    // Используем display: inline вместо inline-flex
+    display: inline;
+    margin-left: 4px;
+  }
+}

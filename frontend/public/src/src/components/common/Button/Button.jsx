@@ -1,10 +1,10 @@
 import { Button as BootstrapButton } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import PropTypes from 'prop-types';
-import "../../styles/Button.scss";
+import React from 'react';
+import "./Button.scss";
 
 const Button = ({
-                    icon,
+                    icon: IconComponent,
                     text,
                     onClick,
                     isActive = false,
@@ -12,7 +12,7 @@ const Button = ({
                     type = 'button',     // 'button' | 'submit' | 'reset'
                 }) => {
     const buttonClasses = [
-        'custom-button', // Базовый класс всегда будет
+        'custom-button',
         variant === 'header-icon' ? 'header-icon-button' : '',
         variant === 'icon-only' ? 'icon-only' : '',
         isActive ? 'active' : ''
@@ -22,14 +22,13 @@ const Button = ({
         <BootstrapButton
             className={buttonClasses}
             onClick={onClick}
-            variant="link"
+            variant="outline"
             type={type}
         >
-            {icon && (
-                <FontAwesomeIcon
-                    icon={icon}
+            {IconComponent && (
+                <IconComponent
                     className="button-icon"
-                    size={variant === 'header-icon' ? 'lg' : undefined}
+                    size={variant === 'header-icon' ? 24 : 20}
                 />
             )}
             {text && <span className="button-text">{text}</span>}
@@ -38,8 +37,12 @@ const Button = ({
 };
 
 Button.propTypes = {
-    icon: PropTypes.object,
-    text: PropTypes.string,
+    icon: PropTypes.elementType,
+    text: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.element,
+        PropTypes.node
+    ]),
     onClick: PropTypes.func.isRequired,
     isActive: PropTypes.bool,
     variant: PropTypes.oneOf(['default', 'icon-only', 'header-icon']),

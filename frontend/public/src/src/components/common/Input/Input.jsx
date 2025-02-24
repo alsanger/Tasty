@@ -1,6 +1,6 @@
 import { Form } from 'react-bootstrap';
 import PropTypes from 'prop-types';
-import "../../styles/Input.scss";
+import "./Input.scss";
 
 const Input = ({
                    type = 'text',

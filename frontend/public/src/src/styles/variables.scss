@@ -2,9 +2,10 @@
 $primary-color: #06A561;
 $secondary-color: #454545;
 $text-color: #333;
-$placeholder-color: #6c757d;
+$button-color: #efefef;
+$placeholder-color: #fafafa;
 $background-color: #fff;
-$border-color: #dee2e6;
+$border-color: #e9e9e9;
 $hover-color: #202020;
 
 // Радиусы и размеры
@@ -25,8 +26,8 @@ $transition: all 0.2s ease;
   align-items: center;
   justify-content: center;
   gap: 4px;
-  border: 1px solid $primary-color;
-  background-color: transparent;
+  border: 1px solid $border-color;
+  background-color: $button-color;
   color: $primary-color;
   font-weight: 500;
   border-radius: $border-radius;
@@ -50,8 +51,9 @@ $transition: all 0.2s ease;
 
 @mixin button-active {
   &.active {
-    background-color: $primary-color;
-    color: white;
+    background-color: $primary-color !important;
+    border-color: $primary-color !important;
+    color: white !important;
   }
 }
 
@@ -89,7 +91,7 @@ $transition: all 0.2s ease;
   }
 
   .btn {
-    background-color: $background-color;
+    background-color: $button-color;
     border: 1px solid $border-color;
     color: $primary-color;
     width: 38px;

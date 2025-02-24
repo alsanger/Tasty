@@ -1,15 +1,20 @@
+import { BrowserRouter } from 'react-router-dom';
 import Header from './components/header/Header.jsx';
 import './styles/main.scss';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {UserProvider} from "./contexts/UserContext.jsx";
+import Main from "./components/main/Main.jsx";
 
 function App() {
     return (
-        <UserProvider>
-            <div className="app">
-                <Header/>
-            </div>
-        </UserProvider>
+        <BrowserRouter>
+            <UserProvider>
+                <div className="app">
+                    <Header />
+                    <Main />
+                </div>
+            </UserProvider>
+        </BrowserRouter>
     );
 }
 
@@ -24,7 +29,7 @@ import ScrollableList from './components/common/ScrollableList';
 import RecipeCard from './components/recipe/RecipeCard';
 import { recipeService } from './services/api';
 import './styles/main.scss';
-import './styles/header.scss';
+import './styles/Header.scss';
 
 function App() {
     const [featuredRecipes, setFeaturedRecipes] = useState(null);

@@ -1,4 +1,4 @@
-@use 'variables' as *;
+@use '../../../styles/variables' as *;
 
 .search-bar {
   width: 100%;
@@ -13,6 +13,10 @@
         & + .btn {
           border-color: $primary-color;
           color: $primary-color;
+
+          &:hover {
+            color: white; // Исправляем проблему - лупа должна стать белой при наведении
+          }
         }
       }
     }

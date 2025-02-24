@@ -1,12 +1,12 @@
 import {useState} from 'react';
-import { userApi } from '../../utils/fetchApi';
+import { userApi } from '../../../utils/fetchApi/index.js';
 import {Modal, Form, Spinner} from 'react-bootstrap';
-import {API_BASE_URL, ENDPOINTS} from '../../utils/constants';
-import Input from '../common/Input';
-import Button from '../common/Button';
-import '../../styles/LoginModal.scss';
-import logo from '../../assets/images/logo.svg';
-import {useUser} from "../../contexts/UserContext.jsx";
+import {API_BASE_URL, ENDPOINTS} from '../../../utils/constants.js';
+import Input from '../../common/Input/Input.jsx';
+import Button from '../../common/Button/Button.jsx';
+import './LoginModal.scss';
+import logo from '../../../assets/images/logo.svg';
+import {useUser} from "../../../contexts/UserContext.jsx";
 
 const LoginModal = ({show, onHide, onLoginSuccess, onShowRegister}) => {
 
@@ -105,7 +105,7 @@ console.log('Forgot password clicked');
 
                     <div className="enter-password-container">
                         <Button
-                            variant="success"
+                            variant="default"
                             type="submit"
                             disabled={loading}
                             text={loading ? (
@@ -121,8 +121,7 @@ console.log('Forgot password clicked');
                                     Завантаження...
                                 </>
                             ) : '\u00A0\u00A0\u00A0Увійти\u00A0\u00A0\u00A0'}
-                            onClick={() => {
-                            }}
+                            onClick={() => {}}
                             isActive={true}
                             className="login-button"
                         />

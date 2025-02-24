@@ -1,4 +1,4 @@
-@use 'variables' as *;
+@use '../../../styles/variables' as *;
 @use "sass:color";
 
 .login-modal {
@@ -27,7 +27,7 @@
         background: none;
         border: none;
         padding: 0;
-        color: $placeholder-color;
+        color: $secondary-color;
         text-decoration: none;
         font-size: $font-size-small;
 

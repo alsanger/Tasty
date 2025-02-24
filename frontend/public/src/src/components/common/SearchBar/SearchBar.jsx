@@ -1,9 +1,8 @@
 import { useState } from 'react';
 import { Form, InputGroup, Button } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { FaSearch } from 'react-icons/fa';
 import PropTypes from "prop-types";
-import "../../styles/SearchBar.scss";
+import "./SearchBar.scss";
 
 const SearchBar = ({ onSearch }) => {
     const [searchQuery, setSearchQuery] = useState('');
@@ -23,7 +22,7 @@ const SearchBar = ({ onSearch }) => {
                     onChange={(e) => setSearchQuery(e.target.value)}
                 />
                 <Button variant="outline-success" type="submit">
-                    <FontAwesomeIcon icon={faSearch} />
+                    <FaSearch />
                 </Button>
             </InputGroup>
         </Form>
