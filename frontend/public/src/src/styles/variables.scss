@@ -1,12 +1,21 @@
 // Цвета
 $primary-color: #06A561;
+$primary-color: #06A561;
 $secondary-color: #454545;
 $text-color: #333;
-$button-color: #efefef;
 $placeholder-color: #fafafa;
-$background-color: #fff;
-$border-color: #e9e9e9;
+$background-color: #efefef;
 $hover-color: #202020;
+
+$button-default-color: #F7F7F7;
+$button-hover-color: #F2F2F2;
+$button-active-color: #E6E6E6;
+
+$button-active-default-color: #06A561;
+$button-active-hover-color: #07be6f;
+$button-active-press-color:#068c53;
+
+$border-color: #E6E6E6;
 
 // Радиусы и размеры
 $border-radius: 6px;
@@ -27,7 +36,7 @@ $transition: all 0.2s ease;
   justify-content: center;
   gap: 4px;
   border: 1px solid $border-color;
-  background-color: $button-color;
+  background-color: $background-color;
   color: $primary-color;
   font-weight: 500;
   border-radius: $border-radius;
@@ -58,7 +67,7 @@ $transition: all 0.2s ease;
 }
 
 @mixin button-icon {
-  padding: 8px;
+  padding: 0;
   width: 36px;
   height: 36px;
   display: flex;
@@ -91,7 +100,7 @@ $transition: all 0.2s ease;
   }
 
   .btn {
-    background-color: $button-color;
+    background-color: white;
     border: 1px solid $border-color;
     color: $primary-color;
     width: 38px;

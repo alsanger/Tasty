@@ -7,7 +7,7 @@
     position: relative;
 
     .form-control {
-      @include form-control-base; // Подключаем общий стиль
+      @include form-control-base;
 
       &:focus {
         & + .btn {
@@ -15,14 +15,14 @@
           color: $primary-color;
 
           &:hover {
-            color: white; // Исправляем проблему - лупа должна стать белой при наведении
+            color: white;
           }
         }
       }
     }
 
     .btn {
-      background-color: $background-color;
+      background-color: white;
       border: 1px solid $border-color;
       color: $primary-color;
       width: 38px;
