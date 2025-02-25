@@ -2,7 +2,6 @@ import {useState} from 'react';
 import SearchBar from '../common/SearchBar/SearchBar.jsx';
 import LoginModal from './LoginModal/LoginModal.jsx';
 import RegisterModal from './RegisterModal/RegisterModal.jsx';
-import MessageModal from '../common/MessageModal/MessageModal.jsx';
 import logo from '../../assets/images/logo.svg';
 import { FaPlus } from "react-icons/fa6";
 import { FiUser, FiBell } from "react-icons/fi";
@@ -14,21 +13,9 @@ import {Link} from "react-router-dom";
 const Header = () => {
     const [showLoginModal, setShowLoginModal] = useState(false);
     const [showRegisterModal, setShowRegisterModal] = useState(false);
-    const [showMessageModal, setShowMessageModal] = useState(false);
-    const [message, setMessage] = useState(null);
-
-    const handleLoginSuccess = (userData) => {
-        console.log('Успешный вход:', userData);
-    };
 
     const handleSearch = (searchQuery) => {
         console.log('Поисковый запрос:', searchQuery);
-    };
-
-    const handleShowMessage = (messageData) => {
-        console.log('Показ сообщения:', messageData);
-        setMessage(messageData);
-        setShowMessageModal(true);
     };
 
     return (
@@ -76,7 +63,6 @@ const Header = () => {
             <LoginModal
                 show={showLoginModal}
                 onHide={() => setShowLoginModal(false)}
-                onLoginSuccess={handleLoginSuccess}
                 onShowRegister={() => {
                     setShowLoginModal(false);
                     setShowRegisterModal(true);
@@ -90,7 +76,6 @@ const Header = () => {
                     setShowRegisterModal(false);
                     setShowLoginModal(true);
                 }}
-                onShowMessage={handleShowMessage}
             />
         </header>
     );

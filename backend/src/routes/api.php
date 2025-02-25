@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\V1\CookingMethod\CookingMethodController;
 use App\Http\Controllers\Api\V1\CookingPlan\CookingPlanController;
 use App\Http\Controllers\Api\V1\Country\CountryController;
 use App\Http\Controllers\Api\V1\Fridge\FridgeController;
+use App\Http\Controllers\Api\V1\Image\ImageUploadController;
 use App\Http\Controllers\Api\V1\Ingredient\IngredientController;
 use App\Http\Controllers\Api\V1\Recipe\RecipeController;
 use App\Http\Controllers\Api\V1\Recipe\RecipeSearchController;
@@ -22,6 +23,7 @@ Route::group(['prefix' => 'v1'], function () {
     Route::post('/users', [UserController::class, 'store']);  // Регистрация пользователя
     Route::post('/login', [AuthController::class, 'login'])  // Аутентификация пользователя
         ->name('login');
+    Route::get('/image', [ImageUploadController::class, 'getImages']); // Получение изображений
 
     // Маршруты для полученния данных для отображения на главной странице
     Route::get('/recipes/top-by-period', [RecipeSearchController::class, 'topByPeriod']); // Получение списка топовых рецептов за определенный период
@@ -118,6 +120,9 @@ Route::group(['prefix' => 'v1'], function () {
         Route::get('/users/{user}/following', [FollowController::class, 'following']);
         Route::post('/users/follow', [FollowController::class, 'follow']);
         Route::post('/users/unfollow', [FollowController::class, 'unfollow']);
+        // Маршруты для работы с изображениями:
+        Route::post('/image-upload', [ImageUploadController::class, 'upload']); // Загрузка изображения
+        Route::delete('/image-delete', [ImageUploadController::class, 'delete']); // Удаление изображения
     });
 
     // Маршруты для верификации email:

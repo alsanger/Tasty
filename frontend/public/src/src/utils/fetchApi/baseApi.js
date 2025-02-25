@@ -1,11 +1,10 @@
 import { API_BASE_URL } from '../constants';
 
 // Функция для формирования заголовков запроса
-// Автоматически добавляет токен из localStorage, если он есть
-const getHeaders = () => {
+const getHeaders = (contentType = 'application/json') => {
     const token = localStorage.getItem('token');
     const headers = {
-        'Content-Type': 'application/json',
+        'Content-Type': contentType,
     };
 
     if (token) {
@@ -16,190 +15,42 @@ const getHeaders = () => {
 };
 
 // GET запрос
-// endpoint - конечная точка API (например, '/users')
-// params - объект с query-параметрами (например, { page: 1, limit: 10 })
 export const get = async (endpoint, params = {}) => {
-    // Формируем URL с query-параметрами
     const url = new URL(`${API_BASE_URL}${endpoint}`);
-    Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
+    Object.keys(params).forEach(key => {
+        if (params[key] !== null && params[key] !== undefined) {
+            url.searchParams.append(key, params[key]);
+        }
+    });
 
     try {
         const response = await fetch(url.toString(), {
             method: 'GET',
             headers: getHeaders(),
         });
-
         const responseData = await response.json();
 
-        // Если статус ответа не в диапазоне 200-299, выбрасываем ошибку
         if (!response.ok) {
-            throw new Error(responseData.message || `Помилка: ${response.status}`);
+            throw new Error(responseData.message || `Ошибка: ${response.status}`);
         }
 
         return responseData;
     } catch (error) {
-        console.error('Помилка при виконанні GET-запиту:', error);
+        console.error('Ошибка при выполнении GET-запроса:', error);
         throw error;
     }
 };
 
 // POST запрос
-// endpoint - конечная точка API
-// data - данные для отправки
-export const post = async (endpoint, data) => {
+export const post = async (endpoint, data, isFormData = false) => {
     try {
+        const headers = isFormData ? getHeaders(undefined) : getHeaders();
+        const body = isFormData ? data : JSON.stringify(data);
+
         const response = await fetch(`${API_BASE_URL}${endpoint}`, {
             method: 'POST',
-            headers: getHeaders(),
-            body: JSON.stringify(data),
-        });
-
-        const responseData = await response.json();
-
-        if (!response.ok) {
-            throw new Error(responseData.message || `Помилка: ${response.status}`);
-        }
-
-        return responseData;
-    } catch (error) {
-        console.error('Помилка при виконанні POST-запиту:', error);
-        throw error;
-    }
-};
-
-// PUT запрос для обновления данных
-// endpoint - конечная точка API
-// data - данные для обновления
-export const put = async (endpoint, data) => {
-    try {
-        const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-            method: 'PUT',
-            headers: getHeaders(),
-            body: JSON.stringify(data),
-        });
-
-        const responseData = await response.json();
-
-        if (!response.ok) {
-            throw new Error(responseData.message || `Помилка: ${response.status}`);
-        }
-
-        return responseData;
-    } catch (error) {
-        console.error('Помилка при виконанні PUT-запиту:', error);
-        throw error;
-    }
-};
-
-// DELETE запрос
-// endpoint - конечная точка API
-export const remove = async (endpoint) => {
-    try {
-        const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-            method: 'DELETE',
-            headers: getHeaders(),
-        });
-
-        const responseData = await response.json();
-
-        if (!response.ok) {
-            throw new Error(responseData.message || `Помилка: ${response.status}`);
-        }
-
-        return responseData;
-    } catch (error) {
-        console.error('Помилка при виконанні DELETE-запиту:', error);
-        throw error;
-    }
-};
-
-/*import { API_BASE_URL } from '../constants';
-
-// * Выполняет GET-запрос к API.
-// * @param {string} endpoint - Эндпоинт API.
-// * @param {Object} params - Параметры запроса (опционально).
-// * @returns {Promise} - Промис с результатом запроса.
-export const get = async (endpoint, params = {}) => {
-    const url = new URL(`${API_BASE_URL}${endpoint}`);
-    Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
-
-    try {
-        const response = await fetch(url.toString(), {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
-
-        if (!response.ok) {
-            throw new Error(`Ошибка: ${response.status}`);
-        }
-
-        return await response.json();
-    } catch (error) {
-        console.error('Ошибка при выполнении GET-запроса:', error);
-        throw error;
-    }
-};
-// Вот этот чуть лучше того что выше:
-export const get = async (endpoint, params = {}) => {
-    const url = new URL(`${API_BASE_URL}${endpoint}`);
-    Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
-
-    try {
-        const response = await fetch(url.toString(), {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
-
-        const responseData = await response.json();
-
-        if (!response.ok) {
-            throw new Error(responseData.message || `Ошибка: ${response.status}`);
-        }
-
-        return responseData;
-    } catch (error) {
-        console.error('Ошибка при выполнении GET-запроса:', error);
-        throw error;
-    }
-};
-
-// * Выполняет POST-запрос к API.
-// * @param {string} endpoint - Эндпоинт API.
-// * @param {Object} data - Данные для отправки.
-// * @returns {Promise} - Промис с результатом запроса.
-export const post = async (endpoint, data) => {
-    try {
-        const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
-        });
-
-        if (!response.ok) {
-            throw new Error(`Ошибка: ${response.status}`);
-        }
-
-        return await response.json();
-    } catch (error) {
-        console.error('Ошибка при выполнении POST-запроса:', error);
-        throw error;
-    }
-};
-// Вот этот чуть лучше того что выше:
-export const post = async (endpoint, data) => {
-    try {
-        const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
+            headers: headers,
+            body: body,
         });
 
         const responseData = await response.json();
@@ -215,85 +66,44 @@ export const post = async (endpoint, data) => {
     }
 };
 
-// * Выполняет PUT-запрос к API.
-// * @param {string} endpoint - Эндпоинт API.
-// * @param {Object} data - Данные для отправки.
-// * @returns {Promise} - Промис с результатом запроса.
-export const put = async (endpoint, data) => {
+// PUT запрос
+export const put = async (endpoint, data, isFormData = false) => {
     try {
+        const headers = isFormData ? getHeaders(undefined) : getHeaders();
+        const body = isFormData ? data : JSON.stringify(data);
+
         const response = await fetch(`${API_BASE_URL}${endpoint}`, {
             method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
+            headers: headers,
+            body: body,
         });
 
+        const responseData = await response.json();
+
         if (!response.ok) {
-            throw new Error(`Ошибка: ${response.status}`);
+            throw new Error(responseData.message || `Ошибка: ${response.status}`);
         }
 
-        return await response.json();
+        return responseData;
     } catch (error) {
         console.error('Ошибка при выполнении PUT-запроса:', error);
         throw error;
     }
 };
-// Вот этот чуть лучше того что выше:
-export const put = async (endpoint, data) => {
+
+// DELETE запрос
+export const remove = async (endpoint, data = null) => {
     try {
-        const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
-        });
+        const options = {
+            method: 'DELETE',
+            headers: getHeaders(),
+        };
 
-        const responseData = await response.json();
-
-        if (!response.ok) {
-            throw new Error(responseData.message || `Ошибка: ${response.status}`);
+        if (data) {
+            options.body = JSON.stringify(data);
         }
 
-        return responseData;
-    } catch (error) {
-        console.error('шибка при выполнении PUT-запроса:', error);
-        throw error;
-    }
-};
-
-// * Выполняет DELETE-запрос к API.
-// * @param {string} endpoint - Эндпоинт API.
-// * @returns {Promise} - Промис с результатом запроса.
-export const remove = async (endpoint) => {
-    try {
-        const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
-
-        if (!response.ok) {
-            throw new Error(`Ошибка: ${response.status}`);
-        }
-
-        return await response.json();
-    } catch (error) {
-        console.error('Ошибка при выполнении DELETE-запроса:', error);
-        throw error;
-    }
-};
-// Вот этот чуть лучше того что выше:
-export const remove = async (endpoint) => {
-    try {
-        const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
+        const response = await fetch(`${API_BASE_URL}${endpoint}`, options);
 
         const responseData = await response.json();
 
@@ -306,4 +116,19 @@ export const remove = async (endpoint) => {
         console.error('Ошибка при выполнении DELETE-запроса:', error);
         throw error;
     }
-};*/
+};
+
+// Специальный метод для загрузки файлов
+export const uploadFile = async (endpoint, file, data = {}) => {
+    const formData = new FormData();
+    formData.append('image', file);
+
+    // Добавляем остальные данные в formData
+    Object.keys(data).forEach(key => {
+        if (data[key] !== null && data[key] !== undefined) {
+            formData.append(key, data[key]);
+        }
+    });
+
+    return post(endpoint, formData, true);
+};

@@ -59,6 +59,8 @@ services:
     container_name: tasty.api
     ports:
       - "8000:8000"
+    volumes:
+      - ./backend/storage/app/public:/var/www/backend/storage/app/public # Добавил для сохранения картинок
     depends_on:
       - tasty.mysql
       - tasty.redis

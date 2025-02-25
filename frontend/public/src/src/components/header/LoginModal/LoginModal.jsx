@@ -1,14 +1,13 @@
 import {useState} from 'react';
 import { userApi } from '../../../utils/fetchApi/index.js';
 import {Modal, Form, Spinner} from 'react-bootstrap';
-import {API_BASE_URL, ENDPOINTS} from '../../../utils/constants.js';
 import Input from '../../common/Input/Input.jsx';
 import Button from '../../common/Button/Button.jsx';
 import './LoginModal.scss';
 import logo from '../../../assets/images/logo.svg';
 import {useUser} from "../../../contexts/UserContext.jsx";
 
-const LoginModal = ({show, onHide, onLoginSuccess, onShowRegister}) => {
+const LoginModal = ({show, onHide, onShowRegister}) => {
 
     const { login } = useUser();
 
@@ -21,7 +20,6 @@ const LoginModal = ({show, onHide, onLoginSuccess, onShowRegister}) => {
 
     const handleChange = (e) => {
         const {name, value} = e.target;
-console.log(`Field ${name} changed to: ${value}`);
         setFormData(prev => ({
             ...prev,
             [name]: value
@@ -30,23 +28,15 @@ console.log(`Field ${name} changed to: ${value}`);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-console.log('Form submitted with data:', formData);
         setLoading(true);
         setError('');
 
         try {
-console.log('Attempting to login...');
             const data = await userApi.login(formData);
-console.log('Login response:', data);
+            console.log('Ответ с сервера по логину:', data);
             login(data);
-            //localStorage.setItem('token', data.token);
-            //localStorage.setItem('user', JSON.stringify(data.user));
-console.log('Data saved to localStorage');
-
-            //onLoginSuccess?.(data);
             onHide();
         } catch (err) {
-console.error('Login error:', err);
             setError(err.message || 'Помилка входу');
         } finally {
             setLoading(false);
@@ -67,7 +57,6 @@ console.error('Login error:', err);
             </Modal.Header>
             <Modal.Body>
                 <Form onSubmit={(e) => {
-                    console.log('Form submit event triggered');
                     handleSubmit(e);
                 }}>
                     <Input
@@ -92,7 +81,6 @@ console.error('Login error:', err);
 
                         <div className="forgot-password-container">
                             <button className="forgot-password" onClick={() => {
-console.log('Forgot password clicked');
                             }}>
                                 Забули пароль?
                             </button>
@@ -131,7 +119,6 @@ console.log('Forgot password clicked');
                 <div className="text-center mt-3 d-flex align-items-center justify-content-center">
                     <span>Ще не маєте аккаунт?</span>
                     <button className="register-link" onClick={() => {
-console.log('Register clicked');
                         onShowRegister();
                     }}>
                         Зареєструйтесь!
