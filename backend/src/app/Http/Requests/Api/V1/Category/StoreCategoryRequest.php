@@ -31,6 +31,10 @@ class StoreCategoryRequest extends FormRequest
                 'max:255',
                 'unique:categories,name', // Проверка уникальности имени категории
             ],
+            'image_url' => [
+                'nullable',
+                'max:255',
+            ],
         ];
     }
 

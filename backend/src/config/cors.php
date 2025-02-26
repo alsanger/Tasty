@@ -1,12 +1,12 @@
 <?php
 
 return [
-    'paths' => ['api/*'], // Разрешить CORS для API
-    'allowed_methods' => ['*'], // Разрешить все методы (GET, POST, PUT, DELETE)
-    'allowed_origins' => ['*'], // Разрешить запросы с любого источника
+    'paths' => ['api/*', 'sanctum/csrf-cookie', '*'], // Добавьте '*', чтобы разрешить все пути
+    'allowed_methods' => ['*'], // Все методы разрешены
+    'allowed_origins' => ['*'], // Все источники разрешены
     'allowed_origins_patterns' => [],
-    'allowed_headers' => ['*'], // Разрешить любые заголовки
+    'allowed_headers' => ['*'], // Все заголовки разрешены
     'exposed_headers' => [],
     'max_age' => 0,
-    'supports_credentials' => false, // Если авторизация через cookies, поставить true
+    'supports_credentials' => false,
 ];

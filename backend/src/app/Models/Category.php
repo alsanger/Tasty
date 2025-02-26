@@ -12,6 +12,7 @@ class Category extends Model
 
     protected $fillable = [
         'name',
+        'image_url',
     ];
 
     // Связь категории с рецептами

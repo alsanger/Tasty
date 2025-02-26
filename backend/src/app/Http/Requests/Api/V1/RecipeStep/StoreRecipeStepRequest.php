@@ -36,7 +36,6 @@ class StoreRecipeStepRequest extends FormRequest
             ],
             'image_url' => [
                 'nullable',
-                'url',
                 'max:255',
             ],
         ];

@@ -31,7 +31,7 @@ class StoreUserRequest extends FormRequest
                 'after_or_equal:1900-01-01',
                 'before_or_equal:' . now()->subYears(7)->toDateString(),
             ],
-            'avatar_url' => ['nullable', 'url', 'max:255'],
+            'avatar_url' => ['nullable', 'max:255'],
             'is_blocked' => ['nullable', 'boolean'],
             'roles' => ['array', 'exists:roles,id'], // Проверяем, что это массив и все ID существуют
             'roles.*' => 'exists:roles,id', // Проверяем, что ID ролей существуют

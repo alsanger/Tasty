@@ -1,11 +1,12 @@
 import React from 'react';
 import CountryButtonsNavigation from "./CountryButtonsNavigation/CountryButtonsNavigation.jsx";
 import ImageUploader from "./ImageUploader.jsx";
+import './Main.scss';
 
 
 function Main() {
     return (
-        <div className="main">
+        <div className="site-main">
             <CountryButtonsNavigation />
             <p>Это основное содержимое твоего приложения.</p>
             <h2>Загрузка аватара</h2>

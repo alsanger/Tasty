@@ -33,6 +33,10 @@ class UpdateCategoryRequest extends FormRequest
                 // Проверка уникальности имени категории, исключая текущую категорию
                 Rule::unique('categories', 'name')->ignore($this->route('category')?->id),
             ],
+            'image_url' => [
+                'nullable',
+                'max:255',
+            ],
         ];
     }
 

@@ -35,7 +35,6 @@ class UpdateRecipeStepRequest extends FormRequest
             ],
             'image_url' => [
                 'nullable',
-                'url',
                 'max:255',
             ],
         ];

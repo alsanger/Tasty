@@ -1,4 +1,14 @@
 export const API_BASE_URL = 'http://localhost:8000/api';
+
+export const FONT_FAMILIES = {
+    PRIMARY: "'Monomakh', serif",
+    SECONDARY: "'Raleway', sans-serif",
+};
+
+export const FONT_LINKS = [
+    "https://fonts.googleapis.com/css2?family=Monomakh&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap"
+];
+
 export const ENDPOINTS = {
     // Аутентификация и пользователи
     LOGIN: '/v1/login',

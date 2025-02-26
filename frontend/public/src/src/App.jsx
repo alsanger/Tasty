@@ -1,15 +1,17 @@
 import { BrowserRouter } from 'react-router-dom';
 import Header from './components/header/Header.jsx';
-import './styles/main.scss';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {UserProvider} from "./contexts/UserContext.jsx";
 import Main from "./components/main/Main.jsx";
+import { FONT_FAMILIES } from './utils/constants.js';
+/*import FontLoader from './components/FontLoader.jsx';*/
+import './App.css';
 
 function App() {
     return (
         <BrowserRouter>
             <UserProvider>
-                <div className="app">
+                <div className="app" style={{ fontFamily: FONT_FAMILIES.SECONDARY }}>
                     <Header />
                     <Main />
                 </div>

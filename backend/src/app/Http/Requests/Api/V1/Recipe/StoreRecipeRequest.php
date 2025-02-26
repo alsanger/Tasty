@@ -46,7 +46,6 @@ class StoreRecipeRequest extends FormRequest
             ],
             'image_url' => [
                 'nullable',
-                'url', // Проверка, что URL изображения корректен
                 'max:255',
             ],
             'ingredients' => [
