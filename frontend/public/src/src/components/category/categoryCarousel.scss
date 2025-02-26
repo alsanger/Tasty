@@ -1,0 +1,132 @@
+// Файл CategoryCarousel.scss
+.category-carousel {
+  padding: 20px 0;
+  position: relative;
+  overflow: hidden;
+
+  .carousel-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    position: relative;
+    min-height: 180px; /* Минимальная высота для правильного выравнивания стрелок */
+  }
+
+  .carousel-items {
+    flex: 1;
+    overflow: hidden;
+    padding: 0 15px;
+  }
+
+  .categories-wrapper {
+    display: flex;
+    width: 100%;
+    will-change: transform; /* Оптимизация для анимации */
+  }
+
+  .category-wrapper {
+    padding: 0 10px;
+    box-sizing: border-box;
+    flex-shrink: 0;
+  }
+
+  .carousel-control {
+    background-color: #f0f0f0;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin: 0 5px;
+    flex-shrink: 0;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+
+    &-prev {
+      left: 0;
+    }
+
+    &-next {
+      right: 0;
+    }
+
+    &:hover:not(:disabled) {
+      background-color: #e0e0e0;
+      transform: translateY(-50%) scale(1.05);
+    }
+
+    &:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    &:focus {
+      box-shadow: none;
+      outline: none;
+    }
+
+    svg {
+      font-size: 20px;
+    }
+  }
+
+  &-loading, &-error {
+    text-align: center;
+    padding: 30px;
+    font-size: 16px;
+  }
+
+  &-error {
+    color: #dc3545;
+  }
+}
+
+// Медиа-запросы
+@media (max-width: 768px) {
+  .category-carousel {
+    .carousel-items {
+      padding: 0 40px; /* Увеличиваем отступы по бокам для кнопок */
+    }
+
+    .category-wrapper {
+      padding: 0 8px;
+    }
+
+    .carousel-control {
+      width: 36px;
+      height: 36px;
+
+      svg {
+        font-size: 18px;
+      }
+    }
+  }
+}
+
+@media (max-width: 576px) {
+  .category-carousel {
+    .carousel-items {
+      padding: 0 35px; /* Увеличиваем отступы по бокам для кнопок */
+    }
+
+    .category-wrapper {
+      padding: 0 5px;
+    }
+
+    .carousel-control {
+      width: 32px;
+      height: 32px;
+
+      svg {
+        font-size: 16px;
+      }
+    }
+  }
+}
