@@ -1,0 +1,7 @@
+@font-face {
+    font-family: 'Namu';
+    src: url('./assets/fonts/NAMU-1400.eot'); /* Для старых браузеров */
+    src: url('./assets/fonts/NAMU-1400.woff') format('woff'); /* Основной формат */
+    font-weight: normal;
+    font-style: normal;
+}

@@ -4,20 +4,27 @@ namespace App\Http\Controllers\Api\V1\Image;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\Image\ImageUploadRequest;
+use App\Models\Category;
 use App\Models\Recipe;
 use App\Models\RecipeStep;
 use App\Models\User;
+
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 
 class ImageUploadController extends Controller
 {
-    public function upload(ImageUploadRequest $request)
+    public function upload(ImageUploadRequest $request): JsonResponse
     {
+        Log::error(json_encode($request->all()));
+
         $extension = $request->file('image')->getClientOriginalExtension();
         $id = $request->id;
         $recipeStepId = $request->recipe_step_id;
+
+
 
         // Формируем путь к файлу
         switch ($request->type) {
@@ -30,6 +37,18 @@ class ImageUploadController extends Controller
                 if ($user) {
                     $user->avatar_url = asset("storage/$path");
                     $user->save();
+                }
+                break;
+
+            case 'category':
+            case 'categories':
+                $filename = "{$id}.{$extension}";
+                $path = "categories/{$filename}";
+                // Обновляем URL в базе данных
+                $category = Category::find($id);
+                if ($category) {
+                    $category->image_url = asset("storage/$path");
+                    $category->save();
                 }
                 break;
 
@@ -77,7 +96,7 @@ class ImageUploadController extends Controller
         return response()->json(['image_url' => asset("storage/$path")]);
     }
 
-    public function getImages(Request $request)
+    public function getImages(Request $request): JsonResponse
     {
         $id = $request->id;
         $recipeStepId = $request->recipe_step_id;
@@ -86,6 +105,11 @@ class ImageUploadController extends Controller
             case 'avatar':
             case 'avatars':
                 $pattern = "avatars/{$id}.*";
+                break;
+
+            case 'category':
+            case 'categories':
+                $pattern = "categories/{$id}.*";
                 break;
 
             case 'recipe':
@@ -116,7 +140,7 @@ class ImageUploadController extends Controller
         return response()->json(['images' => $imageUrls]);
     }
 
-    public function delete(Request $request)
+    public function delete(Request $request): JsonResponse
     {
         $imagePath = $request->image_path;
         $relativePath = str_replace(asset('storage') . '/', '', $imagePath);
@@ -136,8 +160,16 @@ class ImageUploadController extends Controller
                         $user->save();
                     }
                 }
+                else if ($type === 'categories' && isset($pathParts[1])) {
+                    $categoryId = (int) explode('.', $pathParts[1])[0];
+                    $category = Category::find($categoryId);
+                    if ($category && $category->image_url === $imagePath) {
+                        $category->image_url = null;
+                        $category->save();
+                    }
+                }
                 else if ($type === 'recipes') {
-                    if (count($pathParts) >= 3 && $pathParts[2] === 'main.jpg') {
+                    if (isset($pathParts[2]) && $pathParts[2] === 'main.jpg' || (isset($pathParts[2]) && strpos($pathParts[2], 'main.') === 0)) {
                         $recipeId = (int) $pathParts[1];
                         $recipe = Recipe::find($recipeId);
                         if ($recipe && $recipe->image_url === $imagePath) {
@@ -145,7 +177,7 @@ class ImageUploadController extends Controller
                             $recipe->save();
                         }
                     }
-                    else if (count($pathParts) >= 4 && $pathParts[2] === 'steps') {
+                    else if (isset($pathParts[2]) && $pathParts[2] === 'steps' && isset($pathParts[3])) {
                         $stepId = (int) explode('.', $pathParts[3])[0];
                         $recipeStep = RecipeStep::find($stepId);
                         if ($recipeStep && $recipeStep->image_url === $imagePath) {

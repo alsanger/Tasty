@@ -4,7 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import {UserProvider} from "./contexts/UserContext.jsx";
 import Main from "./components/main/Main.jsx";
 import { FONT_FAMILIES } from './utils/constants.js';
-/*import FontLoader from './components/FontLoader.jsx';*/
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
 function App() {

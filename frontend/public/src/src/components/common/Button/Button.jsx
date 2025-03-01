@@ -39,7 +39,7 @@ const Button = ({
         <BootstrapButton
             className={buttonClasses}
             onClick={onClick}
-            variant="outline"
+            /*variant="outline"*/
             type={type}
             style={customStyle}
         >

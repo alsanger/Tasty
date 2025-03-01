@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'paths' => ['api/*', 'sanctum/csrf-cookie', '*'], // Добавьте '*', чтобы разрешить все пути
+    'paths' => ['*'], // Добавьте '*', чтобы разрешить все пути
     'allowed_methods' => ['*'], // Все методы разрешены
     'allowed_origins' => ['*'], // Все источники разрешены
     'allowed_origins_patterns' => [],

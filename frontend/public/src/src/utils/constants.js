@@ -1,7 +1,7 @@
 export const API_BASE_URL = 'http://localhost:8000/api';
 
 export const FONT_FAMILIES = {
-    PRIMARY: "'Monomakh', serif",
+    PRIMARY: "'NAMU', serif",
     SECONDARY: "'Raleway', sans-serif",
 };
 
