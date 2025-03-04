@@ -1,28 +1,6 @@
+version: "3.8"
+
 services:
-  tasty.mysql:
-    image: mysql:9
-    container_name: tasty.mysql
-    restart: always
-    env_file:
-      - .env
-    ports:
-      - "3306:3306"
-    volumes:
-      - ./volumes/mysql:/var/lib/mysql
-    networks:
-      - tasty_network
-
-  tasty.phpmyadmin:
-    image: phpmyadmin:latest
-    container_name: tasty.phpmyadmin
-    restart: always
-    env_file:
-      - .env
-    ports:
-      - "8081:80"
-    networks:
-      - tasty_network
-
   tasty.redis:
     image: redis:latest
     container_name: tasty.redis
@@ -59,8 +37,9 @@ services:
     container_name: tasty.api
     ports:
       - "8000:8000"
+    volumes:
+      - ./backend/storage/app/public:/app/storage
     depends_on:
-      - tasty.mysql
       - tasty.redis
     networks:
       - tasty_network
@@ -71,7 +50,6 @@ services:
       dockerfile: Dockerfile_queue
     container_name: tasty.queue
     depends_on:
-      - tasty.mysql
       - tasty.redis
     networks:
       - tasty_network
@@ -80,7 +58,7 @@ services:
     image: nginx:latest
     container_name: tasty.nginx
     ports:
-      - "8080:80"
+      - "8082:80"
     volumes:
       - ./_docker/nginx/conf.d/frontend.conf:/etc/nginx/conf.d/frontend.conf:ro
       - ./services/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
@@ -96,3 +74,4 @@ networks:
   tasty_network:
     driver: bridge
     name: tasty_network
+
