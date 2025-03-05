@@ -9,7 +9,8 @@ const Input = ({
                    value,
                    onChange,
                    required = false,
-                   className = ''
+                   className = '',
+                   error = ''
                }) => {
     return (
         <Form.Group className={`custom-input ${className}`}>
@@ -20,7 +21,11 @@ const Input = ({
                 value={value}
                 onChange={onChange}
                 required={required}
+                className={error ? 'error' : ''}
             />
+            {error && (
+                <Form.Text className="text-danger">{error}</Form.Text> // Отображаем текст ошибки
+            )}
         </Form.Group>
     );
 };
@@ -32,7 +37,8 @@ Input.propTypes = {
     value: PropTypes.string.isRequired,
     onChange: PropTypes.func.isRequired,
     required: PropTypes.bool,
-    className: PropTypes.string
+    className: PropTypes.string,
+    error: PropTypes.string // Добавляем проверку типа для ошибки
 };
 
 export default Input;

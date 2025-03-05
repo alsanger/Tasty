@@ -1,9 +1,9 @@
 // Файл CategoryCarousel.jsx
 import React, { useState, useEffect } from 'react';
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
-import Category from './category';
+import Category from './Category.jsx';
 import { getCategories } from '../../utils/fetchApi/categoryApi';
-import './categoryCarousel.scss';
+import './CategoryCarousel.scss';
 
 const CategoryCarousel = ({ onCategoryClick }) => {
   const [startIndex, setStartIndex] = useState(0);

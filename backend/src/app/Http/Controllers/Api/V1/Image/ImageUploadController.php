@@ -13,26 +13,34 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class ImageUploadController extends Controller
 {
     public function upload(ImageUploadRequest $request): JsonResponse
     {
-        Log::error(json_encode($request->all()));
+        Log::info('Заголовки запроса:', $request->headers->all());
+        Log::info('Тип контента:', [$request->header('Content-Type')]);
+        Log::info('Данные запроса:', $request->all());
 
-        $extension = $request->file('image')->getClientOriginalExtension();
-        $id = $request->id;
-        $recipeStepId = $request->recipe_step_id;
+        $file = $request->file('image');
 
+        if (!$file) {
+            Log::error('Файл не найден в запросе');
+            return response()->json(['error' => 'Файл не найден'], 400);
+        }
 
+        $type = $request->input('type');
+        $id = $request->input('id');
+        $recipeStepId = $request->input('recipe_step_id');
 
-        // Формируем путь к файлу
-        switch ($request->type) {
+        $extension = $file->getClientOriginalExtension();
+
+        switch ($type) {
             case 'avatar':
             case 'avatars':
                 $filename = "{$id}.{$extension}";
                 $path = "avatars/{$filename}";
-                // Обновляем URL в базе данных
                 $user = User::find($id);
                 if ($user) {
                     $user->avatar_url = asset("storage/$path");
@@ -44,7 +52,6 @@ class ImageUploadController extends Controller
             case 'categories':
                 $filename = "{$id}.{$extension}";
                 $path = "categories/{$filename}";
-                // Обновляем URL в базе данных
                 $category = Category::find($id);
                 if ($category) {
                     $category->image_url = asset("storage/$path");
@@ -57,7 +64,6 @@ class ImageUploadController extends Controller
                 if ($recipeStepId) {
                     $filename = "{$recipeStepId}.{$extension}";
                     $path = "recipes/{$id}/steps/{$filename}";
-                    // Обновляем URL в базе данных
                     $recipeStep = RecipeStep::find($recipeStepId);
                     if ($recipeStep) {
                         $recipeStep->image_url = asset("storage/$path");
@@ -66,7 +72,6 @@ class ImageUploadController extends Controller
                 } else {
                     $filename = "main.{$extension}";
                     $path = "recipes/{$id}/{$filename}";
-                    // Обновляем URL в базе данных
                     $recipe = Recipe::find($id);
                     if ($recipe) {
                         $recipe->image_url = asset("storage/$path");
@@ -91,53 +96,35 @@ class ImageUploadController extends Controller
         }
 
         // Сохраняем новый файл
-        Storage::disk('public')->put($path, file_get_contents($request->file('image')));
+        $file->storeAs('public', $path);
 
         return response()->json(['image_url' => asset("storage/$path")]);
     }
 
-    public function getImages(Request $request): JsonResponse
+    public function getImage(Request $request)
     {
-        $id = $request->id;
-        $recipeStepId = $request->recipe_step_id;
+        $imageUrl = $request->input('url');
 
-        switch ($request->type) {
-            case 'avatar':
-            case 'avatars':
-                $pattern = "avatars/{$id}.*";
-                break;
+        try {
+            // Извлекаем путь из полного URL
+            $path = parse_url($imageUrl, PHP_URL_PATH);
+            $path = str_replace('/storage/', '', $path);
 
-            case 'category':
-            case 'categories':
-                $pattern = "categories/{$id}.*";
-                break;
+            $fullPath = storage_path('app/public/' . $path);
 
-            case 'recipe':
-            case 'recipes':
-                if ($recipeStepId) {
-                    $pattern = "recipes/{$id}/steps/{$recipeStepId}.*";
-                } else {
-                    $pattern = "recipes/{$id}/main.*";
-                }
-                break;
+            Log::info("Полный путь: {$fullPath}");
 
-            default:
-                return response()->json(['error' => 'Invalid type'], 400);
+            if (!file_exists($fullPath)) {
+                Log::warning("Файл не найден: {$path}");
+                return response()->file(public_path('default-image.png'));
+            }
+
+            Log::info("Успешная загрузка файла: {$path}");
+            return response()->file($fullPath);
+        } catch (\Exception $e) {
+            Log::error("Ошибка при загрузке файла: " . $e->getMessage());
+            return response()->file(public_path('default-image.png'));
         }
-
-        $baseDir = dirname($pattern);
-
-        // Создаем директорию, если она не существует
-        if (!Storage::disk('public')->exists($baseDir)) {
-            Storage::disk('public')->makeDirectory($baseDir);
-            return response()->json(['images' => []]);
-        }
-
-        $files = Storage::disk('public')->files($baseDir);
-        $filteredFiles = array_filter($files, fn ($file) => fnmatch($pattern, $file));
-        $imageUrls = array_map(fn ($file) => asset("storage/$file"), $filteredFiles);
-
-        return response()->json(['images' => $imageUrls]);
     }
 
     public function delete(Request $request): JsonResponse

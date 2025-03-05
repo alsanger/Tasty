@@ -1,3 +1,4 @@
+//ImageUploader.jsx
 import React, { useState, useRef } from 'react';
 import { Alert, Spinner, Image } from 'react-bootstrap';
 import PropTypes from 'prop-types';
@@ -28,19 +29,13 @@ const ImageUploader = ({
     // Объединяем дефолтные и переданные пропсы для кнопки
     const buttonProps = { ...defaultButtonProps, ...button };
 
-    // Логирование пропсов кнопки
-    console.log('Должно быть: buttonProps — { text: "Вибрати фото", icon: CameraIcon, variant: "default" }');
-    console.log('По факту: buttonProps —', buttonProps);
-
     // Функция для открытия диалога выбора файла
     const handleButtonClick = () => {
-        console.log('Действие: Кнопка нажата, открыт диалог выбора файла');
         fileInputRef.current.click();
     };
 
     const handleFileChange = (e) => {
         if (e.target.files && e.target.files[0]) {
-            console.log('Действие: Файл выбран —', e.target.files[0].name);
             handleUpload(e.target.files[0]);
         } else {
             console.log('Действие: Файл не выбран');
@@ -60,26 +55,22 @@ const ImageUploader = ({
             console.log('Действие: Загрузка файла начата —', file.name);
             const response = await uploadImage(file, type, id, recipeStepId);
             if (response && response.image_url) {
-                console.log('Должно быть: URL изображения — строка (например, "http://example.com/image.jpg")');
-                console.log('По факту: URL изображения —', response.image_url);
                 setImageUrl(response.image_url);
                 onImageUpdate(response.image_url);
             } else {
-                console.log('По факту: URL изображения не получен');
+                console.log('URL изображения не получен');
                 throw new Error('Не вдалося отримати URL зображення');
             }
         } catch (err) {
-            console.log('По факту: Ошибка при загрузке файла —', err.message);
+            console.log('Ошибка при загрузке файла —', err.message);
             setError(err.message || 'Помилка при завантаженні зображення');
         } finally {
-            console.log('Действие: Загрузка завершена');
             setLoading(false);
         }
     };
 
     const handleDelete = async () => {
         if (!imageUrl) {
-            console.log('Действие: Нет изображения для удаления');
             return;
         }
 
@@ -87,13 +78,10 @@ const ImageUploader = ({
         setError(null);
 
         try {
-            console.log('Действие: Удаление изображения начато —', imageUrl);
             await deleteImage(imageUrl);
-            console.log('Действие: Изображение удалено');
             setImageUrl(null);
             onImageUpdate(null);
         } catch (err) {
-            console.log('По факту: Ошибка при удалении изображения —', err.message);
             setError(err.message || 'Помилка при видаленні зображення');
         } finally {
             console.log('Действие: Удаление завершено');
@@ -115,10 +103,6 @@ const ImageUploader = ({
             Завантаження...
         </>
     ) : buttonProps.text;
-
-    // Логирование состояния кнопки
-    console.log('Должно быть: Текст кнопки — "Вибрати фото"');
-    console.log('По факту: Текст кнопки —', buttonText);
 
     return (
         <div className="image-uploader">

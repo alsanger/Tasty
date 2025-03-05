@@ -47,8 +47,13 @@ const RegisterModal = ({show, onHide, onShowLogin}) => {
 
         setLoading(true);
         try {
+            console.log("start")
             const response = await userApi.register(formData);
 
+            console.log("end")
+            console.log(response.data)
+
+            /*
             if (response.data) {
                 await login(response.data);
                 setErrors({});
@@ -56,6 +61,8 @@ const RegisterModal = ({show, onHide, onShowLogin}) => {
             } else {
                 throw new Error('Неверный формат ответа от сервера');
             }
+
+             */
 
         } catch (err) {
             console.error("Ошибка при регистрации:", err);

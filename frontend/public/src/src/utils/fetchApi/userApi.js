@@ -4,7 +4,7 @@ import {ENDPOINTS} from '../constants.js';
 // CRUD операции
 // Создание пользователя (уже есть в примере как register)
 export const register = async (userData) => {
-    return post(ENDPOINTS.REGISTER, userData);
+    return await post(ENDPOINTS.REGISTER, userData);
 };
 
 // Получение списка пользователей

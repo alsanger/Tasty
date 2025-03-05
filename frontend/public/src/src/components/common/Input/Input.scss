@@ -10,5 +10,15 @@
     &:hover {
       border-color: $primary-color;
     }
+
+    &.error {
+      border-color: $border-error-color; // Красный бордер при ошибке
+    }
+  }
+
+  .text-danger {
+    color: $border-error-color; // Красный текст ошибки
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
   }
 }

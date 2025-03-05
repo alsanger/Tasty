@@ -1,13 +1,15 @@
-import { get, uploadFile, remove } from './baseApi';
-import { ENDPOINTS } from '../constants';
+//image.js
+import {downloadFile, remove, uploadFile} from './baseApi';
+import {ENDPOINTS} from '../constants';
 
 // Получение изображений
-export const getImages = async (type, id, recipeStepId = null) => {
-    return await get(ENDPOINTS.IMAGE.GET, {
-        type,
-        id,
-        recipe_step_id: recipeStepId
-    });
+export const getImage = async (imageUrl) => {
+    try {
+        return await downloadFile(ENDPOINTS.IMAGE.GET, { url: imageUrl });
+    } catch (error) {
+        console.error('Ошибка получения изображения:', error);
+        return null;
+    }
 };
 
 // Загрузка изображения

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
-import Category from './category';
+import Category from './Category.jsx';
 import { getCategoryById } from '../../utils/fetchApi/categoryApi';
 
 const CategoryExample = () => {

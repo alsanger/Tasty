@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import Button from "../../common/Button/Button"; // Подключаем ваш кастомный компонент кнопки
-import { getCountries } from "../../../utils/fetchApi/countryApi";
-import { get, post } from "../../../utils/fetchApi/baseApi";
-import { ENDPOINTS } from "../../../utils/constants";
+import Button from "../common/Button/Button.jsx"; // Подключаем ваш кастомный компонент кнопки
+import { getCountries } from "../../utils/fetchApi/countryApi.js";
+import { get, post } from "../../utils/fetchApi/baseApi.js";
+import { ENDPOINTS } from "../../utils/constants.js";
 import { GiChefToque } from "react-icons/gi";
 import "./CountryButtonsNavigation.scss";
 
