@@ -1,5 +1,7 @@
 // Файл constants.js
-export const API_BASE_URL = 'http://localhost:8000/api';
+export const BASE_URL = 'http://localhost:8000';
+
+export const API_BASE_URL = `${BASE_URL}/api`;
 
 export const FONT_FAMILIES = {
     PRIMARY: "'NAMU', serif",
@@ -86,7 +88,7 @@ export const ENDPOINTS = {
 
     // Изображения
     IMAGE: {
-        GET: '/v1/image',
+        // GET: '/v1/image',
         UPLOAD: '/v1/image-upload',
         DELETE: '/v1/image-delete'
     },

@@ -43,7 +43,8 @@ class ImageUploadController extends Controller
                 $path = "avatars/{$filename}";
                 $user = User::find($id);
                 if ($user) {
-                    $user->avatar_url = asset("storage/$path");
+                    //$user->avatar_url = asset("storage/$path");
+                    $user->avatar_url = "/storage/$path";
                     $user->save();
                 }
                 break;
@@ -54,7 +55,8 @@ class ImageUploadController extends Controller
                 $path = "categories/{$filename}";
                 $category = Category::find($id);
                 if ($category) {
-                    $category->image_url = asset("storage/$path");
+                    //$category->image_url = asset("storage/$path");
+                    $category->image_url = "/storage/$path";
                     $category->save();
                 }
                 break;
@@ -66,7 +68,8 @@ class ImageUploadController extends Controller
                     $path = "recipes/{$id}/steps/{$filename}";
                     $recipeStep = RecipeStep::find($recipeStepId);
                     if ($recipeStep) {
-                        $recipeStep->image_url = asset("storage/$path");
+                        //$recipeStep->image_url = asset("storage/$path");
+                        $recipeStep->image_url = "/storage/$path";
                         $recipeStep->save();
                     }
                 } else {
@@ -74,7 +77,8 @@ class ImageUploadController extends Controller
                     $path = "recipes/{$id}/{$filename}";
                     $recipe = Recipe::find($id);
                     if ($recipe) {
-                        $recipe->image_url = asset("storage/$path");
+                        //$recipe->image_url = asset("storage/$path");
+                        $recipe->image_url = "/storage/$path";
                         $recipe->save();
                     }
                 }
@@ -96,35 +100,10 @@ class ImageUploadController extends Controller
         }
 
         // Сохраняем новый файл
-        $file->storeAs('public', $path);
+        $file->storeAs($path);
 
-        return response()->json(['image_url' => asset("storage/$path")]);
-    }
-
-    public function getImage(Request $request)
-    {
-        $imageUrl = $request->input('url');
-
-        try {
-            // Извлекаем путь из полного URL
-            $path = parse_url($imageUrl, PHP_URL_PATH);
-            $path = str_replace('/storage/', '', $path);
-
-            $fullPath = storage_path('app/public/' . $path);
-
-            Log::info("Полный путь: {$fullPath}");
-
-            if (!file_exists($fullPath)) {
-                Log::warning("Файл не найден: {$path}");
-                return response()->file(public_path('default-image.png'));
-            }
-
-            Log::info("Успешная загрузка файла: {$path}");
-            return response()->file($fullPath);
-        } catch (\Exception $e) {
-            Log::error("Ошибка при загрузке файла: " . $e->getMessage());
-            return response()->file(public_path('default-image.png'));
-        }
+        //return response()->json(['image_url' => asset("storage/$path")]);
+        return response()->json(['image_url' => "/storage/$path"]);
     }
 
     public function delete(Request $request): JsonResponse

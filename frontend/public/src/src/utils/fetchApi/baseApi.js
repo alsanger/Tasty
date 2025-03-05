@@ -151,16 +151,3 @@ export const uploadFile = async (endpoint, file, data = {}) => {
         throw new Error(error.response?.data?.message || `Ошибка: ${error.response?.status}`);
     }
 };
-
-export const downloadFile = async (endpoint, params) => {
-    try {
-        const response = await axios.get(`${API_BASE_URL}${endpoint}`, {
-            params,
-            responseType: 'blob'
-        });
-        return URL.createObjectURL(response.data);
-    } catch (error) {
-        console.error('Ошибка загрузки файла:', error);
-        throw error;
-    }
-};

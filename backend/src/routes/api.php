@@ -23,7 +23,7 @@ Route::group(['prefix' => 'v1'], function () {
     Route::post('/users', [UserController::class, 'store']);  // Регистрация пользователя
     Route::post('/login', [AuthController::class, 'login'])  // Аутентификация пользователя
         ->name('login');
-    Route::get('/image', [ImageUploadController::class, 'getImage']); // Получение изображений
+    //Route::get('/image', [ImageUploadController::class, 'getImage']); // Получение изображений
 
     // Маршруты для полученния данных для отображения на главной странице
     Route::get('/recipes/top-by-period', [RecipeSearchController::class, 'topByPeriod']); // Получение списка топовых рецептов за определенный период

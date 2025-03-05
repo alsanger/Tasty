@@ -1,20 +1,14 @@
 // Файл Category.jsx
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Card } from 'react-bootstrap';
+import { BASE_URL } from '../../utils/constants';
 import './Category.scss';
+import defaultAvatar from '../../assets/images/defaultAvatar.png';
 
 const Category = ({ category, onClick }) => {
-    // Добавляем логирование при монтировании
-    useEffect(() => {
-        console.log(`Category компонент смонтирован: ${category.name}`);
-        console.log(`Путь к изображению: ${category.image_url}`);
-
-        // Проверим, загружается ли изображение
-        const img = new Image();
-        img.onload = () => console.log(`✅ Изображение для ${category.name} загрузилось успешно`);
-        img.onerror = () => console.error(`❌ Ошибка загрузки изображения для ${category.name}`);
-        img.src = category.image_url;
-    }, [category]);
+    if (!category) {
+        return null;
+    }
 
     const handleClick = () => {
         if (onClick) {
@@ -24,23 +18,18 @@ const Category = ({ category, onClick }) => {
         }
     };
 
-    if (!category) {
-        return null;
-    }
-
     return (
         <div className="category-item" onClick={handleClick}>
             <Card className="category-card">
                 <div className="category-image-container">
-                    {/* Добавим фолбэк в случае ошибки загрузки изображения */}
                     <Card.Img
                         variant="top"
-                        src={category.image_url}
+                        src={`${BASE_URL}${category.image_url}`}
                         alt={category.name}
                         className="category-image"
                         onError={(e) => {
                             console.error(`Ошибка загрузки изображения в компоненте: ${category.name}`);
-                            e.target.src = 'https://via.placeholder.com/100';
+                            e.target.src = defaultAvatar;
                             e.target.onerror = null;
                         }}
                     />
