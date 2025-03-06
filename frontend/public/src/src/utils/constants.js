@@ -88,8 +88,12 @@ export const ENDPOINTS = {
 
     // Изображения
     IMAGE: {
-        // GET: '/v1/image',
-        UPLOAD: '/v1/image-upload',
+        UPLOAD_USER_AVATAR: '/v1/upload-user-avatar',
+        UPLOAD_CATEGORY_IMAGE: '/v1/upload-category-image',
+        UPLOAD_RECIPE_IMAGE: '/v1/upload-recipe-image',
+        UPLOAD_RECIPE_STEP_IMAGE: '/v1/upload-recipe-step-image',
+
+        //UPLOAD: '/v1/image-upload',
         DELETE: '/v1/image-delete'
     },
 

@@ -3,7 +3,7 @@ import React from 'react';
 import { Card } from 'react-bootstrap';
 import { BASE_URL } from '../../utils/constants';
 import './Category.scss';
-import defaultAvatar from '../../assets/images/defaultAvatar.png';
+import defaultCategory from '../../assets/images/defaultCategory.jpg';
 
 const Category = ({ category, onClick }) => {
     if (!category) {
@@ -29,7 +29,7 @@ const Category = ({ category, onClick }) => {
                         className="category-image"
                         onError={(e) => {
                             console.error(`Ошибка загрузки изображения в компоненте: ${category.name}`);
-                            e.target.src = defaultAvatar;
+                            e.target.src = defaultCategory;
                             e.target.onerror = null;
                         }}
                     />

@@ -6,6 +6,7 @@ import {CameraIcon} from "lucide-react";
 import ImageUploader from "../common/ImageUploader/index.js";
 import { useUser } from '../../contexts/UserContext';
 import UserCarousel from "../users/UserCarousel.jsx";
+import {ENDPOINTS} from "../../utils/constants.js";
 
 
 function Main() {
@@ -18,15 +19,13 @@ function Main() {
             <CategoryCarousel/>
             <UserCarousel/>
 
+
             <ImageUploader
-                type="avatar"
-                id={26}
-                button={{
-                    text: "Вибрати фото",
-                    icon: CameraIcon,
-                    variant: "success",
-                }}
-                onImageUpdate={(url) => console.log('Новое изображение:', url)}
+                endpoint={ENDPOINTS.IMAGE.UPLOAD_USER_AVATAR}
+                id={user.id}
+                currentImageUrl={user.avatar_url}
+                onImageUpdate={(newUrl) => handleAvatarUpdate(newUrl)}
+                button={{ text: 'Загрузить аватар' }}
             />
 
 

@@ -21,18 +21,6 @@ class UserPolicy
         return !$user->isBlocked();
     }
 
-    public function viewAny(User $user): bool
-    {
-        // Проверяем, является ли пользователь администратором
-        return $this->isAdmin($user);
-    }
-
-    /*public function view(User $user, User $model): bool
-    {
-        // Пользователь может просматривать информацию только о себе, а администратор о любом пользователе
-        return $user->id === $model->id || $this->isAdmin($user);
-    }*/
-
     public function update(User $user, User $model): bool
     {
         // Пользователь может редактировать информацию только о себе, а администратор о любом пользователе

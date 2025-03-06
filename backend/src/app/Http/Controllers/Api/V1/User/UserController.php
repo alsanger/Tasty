@@ -29,8 +29,6 @@ class UserController extends Controller
     }*/
     public function index(): UserCollection
     {
-        $this->authorize('viewAny', User::class);
-
         $users = User::with(['roles'])->paginate(20); // Жадная загрузка ролей
 
         return new UserCollection($users); // Возвращаем коллекцию пользователей
@@ -87,8 +85,6 @@ class UserController extends Controller
     }*/
     public function show(User $user): UserResource
     {
-        //$this->authorize('view', $user);
-
         return new UserResource($user->load('roles', 'followers', 'following')); // Возвращаем декоратор через UserResource
     }
 

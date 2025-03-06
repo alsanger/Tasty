@@ -9,102 +9,203 @@ use App\Models\Recipe;
 use App\Models\RecipeStep;
 use App\Models\User;
 
+use App\Services\ImageUploadService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class ImageUploadController extends Controller
 {
-    public function upload(ImageUploadRequest $request): JsonResponse
+    protected $imageUploadService;
+
+    public function __construct(ImageUploadService $imageUploadService)
     {
-        Log::info('Заголовки запроса:', $request->headers->all());
-        Log::info('Тип контента:', [$request->header('Content-Type')]);
-        Log::info('Данные запроса:', $request->all());
+        $this->imageUploadService = $imageUploadService;
+    }
 
+    // Загрузка аватара пользователя
+    /*public function uploadUserAvatar(ImageUploadRequest $request): JsonResponse
+    {
         $file = $request->file('image');
-
         if (!$file) {
             Log::error('Файл не найден в запросе');
             return response()->json(['error' => 'Файл не найден'], 400);
         }
 
-        $type = $request->input('type');
-        $id = $request->input('id');
-        $recipeStepId = $request->input('recipe_step_id');
+        $userId = $request->input('id');
 
-        $extension = $file->getClientOriginalExtension();
-
-        switch ($type) {
-            case 'avatar':
-            case 'avatars':
-                $filename = "{$id}.{$extension}";
-                $path = "avatars/{$filename}";
-                $user = User::find($id);
-                if ($user) {
-                    //$user->avatar_url = asset("storage/$path");
-                    $user->avatar_url = "/storage/$path";
-                    $user->save();
-                }
-                break;
-
-            case 'category':
-            case 'categories':
-                $filename = "{$id}.{$extension}";
-                $path = "categories/{$filename}";
-                $category = Category::find($id);
-                if ($category) {
-                    //$category->image_url = asset("storage/$path");
-                    $category->image_url = "/storage/$path";
-                    $category->save();
-                }
-                break;
-
-            case 'recipe':
-            case 'recipes':
-                if ($recipeStepId) {
-                    $filename = "{$recipeStepId}.{$extension}";
-                    $path = "recipes/{$id}/steps/{$filename}";
-                    $recipeStep = RecipeStep::find($recipeStepId);
-                    if ($recipeStep) {
-                        //$recipeStep->image_url = asset("storage/$path");
-                        $recipeStep->image_url = "/storage/$path";
-                        $recipeStep->save();
-                    }
-                } else {
-                    $filename = "main.{$extension}";
-                    $path = "recipes/{$id}/{$filename}";
-                    $recipe = Recipe::find($id);
-                    if ($recipe) {
-                        //$recipe->image_url = asset("storage/$path");
-                        $recipe->image_url = "/storage/$path";
-                        $recipe->save();
-                    }
-                }
-                break;
-
-            default:
-                return response()->json(['error' => 'Invalid type'], 400);
+        // Проверка прав доступа: пользователь может загружать только свой аватар
+        if (Auth::id() != $userId) {
+            return response()->json(['error' => 'Доступ запрещен'], 403);
         }
 
-        // Создаем директорию, если она не существует
-        $directory = dirname($path);
-        if (!Storage::disk('public')->exists($directory)) {
-            Storage::disk('public')->makeDirectory($directory);
+        $imageUrl = $this->imageUploadService->uploadUserAvatar($file, $userId);
+
+        if (!$imageUrl) {
+            return response()->json(['error' => 'Ошибка при загрузке изображения'], 500);
         }
 
-        // Удаляем старый файл, если он существует
-        if (Storage::disk('public')->exists($path)) {
-            Storage::disk('public')->delete($path);
+        // Обновление модели пользователя
+        $user = User::find($userId);
+        if ($user) {
+            $user->avatar_url = $imageUrl;
+            $user->save();
         }
 
-        // Сохраняем новый файл
-        $file->storeAs($path);
+        return response()->json(['image_url' => $imageUrl]);
+    }*/
+    public function uploadUserAvatar(ImageUploadRequest $request): JsonResponse
+    {
+        Log::info('Начало загрузки аватара пользователя.');
 
-        //return response()->json(['image_url' => asset("storage/$path")]);
-        return response()->json(['image_url' => "/storage/$path"]);
+        $file = $request->file('image');
+        if (!$file) {
+            Log::error('Файл не найден в запросе.');
+            return response()->json(['error' => 'Файл не найден'], 400);
+        }
+        Log::info('Файл успешно получен из запроса.');
+
+        $userId = $request->input('id');
+        Log::info('ID пользователя из запроса: ' . $userId);
+
+        // Получаем пользователя из токена в заголовке
+        $user = Auth::user();
+        if (!$user) {
+            Log::error('Пользователь не аутентифицирован. Токен отсутствует или недействителен.');
+            return response()->json(['error' => 'Доступ запрещен'], 403);
+        }
+        Log::info('Текущий аутентифицированный пользователь: ' . $user->id);
+
+        // Проверка прав доступа: пользователь может загружать только свой аватар
+        if ($user->id != $userId) {
+            Log::error('Попытка загрузить аватар для другого пользователя. Текущий пользователь: ' . $user->id . ', запрошенный пользователь: ' . $userId);
+            return response()->json(['error' => 'Доступ запрещен'], 403);
+        }
+        Log::info('Проверка прав доступа успешно пройдена.');
+
+        // Загрузка аватара
+        Log::info('Начало загрузки аватара в сервис.');
+        $imageUrl = $this->imageUploadService->uploadUserAvatar($file, $userId);
+        if (!$imageUrl) {
+            Log::error('Ошибка при загрузке изображения в сервис.');
+            return response()->json(['error' => 'Ошибка при загрузке изображения'], 500);
+        }
+        Log::info('Аватар успешно загружен. URL: ' . $imageUrl);
+
+        // Обновление модели пользователя
+        Log::info('Начало обновления модели пользователя.');
+        $user->avatar_url = "/storage/$imageUrl";
+        $user->save();
+        Log::info('Модель пользователя успешно обновлена.');
+
+        Log::info('Загрузка аватара завершена успешно.');
+        return response()->json(['image_url' => $imageUrl]);
     }
+
+    // Загрузка изображения категории
+    public function uploadCategoryImage(ImageUploadRequest $request): JsonResponse
+    {
+        $file = $request->file('image');
+        if (!$file) {
+            Log::error('Файл не найден в запросе');
+            return response()->json(['error' => 'Файл не найден'], 400);
+        }
+
+        $categoryId = $request->input('id');
+
+        // Проверку прав доступа к категории, если необходимо
+
+        $imageUrl = $this->imageUploadService->uploadCategoryImage($file, $categoryId);
+
+        if (!$imageUrl) {
+            return response()->json(['error' => 'Ошибка при загрузке изображения'], 500);
+        }
+
+        // Обновление модели категории
+        $category = Category::find($categoryId);
+        if ($category) {
+            $category->image_url = "/storage/$imageUrl";
+            $category->save();
+        }
+
+        return response()->json(['image_url' => $imageUrl]);
+    }
+
+    // Загрузка основного изображения рецепта
+    public function uploadRecipeImage(ImageUploadRequest $request): JsonResponse
+    {
+        $file = $request->file('image');
+        if (!$file) {
+            Log::error('Файл не найден в запросе');
+            return response()->json(['error' => 'Файл не найден'], 400);
+        }
+
+        $recipeId = $request->input('id');
+
+        // Проверка прав доступа: только владелец рецепта может загружать изображения
+        $recipe = Recipe::find($recipeId);
+        if (!$recipe || $recipe->user_id != Auth::id()) {
+            return response()->json(['error' => 'Доступ запрещен'], 403);
+        }
+
+        $imageUrl = $this->imageUploadService->uploadRecipeImage($file, $recipeId);
+
+        if (!$imageUrl) {
+            return response()->json(['error' => 'Ошибка при загрузке изображения'], 500);
+        }
+
+        // Обновление модели рецепта
+        $recipe->image_url = "/storage/$imageUrl";
+        $recipe->save();
+
+        return response()->json(['image_url' => $imageUrl]);
+    }
+
+    // Загрузка изображения шага рецепта
+    public function uploadRecipeStepImage(ImageUploadRequest $request): JsonResponse
+    {
+        $file = $request->file('image');
+        if (!$file) {
+            Log::error('Файл не найден в запросе');
+            return response()->json(['error' => 'Файл не найден'], 400);
+        }
+
+        $recipeId = $request->input('id');
+        $stepId = $request->input('recipe_step_id');
+
+        if (!$stepId) {
+            return response()->json(['error' => 'ID шага рецепта не указан'], 400);
+        }
+
+        // Проверка прав доступа через рецепт: только владелец рецепта может загружать изображения
+        $recipe = Recipe::find($recipeId);
+        if (!$recipe || $recipe->user_id != Auth::id()) {
+            return response()->json(['error' => 'Доступ запрещен'], 403);
+        }
+
+        // Дополнительная проверка, что шаг действительно принадлежит этому рецепту
+        $recipeStep = RecipeStep::find($stepId);
+        if (!$recipeStep || $recipeStep->recipe_id != $recipeId) {
+            return response()->json(['error' => 'Шаг не найден или не принадлежит указанному рецепту'], 400);
+        }
+
+        $imageUrl = $this->imageUploadService->uploadRecipeStepImage($file, $recipeId, $stepId);
+
+        if (!$imageUrl) {
+            return response()->json(['error' => 'Ошибка при загрузке изображения'], 500);
+        }
+
+        // Обновление модели шага рецепта
+        $recipeStep->image_url = "/storage/$imageUrl";
+        $recipeStep->save();
+
+        return response()->json(['image_url' => $imageUrl]);
+    }
+
+
 
     public function delete(Request $request): JsonResponse
     {

@@ -121,7 +121,10 @@ Route::group(['prefix' => 'v1'], function () {
         Route::post('/users/follow', [FollowController::class, 'follow']);
         Route::post('/users/unfollow', [FollowController::class, 'unfollow']);
         // Маршруты для работы с изображениями:
-        Route::post('/image-upload', [ImageUploadController::class, 'upload']); // Загрузка изображения
+        Route::post('/upload-user-avatar', [ImageUploadController::class, 'uploadUserAvatar']); // Загрузка аватара пользователя
+        Route::post('/upload-category-image', [ImageUploadController::class, 'uploadCategoryImage']); // Загрузка изображения категории
+        Route::post('/upload-recipe-image', [ImageUploadController::class, 'uploadRecipeImage']); // Загрузка изображения рецепта
+        Route::post('/upload-recipe-step-image', [ImageUploadController::class, 'uploadRecipeStepImage']); // Загрузка изображения шага рецепта
         Route::delete('/image-delete', [ImageUploadController::class, 'delete']); // Удаление изображения
     });
 
