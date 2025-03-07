@@ -44,7 +44,7 @@ class RecipeController extends Controller
         }
 
         // Пересчитываем сложность рецепта
-        $recipe->update(['difficulty' => Recipe::calculateDifficulty($recipe)]);
+        //$recipe->update(['difficulty' => RecipeService::calculateDifficulty($recipe)]);
 
         // Загружаем связанные данные и возвращаем ресурс
         return new RecipeResource($recipe->load([
@@ -92,7 +92,7 @@ class RecipeController extends Controller
         );
 
         // Пересчитываем сложность рецепта
-        $recipe->update(['difficulty' => Recipe::calculateDifficulty($recipe)]);
+        //$recipe->update(['difficulty' => RecipeService::calculateDifficulty($recipe)]);
 
         // Загружаем связанные данные и возвращаем ресурс
         return new RecipeResource($recipe->load([

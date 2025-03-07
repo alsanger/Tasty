@@ -26,50 +26,15 @@ class ImageUploadController extends Controller
         $this->imageUploadService = $imageUploadService;
     }
 
-    // Загрузка аватара пользователя
-    /*public function uploadUserAvatar(ImageUploadRequest $request): JsonResponse
-    {
-        $file = $request->file('image');
-        if (!$file) {
-            Log::error('Файл не найден в запросе');
-            return response()->json(['error' => 'Файл не найден'], 400);
-        }
-
-        $userId = $request->input('id');
-
-        // Проверка прав доступа: пользователь может загружать только свой аватар
-        if (Auth::id() != $userId) {
-            return response()->json(['error' => 'Доступ запрещен'], 403);
-        }
-
-        $imageUrl = $this->imageUploadService->uploadUserAvatar($file, $userId);
-
-        if (!$imageUrl) {
-            return response()->json(['error' => 'Ошибка при загрузке изображения'], 500);
-        }
-
-        // Обновление модели пользователя
-        $user = User::find($userId);
-        if ($user) {
-            $user->avatar_url = $imageUrl;
-            $user->save();
-        }
-
-        return response()->json(['image_url' => $imageUrl]);
-    }*/
     public function uploadUserAvatar(ImageUploadRequest $request): JsonResponse
     {
-        Log::info('Начало загрузки аватара пользователя.');
-
         $file = $request->file('image');
         if (!$file) {
             Log::error('Файл не найден в запросе.');
             return response()->json(['error' => 'Файл не найден'], 400);
         }
-        Log::info('Файл успешно получен из запроса.');
 
         $userId = $request->input('id');
-        Log::info('ID пользователя из запроса: ' . $userId);
 
         // Получаем пользователя из токена в заголовке
         $user = Auth::user();
@@ -77,31 +42,23 @@ class ImageUploadController extends Controller
             Log::error('Пользователь не аутентифицирован. Токен отсутствует или недействителен.');
             return response()->json(['error' => 'Доступ запрещен'], 403);
         }
-        Log::info('Текущий аутентифицированный пользователь: ' . $user->id);
 
         // Проверка прав доступа: пользователь может загружать только свой аватар
         if ($user->id != $userId) {
             Log::error('Попытка загрузить аватар для другого пользователя. Текущий пользователь: ' . $user->id . ', запрошенный пользователь: ' . $userId);
             return response()->json(['error' => 'Доступ запрещен'], 403);
         }
-        Log::info('Проверка прав доступа успешно пройдена.');
 
         // Загрузка аватара
-        Log::info('Начало загрузки аватара в сервис.');
         $imageUrl = $this->imageUploadService->uploadUserAvatar($file, $userId);
         if (!$imageUrl) {
-            Log::error('Ошибка при загрузке изображения в сервис.');
             return response()->json(['error' => 'Ошибка при загрузке изображения'], 500);
         }
-        Log::info('Аватар успешно загружен. URL: ' . $imageUrl);
 
-        // Обновление модели пользователя
-        Log::info('Начало обновления модели пользователя.');
+        // Обновление модели пользователя (потом убрать. Возвращаем ссылку и изменения вносятся через update с учетом политик)
         $user->avatar_url = "/storage/$imageUrl";
         $user->save();
-        Log::info('Модель пользователя успешно обновлена.');
 
-        Log::info('Загрузка аватара завершена успешно.');
         return response()->json(['image_url' => $imageUrl]);
     }
 
@@ -116,15 +73,13 @@ class ImageUploadController extends Controller
 
         $categoryId = $request->input('id');
 
-        // Проверку прав доступа к категории, если необходимо
-
         $imageUrl = $this->imageUploadService->uploadCategoryImage($file, $categoryId);
 
         if (!$imageUrl) {
             return response()->json(['error' => 'Ошибка при загрузке изображения'], 500);
         }
 
-        // Обновление модели категории
+        // Обновление модели категории (потом убрать. Возвращаем ссылку и изменения вносятся через update с учетом политик)
         $category = Category::find($categoryId);
         if ($category) {
             $category->image_url = "/storage/$imageUrl";
@@ -157,7 +112,7 @@ class ImageUploadController extends Controller
             return response()->json(['error' => 'Ошибка при загрузке изображения'], 500);
         }
 
-        // Обновление модели рецепта
+        // Обновление модели рецепта (потом убрать. Возвращаем ссылку и изменения вносятся через update с учетом политик)
         $recipe->image_url = "/storage/$imageUrl";
         $recipe->save();
 
@@ -198,13 +153,12 @@ class ImageUploadController extends Controller
             return response()->json(['error' => 'Ошибка при загрузке изображения'], 500);
         }
 
-        // Обновление модели шага рецепта
+        // Обновление модели шага рецепта (потом убрать. Возвращаем ссылку и изменения вносятся через update с учетом политик)
         $recipeStep->image_url = "/storage/$imageUrl";
         $recipeStep->save();
 
         return response()->json(['image_url' => $imageUrl]);
     }
-
 
 
     public function delete(Request $request): JsonResponse

@@ -30,8 +30,8 @@ class RecipeStepController extends Controller
         $recipeStep = RecipeStep::create($request->validated());
         Log::info('Шаг добавлен');
         // Пересчитываем сложность рецепта
-        $recipe->update(['difficulty' => Recipe::calculateDifficulty($recipe)]);
-        Log::info('Пересчитана сложность рецепта', ['difficulty' => $recipe->difficulty]);
+        //$recipe->update(['difficulty' => RecipeService::calculateDifficulty($recipe)]);
+        //Log::info('Пересчитана сложность рецепта', ['difficulty' => $recipe->difficulty]);
 
         return new RecipeStepResource($recipeStep);
     }
@@ -59,7 +59,7 @@ class RecipeStepController extends Controller
         $recipeStep->delete();
 
         // Пересчитываем сложность рецепта
-        $recipe->update(['difficulty' => Recipe::calculateDifficulty($recipe)]);
+        //$recipe->update(['difficulty' => Recipe::calculateDifficulty($recipe)]);
 
         return response()->json(['message' => 'Крок приготування рецепту успішно видалений'], 200);
     }
