@@ -25,7 +25,7 @@ Route::group(['prefix' => 'v1'], function () {
         ->name('login');
     //Route::get('/image', [ImageUploadController::class, 'getImage']); // Получение изображений
 
-    // Маршруты для полученния данных для отображения на главной странице
+    // Маршруты для получения данных для отображения на главной странице
     Route::get('/recipes/top-by-period', [RecipeSearchController::class, 'topByPeriod']); // Получение списка топовых рецептов за определенный период
     Route::get('/recipes/newest', [RecipeSearchController::class, 'newest']); // Получение списка самых новых рецептов
     Route::get('/recipes/top-rated', [RecipeSearchController::class, 'topRated']); // Получение списка самых рейтинговых рецептов
@@ -34,7 +34,7 @@ Route::group(['prefix' => 'v1'], function () {
     // Маршруты для работы с категориями рецептов:
     Route::get('/categories', [CategoryController::class, 'index']);  // Получение списка категорий
     Route::get('/categories/{category}', [CategoryController::class, 'show']); // Получение одной категории
-    // Маршруты для работы с способами приготовления рецептов:
+    // Маршруты для работы со способами приготовления рецептов:
     Route::get('/cooking-methods', [CookingMethodController::class, 'index']);  // Получение списка способов приготовления
     Route::get('/cooking-methods/{cookingMethod}', [CookingMethodController::class, 'show']); // Получение одного способа приготовления
     // Маршруты для работы со странами рецептов:
@@ -56,6 +56,12 @@ Route::group(['prefix' => 'v1'], function () {
     // Маршруты для работы с единицами измерения ингредиентов:
     Route::get('/units', [UnitController::class, 'index']);  // Получение списка units
     Route::get('/units/{unit}', [UnitController::class, 'show']); // Получение одного unit
+    // Маршруты для работы с планами приготовления еды:
+    Route::get('/cooking-plans', [CookingPlanController::class, 'index']);  // Получение списка планов приготовления еды
+    Route::get('/cooking-plans/{cookingPlan}', [CookingPlanController::class, 'show']); // Получение одного плана приготовления еды
+    // Маршруты для работы с пользователями:
+    Route::get('/users', [UserController::class, 'index']);  // Получение списка пользователей
+    Route::get('users/{user}', [UserController::class, 'show']);  // Получение одного пользователя
 
     //ГРУППА ДЛЯ АУТЕНТИФИЦИРОВАННЫХ ПОЛЬЗОВАТЕЛЕЙ С НЕВЕРИФИЦИРОВАННЫМ EMAIL:
     Route::group(['middleware' => 'auth:sanctum'], function () {
@@ -69,13 +75,11 @@ Route::group(['prefix' => 'v1'], function () {
         Route::post('/categories', [CategoryController::class, 'store']);  // Создание категории
         Route::put('/categories/{category}', [CategoryController::class, 'update']);  // Обновление категории
         Route::delete('/categories/{category}', [CategoryController::class, 'destroy']);  // Удаление категории
-        // Маршруты для работы с способами приготовления рецептов:
+        // Маршруты для работы со способами приготовления рецептов:
         Route::post('/cooking-methods', [CookingMethodController::class, 'store']);  // Создание способа приготовления
         Route::put('/cooking-methods/{cookingMethod}', [CookingMethodController::class, 'update']);  // Обновление способа приготовления
         Route::delete('/cooking-methods/{cookingMethod}', [CookingMethodController::class, 'destroy']);  // Удаление способа приготовления
-        // Маршруты для работы с планами приготовлени еды:
-        Route::get('/cooking-plans', [CookingPlanController::class, 'index']);  // Получение списка планов приготовления еды
-        Route::get('/cooking-plans/{cookingPlan}', [CookingPlanController::class, 'show']); // Получение одного плана приготовления еды
+        // Маршруты для работы с планами приготовления еды:
         Route::post('/cooking-plans', [CookingPlanController::class, 'store']);  // Создание плана приготовления еды
         Route::put('/cooking-plans/{cookingPlan}', [CookingPlanController::class, 'update']);  // Обновление плана приготовления еды
         Route::delete('/cooking-plans/{cookingPlan}', [CookingPlanController::class, 'destroy']);  // Удаление плана приготовления еды
@@ -110,8 +114,6 @@ Route::group(['prefix' => 'v1'], function () {
         Route::put('/units/{unit}', [UnitController::class, 'update']);  // Обновление unit
         Route::delete('/units/{unit}', [UnitController::class, 'destroy']);  // Удаление unit
         // Маршруты для работы с пользователями:
-        Route::get('/users', [UserController::class, 'index']);  // Получение списка пользователей
-        Route::get('users/{user}', [UserController::class, 'show']);  // Получение одного пользователя
         Route::put('/users/{user}', [UserController::class, 'update']);  // Обновление пользователя
         Route::delete('/users/{user}', [UserController::class, 'destroy']);  // Удаление пользователя
         Route::get('/roles/{user}', [UserController::class, 'roles']);  // Получение ролей пользователя
