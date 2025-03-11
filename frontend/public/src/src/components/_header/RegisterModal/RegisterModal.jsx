@@ -1,8 +1,8 @@
 import {useState} from 'react';
 import {userApi} from '../../../utils/fetchApi/index.js';
 import {Modal, Form, Spinner} from 'react-bootstrap';
-import Input from '../../common/Input/Input.jsx';
-import Button from '../../common/Button/Button.jsx';
+import Input from '../../_common/Input/Input.jsx';
+import Button from '../../_common/Button/Button.jsx';
 import './RegisterModal.scss';
 import logo from '../../../assets/images/logo.svg';
 import {useUser} from "../../../contexts/UserContext.jsx";

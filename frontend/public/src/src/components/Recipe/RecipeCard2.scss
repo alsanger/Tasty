@@ -1,8 +1,7 @@
-// RecipeCardHorizontal.scss
+// Файл RecipeCard2.scss
 @use '../../styles/variables' as *;
 
 .recipe-card-horizontal-container {
-  // Фиксированные размеры карточки
   width: 200px; // Фиксированная ширина
   height: 350px; // Фиксированная высота
 
@@ -34,8 +33,8 @@
         left: 0;
         width: 100%;
         height: 100%;
-        object-fit: cover; // Заполняет всё пространство, сохраняя соотношение сторон
-        object-position: center; // Центрирует изображение для равномерной обрезки
+        object-fit: cover;
+        object-position: center;
       }
 
       // Кнопка "Избранное" с сердечком
@@ -66,7 +65,7 @@
       display: flex;
       flex-direction: column;
       flex-grow: 1;
-      height: 35%; // Оставшаяся высота для текста и информации
+      height: 35%;
 
       // Название рецепта
       .recipe-name {
@@ -75,7 +74,7 @@
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-        height: 20px; // Фиксированная высота для одной строки
+        height: 20px;
       }
 
       // Список ингредиентов

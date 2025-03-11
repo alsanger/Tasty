@@ -1,13 +1,13 @@
-// RecipeCardHorizontal.jsx
+// Файл RecipeCard2.jsx
 import React, { useState, useEffect } from 'react';
 import { Card, Spinner } from 'react-bootstrap';
 import { IoHeartOutline, IoHeart, IoTimeOutline } from "react-icons/io5";
 import { FaStar } from "react-icons/fa";
 import { getRecipeById } from '../../utils/fetchApi/recipeApi';
-import './RecipeCardHorizontal.scss';
+import './RecipeCard2.scss';
 import { BASE_URL, FONT_FAMILIES } from "../../utils/constants.js";
 
-const RecipeCardHorizontal = ({
+const RecipeCard2 = ({
                                   recipeId,
                                   onClick
                               }) => {
@@ -135,4 +135,4 @@ const RecipeCardHorizontal = ({
     );
 };
 
-export default RecipeCardHorizontal;
+export default RecipeCard2;

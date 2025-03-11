@@ -1,0 +1,295 @@
+// Файл Recipes2Carousel.scss
+.recipes-carousel {
+  padding: 20px 0;
+  position: relative;
+  overflow: hidden;
+
+  .carousel-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    position: relative;
+    min-height: 350px;
+  }
+
+  .carousel-items {
+    flex: 1;
+    overflow: hidden;
+    width: 100%;
+    padding: 0;
+  }
+
+  .recipes-wrapper {
+    display: flex;
+    justify-content: space-between;
+    will-change: transform;
+  }
+
+  .recipe-wrapper {
+    padding: 0 10px;
+    box-sizing: border-box;
+    flex-shrink: 0;
+  }
+
+  // Обеспечиваем, чтобы первая и последняя карточки были прижаты к краям
+  .recipe-wrapper:first-child {
+    padding-left: 0;
+  }
+
+  .recipe-wrapper:last-child {
+    padding-right: 0;
+  }
+
+  .carousel-control {
+    background-color: #f0f0f0;
+    border: none;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin: 0;
+    flex-shrink: 0;
+    opacity: 0.6;
+    position: absolute;
+    top: 32.5%;
+    transform: translateY(-50%);
+
+    &-prev {
+      left: 0;
+    }
+
+    &-next {
+      right: 0;
+    }
+
+    &:hover:not(:disabled) {
+      background-color: #e0e0e0;
+      transform: translateY(-50%) scale(1.05);
+      opacity: 0.8;
+    }
+
+    &:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    &:focus {
+      box-shadow: none;
+      outline: none;
+    }
+
+    svg {
+      font-size: 20px;
+    }
+  }
+
+  &-loading, &-error {
+    text-align: center;
+    padding: 30px;
+    font-size: 16px;
+  }
+
+  &-error {
+    color: #dc3545;
+  }
+}
+
+// Медиа-запросы
+@media (max-width: 768px) {
+  .recipes-carousel {
+    .carousel-items {
+      padding: 0 40px;
+    }
+
+    .recipe-wrapper {
+      padding: 0 8px;
+    }
+
+    .recipe-wrapper:first-child {
+      padding-left: 0;
+    }
+
+    .recipe-wrapper:last-child {
+      padding-right: 0;
+    }
+
+    .carousel-control {
+      width: 36px;
+      height: 36px;
+
+      svg {
+        font-size: 18px;
+      }
+    }
+  }
+}
+
+@media (max-width: 576px) {
+  .recipes-carousel {
+    .carousel-items {
+      padding: 0 35px;
+    }
+
+    .recipe-wrapper {
+      padding: 0 5px;
+    }
+
+    .recipe-wrapper:first-child {
+      padding-left: 0;
+    }
+
+    .recipe-wrapper:last-child {
+      padding-right: 0;
+    }
+
+    .carousel-control {
+      width: 32px;
+      height: 32px;
+
+      svg {
+        font-size: 16px;
+      }
+    }
+  }
+}
+
+/*
+.recipes-carousel {
+  padding: 20px 0;
+  position: relative;
+  overflow: hidden;
+
+  .carousel-container {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    position: relative;
+    min-height: 350px;
+  }
+
+  .carousel-items {
+    flex: 1;
+    overflow: hidden;
+    padding: 0 15px;
+  }
+
+  .recipes-wrapper {
+    display: flex;
+    width: 100%;
+    will-change: transform;
+  }
+
+  .recipe-wrapper {
+    padding: 0 10px;
+    box-sizing: border-box;
+    flex-shrink: 0;
+  }
+
+  .carousel-control {
+    background-color: #f0f0f0;
+    border: none;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin: 0 5px;
+    flex-shrink: 0;
+    opacity: 0.6;
+    position: absolute;
+    top: 32.5%;
+    transform: translateY(-50%);
+
+    &-prev {
+      left: 0;
+    }
+
+    &-next {
+      right: 0;
+    }
+
+    &:hover:not(:disabled) {
+      background-color: #e0e0e0;
+      transform: translateY(-50%) scale(1.05);
+      opacity: 0.8;
+    }
+
+    &:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    &:focus {
+      box-shadow: none;
+      outline: none;
+    }
+
+    svg {
+      font-size: 20px;
+    }
+  }
+
+  &-loading, &-error {
+    text-align: center;
+    padding: 30px;
+    font-size: 16px;
+  }
+
+  &-error {
+    color: #dc3545;
+  }
+}
+
+// Медиа-запросы
+@media (max-width: 768px) {
+  .recipes-carousel {
+    .carousel-items {
+      padding: 0 40px;
+    }
+
+    .recipe-wrapper {
+      padding: 0 8px;
+    }
+
+    .carousel-control {
+      width: 36px;
+      height: 36px;
+
+      svg {
+        font-size: 18px;
+      }
+    }
+  }
+}
+
+@media (max-width: 576px) {
+  .recipes-carousel {
+    .carousel-items {
+      padding: 0 35px;
+    }
+
+    .recipe-wrapper {
+      padding: 0 5px;
+    }
+
+    .carousel-control {
+      width: 32px;
+      height: 32px;
+
+      svg {
+        font-size: 16px;
+      }
+    }
+  }
+}*/

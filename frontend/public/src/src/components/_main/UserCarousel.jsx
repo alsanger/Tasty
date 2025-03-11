@@ -1,11 +1,13 @@
 // Файл UserCarousel.scss
-import React, { useState, useEffect } from 'react';
-import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
-import User from './User.jsx';
-import { getUsers } from '../../utils/fetchApi/userApi';
+import React, {useState, useEffect} from 'react';
+import {Container} from 'react-bootstrap';
+import {IoIosArrowBack, IoIosArrowForward} from "react-icons/io";
+import User from '../User/User.jsx';
+import {getUsers} from '../../utils/fetchApi/userApi.js';
 import './UserCarousel.scss';
+import {FONT_FAMILIES} from "../../utils/constants.js";
 
-const UserCarousel = ({ onUserClick }) => {
+const UserCarousel = ({onUserClick}) => {
     const [startIndex, setStartIndex] = useState(0);
     const [visibleCount, setVisibleCount] = useState(5);
     const [users, setUsers] = useState([]);
@@ -100,51 +102,54 @@ const UserCarousel = ({ onUserClick }) => {
     const translateValue = `translateX(-${startIndex * (100 / visibleCount)}%)`;
 
     return (
-        <div className="user-carousel">
-            <div className="carousel-container">
-                {showNavButtons && (
-                    <button
-                        className="carousel-control carousel-control-prev"
-                        onClick={handlePrev}
-                        disabled={startIndex === 0 || isAnimating}
-                        aria-label="Предыдущие пользователи"
-                    >
-                        <IoIosArrowBack />
-                    </button>
-                )}
+        <Container fluid className="mt-3">
+            <h2 className="mb-4" style={{fontFamily: FONT_FAMILIES.PRIMARY}}>Популярні автори</h2>
+            <div className="user-carousel">
+                <div className="carousel-container">
+                    {showNavButtons && (
+                        <button
+                            className="carousel-control carousel-control-prev"
+                            onClick={handlePrev}
+                            disabled={startIndex === 0 || isAnimating}
+                            aria-label="Предыдущие пользователи"
+                        >
+                            <IoIosArrowBack/>
+                        </button>
+                    )}
 
-                <div className="carousel-items">
-                    <div className="users-wrapper" style={{
-                        transform: translateValue,
-                        transition: 'transform 0.3s ease-out'
-                    }}>
-                        {users.map(user => (
-                            <div
-                                key={user.id}
-                                className="user-wrapper"
-                                style={{ width: `${100 / visibleCount}%` }}
-                            >
-                                <User
-                                    user={user}
-                                    onClick={onUserClick}
-                                />
-                            </div>
-                        ))}
+                    <div className="carousel-items">
+                        <div className="users-wrapper" style={{
+                            transform: translateValue,
+                            transition: 'transform 0.3s ease-out'
+                        }}>
+                            {users.map(user => (
+                                <div
+                                    key={user.id}
+                                    className="user-wrapper"
+                                    style={{width: `${100 / visibleCount}%`}}
+                                >
+                                    <User
+                                        user={user}
+                                        onClick={onUserClick}
+                                    />
+                                </div>
+                            ))}
+                        </div>
                     </div>
-                </div>
 
-                {showNavButtons && (
-                    <button
-                        className="carousel-control carousel-control-next"
-                        onClick={handleNext}
-                        disabled={startIndex >= users.length - visibleCount || isAnimating}
-                        aria-label="Следующие пользователи"
-                    >
-                        <IoIosArrowForward />
-                    </button>
-                )}
+                    {showNavButtons && (
+                        <button
+                            className="carousel-control carousel-control-next"
+                            onClick={handleNext}
+                            disabled={startIndex >= users.length - visibleCount || isAnimating}
+                            aria-label="Следующие пользователи"
+                        >
+                            <IoIosArrowForward/>
+                        </button>
+                    )}
+                </div>
             </div>
-        </div>
+        </Container>
     );
 };
 

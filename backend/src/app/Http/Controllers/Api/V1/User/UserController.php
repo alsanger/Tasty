@@ -13,6 +13,7 @@ use App\Models\Role;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
@@ -29,6 +30,7 @@ class UserController extends Controller
     }*/
     public function index(): UserCollection
     {
+        Log::info("В методе index UserController");
         $users = User::with(['roles'])->paginate(20); // Жадная загрузка ролей
 
         return new UserCollection($users); // Возвращаем коллекцию пользователей

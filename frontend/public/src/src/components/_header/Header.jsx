@@ -1,12 +1,12 @@
 import {useState} from 'react';
-import SearchBar from '../common/SearchBar/SearchBar.jsx';
+import SearchBar from '../_common/SearchBar/SearchBar.jsx';
 import LoginModal from './LoginModal/LoginModal.jsx';
 import RegisterModal from './RegisterModal/RegisterModal.jsx';
 import logo from '../../assets/images/logo.svg';
 import { FaPlus } from "react-icons/fa6";
 import { FiUser, FiBell } from "react-icons/fi";
 import './Header.scss';
-import Button from "../common/Button/Button.jsx";
+import Button from "../_common/Button/Button.jsx";
 import {ROUTES} from "../../utils/routes.js";
 import {Link} from "react-router-dom";
 

@@ -1,6 +1,6 @@
-// Файл CategoryCarousel.scss
-.category-carousel {
-  padding: 20px 0;
+// Файл UserCarousel.scss
+.user-carousel {
+  padding: 0;
   position: relative;
   overflow: hidden;
 
@@ -18,13 +18,13 @@
     padding: 0 15px;
   }
 
-  .categories-wrapper {
+  .users-wrapper {
     display: flex;
     width: 100%;
     will-change: transform; /* Оптимизация для анимации */
   }
 
-  .category-wrapper {
+  .user-wrapper {
     padding: 0 10px;
     box-sizing: border-box;
     flex-shrink: 0;
@@ -34,8 +34,8 @@
     background-color: #f0f0f0;
     border: none;
     border-radius: 50%;
-    width: 40px;
-    height: 40px;
+    width: 35px;
+    height: 35px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -45,6 +45,7 @@
     transition: all 0.3s ease;
     margin: 0 5px;
     flex-shrink: 0;
+    opacity: 0.6;
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
@@ -60,6 +61,7 @@
     &:hover:not(:disabled) {
       background-color: #e0e0e0;
       transform: translateY(-50%) scale(1.05);
+      opacity: 0.8;
     }
 
     &:disabled {
@@ -90,12 +92,12 @@
 
 // Медиа-запросы
 @media (max-width: 768px) {
-  .category-carousel {
+  .user-carousel {
     .carousel-items {
       padding: 0 40px; /* Увеличиваем отступы по бокам для кнопок */
     }
 
-    .category-wrapper {
+    .user-wrapper {
       padding: 0 8px;
     }
 
@@ -111,12 +113,12 @@
 }
 
 @media (max-width: 576px) {
-  .category-carousel {
+  .user-carousel {
     .carousel-items {
       padding: 0 35px; /* Увеличиваем отступы по бокам для кнопок */
     }
 
-    .category-wrapper {
+    .user-wrapper {
       padding: 0 5px;
     }
 

@@ -1,5 +1,6 @@
 // Файл CategoryCarousel.jsx
 import React, { useState, useEffect } from 'react';
+import {Container} from 'react-bootstrap';
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import Category from './Category.jsx';
 import { getCategories } from '../../utils/fetchApi/categoryApi';
@@ -100,8 +101,8 @@ const CategoryCarousel = ({ onCategoryClick }) => {
   const translateValue = `translateX(-${startIndex * (100 / visibleCount)}%)`;
 
   return (
+      <Container fluid className="mt-0">
       <div className="category-carousel">
-        {/*<Container>*/}
           <div className="carousel-container">
             {showNavButtons && (
                 <button
@@ -145,8 +146,8 @@ const CategoryCarousel = ({ onCategoryClick }) => {
                 </button>
             )}
           </div>
-        {/*</Container>*/}
       </div>
+      </Container>
   );
 };
 

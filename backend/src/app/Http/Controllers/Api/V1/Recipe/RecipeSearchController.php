@@ -13,6 +13,9 @@ use App\Models\Recipe;
 use App\Models\User;
 use App\Services\RecipeService;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Schema;
 
 class RecipeSearchController extends Controller
 {
@@ -151,6 +154,7 @@ class RecipeSearchController extends Controller
         return new RecipeCollection($recipes);
     }
 
+    //ИЗНАЧАЛЬНЫЙ
     public function topByPeriod(TopRecipesRequest $request): RecipeCollection
     {
         $limit = $request->input('limit', 1);
@@ -211,6 +215,204 @@ class RecipeSearchController extends Controller
 
         return new RecipeCollection($paginator);
     }
+    /*public function topByPeriod(TopRecipesRequest $request): RecipeCollection
+    {
+        Log::info("Попали в метод topByPeriod");
+
+        $limit = (int) $request->input('limit', 10);
+        $requestedDays = (int) $request->input('days', 7);
+
+        $recipes = collect();
+        $days = $requestedDays;
+
+        // Будем экспоненциально расширять период поиска, пока не найдем достаточно рецептов
+        while ($recipes->count() < $limit && $days <= 365) {
+            $query = Recipe::query()
+                ->with([
+                    'user', 'category', 'cookingMethod', 'country',
+                    'ingredients', 'ingredients.unit', 'recipeSteps', 'reviews'
+                ])
+                ->whereHas('reviews', function($query) use ($days) {
+                    $query->where('created_at', '>=', now()->subDays($days));
+                });
+
+            // Используем прямую SQL-сортировку, если есть поле rating
+            if (Schema::hasColumn('recipes', 'rating')) {
+                $query->orderByDesc('rating');
+            } else {
+                // Иначе используем withAvg для вычисления среднего рейтинга
+                $query->withAvg('reviews', 'rating')
+                    ->orderByDesc('reviews_avg_rating');
+            }
+
+            $recipes = $query->limit($limit)->get();
+
+            // Если ничего не нашли, увеличиваем период экспоненциально
+            if ($recipes->isEmpty()) {
+                $days *= 2;
+            } else if ($recipes->count() < $limit) {
+                // Если нашли, но недостаточно, увеличиваем период линейно
+                $days += $requestedDays;
+            }
+        }
+
+        // Если всё ещё недостаточно после всех попыток с ограничением периода,
+        // берем лучшие рецепты за всё время
+        if ($recipes->count() < $limit) {
+            $query = Recipe::query()
+                ->with([
+                    'user', 'category', 'cookingMethod', 'country',
+                    'ingredients', 'ingredients.unit', 'recipeSteps', 'reviews'
+                ])
+                ->whereHas('reviews');
+
+            if (Schema::hasColumn('recipes', 'rating')) {
+                $query->orderByDesc('rating');
+            } else {
+                $query->withAvg('reviews', 'rating')
+                    ->orderByDesc('reviews_avg_rating');
+            }
+
+            $recipes = $query->limit($limit)->get();
+        }
+
+        // Если и это не помогло (вообще нет рецептов с отзывами),
+        // берем просто последние рецепты
+        if ($recipes->isEmpty()) {
+            $recipes = Recipe::query()
+                ->with([
+                    'user', 'category', 'cookingMethod', 'country',
+                    'ingredients', 'ingredients.unit', 'recipeSteps', 'reviews'
+                ])
+                ->latest()
+                ->limit($limit)
+                ->get();
+        }
+
+        $paginator = new LengthAwarePaginator(
+            $recipes,
+            $recipes->count(),
+            $limit,
+            1
+        );
+
+        return new RecipeCollection($paginator);
+    }*/
+    /*public function topByPeriod(TopRecipesRequest $request): RecipeCollection
+    {
+        $limit = (int) $request->input('limit', 10);
+        $requestedDays = (int) $request->input('days', 7);
+
+        Log::info("=== НАЧАЛО ОТЛАДКИ TOP BY PERIOD ===");
+        Log::info("Запрошенные параметры: limit={$limit}, days={$requestedDays}");
+        Log::info("Текущее время: " . now());
+        Log::info("Начальная дата отсечения: " . now()->subDays($requestedDays)->toDateString()); // Логируем только дату
+
+        $days = $requestedDays;
+
+        // Отладка временных зон
+        try {
+            $appTime = now();
+            $dbTime = DB::select('SELECT NOW() as time')[0]->time;
+            Log::info("Время приложения: {$appTime}, Время БД: {$dbTime}");
+        } catch (\Exception $e) {
+            Log::error("Ошибка при проверке времени БД: " . $e->getMessage());
+        }
+
+        // Будем экспоненциально расширять период поиска, пока не найдем достаточно рецептов
+        $iteration = 1;
+        $uniqueRecipeIds = [];
+        $finalRecipes = collect();
+
+        while (count($uniqueRecipeIds) < $limit && $days <= 365) {
+            $cutoffDate = now()->subDays($days)->toDateString(); // Используем только дату
+            Log::info("Итерация {$iteration}: Поиск с периодом days={$days}, дата отсечения={$cutoffDate}");
+
+            // Сначала получаем только ID рецептов (без загрузки самих рецептов)
+            $recipeIds = DB::table('reviews')
+                ->select('recipe_id')
+                ->whereDate('created_at', '>=', $cutoffDate) // Используем whereDate
+                ->distinct()
+                ->pluck('recipe_id')
+                ->toArray();
+
+            $uniqueRecipeIds = $recipeIds;
+
+            Log::info("Найдено " . count($uniqueRecipeIds) . " уникальных рецептов для периода {$days} дней");
+
+            // Если ничего не нашли, увеличиваем период экспоненциально
+            if (empty($uniqueRecipeIds)) {
+                $prevDays = $days;
+                $days *= 2;
+                Log::info("Увеличиваем период поиска экспоненциально с {$prevDays} до {$days} дней");
+            } else if (count($uniqueRecipeIds) < $limit) {
+                // Если нашли, но недостаточно, увеличиваем период линейно
+                $prevDays = $days;
+                $days += $requestedDays;
+                Log::info("Найдено недостаточно рецептов, увеличиваем период линейно с {$prevDays} до {$days} дней");
+            } else {
+                // Нашли достаточно рецептов, выходим из цикла
+                Log::info("Найдено достаточно рецептов (" . count($uniqueRecipeIds) . "), прекращаем поиск");
+                break;
+            }
+
+            $iteration++;
+        }
+
+        // Теперь загружаем найденные рецепты и сортируем их по рейтингу
+        if (!empty($uniqueRecipeIds)) {
+            Log::info("Загружаем " . count($uniqueRecipeIds) . " рецептов");
+
+            $query = Recipe::query()
+                ->with([
+                    'user', 'category', 'cookingMethod', 'country',
+                    'ingredients', 'ingredients.unit', 'recipeSteps', 'reviews'
+                ])
+                ->whereIn('id', $uniqueRecipeIds);
+
+            // Используем сортировку по рейтингу, если есть
+            if (Schema::hasColumn('recipes', 'rating')) {
+                $query->orderByDesc('rating');
+                Log::info("Сортировка по колонке rating");
+            } else {
+                // Иначе используем withAvg для вычисления среднего рейтинга
+                $query->withAvg('reviews', 'rating')
+                    ->orderByDesc('reviews_avg_rating');
+                Log::info("Сортировка по среднему рейтингу отзывов (reviews_avg_rating)");
+            }
+
+            $finalRecipes = $query->limit($limit)->get();
+
+            Log::info("Загружено {$finalRecipes->count()} рецептов после сортировки");
+        }
+
+        // Если не нашли рецептов с отзывами, берем просто последние рецепты
+        if ($finalRecipes->isEmpty()) {
+            Log::info("Не найдено рецептов с отзывами, возвращаем последние добавленные рецепты");
+
+            $finalRecipes = Recipe::query()
+                ->with([
+                    'user', 'category', 'cookingMethod', 'country',
+                    'ingredients', 'ingredients.unit', 'recipeSteps', 'reviews'
+                ])
+                ->latest()
+                ->limit($limit)
+                ->get();
+
+            Log::info("Загружено {$finalRecipes->count()} последних рецептов");
+        }
+
+        $paginator = new LengthAwarePaginator(
+            $finalRecipes,
+            $finalRecipes->count(),
+            $limit,
+            1
+        );
+
+        Log::info("=== КОНЕЦ ОТЛАДКИ TOP BY PERIOD ===");
+
+        return new RecipeCollection($paginator);
+    }*/
 
     public function newest(NewestRecipesRequest $request): RecipeCollection
     {
@@ -239,7 +441,7 @@ class RecipeSearchController extends Controller
 
         $recipes = Recipe::query()
             ->with(['user', 'category', 'cookingMethod', 'country', 'ingredients', 'ingredients.unit', 'recipeSteps', 'reviews'])
-            ->has('reviews')
+            /*->has('reviews')*/
             ->get()
             ->sortByDesc(function($recipe) {
                 return RecipeService::calculateRating($recipe);
