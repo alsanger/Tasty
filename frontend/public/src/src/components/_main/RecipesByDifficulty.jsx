@@ -3,7 +3,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 import RecipeCard from '../Recipe/RecipeCard.jsx';
 import {FONT_FAMILIES} from "../../utils/constants.js";
 
-const RecipeGridEasyMediumDifficult = () => {
+const RecipesByDifficulty = () => {
     // Функция для обработки клика
     const handleRecipeClick = (recipeId) => {
         console.log(`Navigating to recipe page with ID: ${recipeId}`);
@@ -45,4 +45,4 @@ const RecipeGridEasyMediumDifficult = () => {
     );
 };
 
-export default RecipeGridEasyMediumDifficult;
+export default RecipesByDifficulty;

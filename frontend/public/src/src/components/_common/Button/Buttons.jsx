@@ -28,7 +28,7 @@ Buttons.propTypes = {
             text: PropTypes.string,
             onClick: PropTypes.func.isRequired,
             isActive: PropTypes.bool,
-            variant: PropTypes.oneOf(['default', 'icon-only', 'header-icon']),
+            variant: PropTypes.oneOf(['default', 'icon-only', '_header-icon']),
             type: PropTypes.oneOf(['button', 'submit', 'reset'])
         })
     ).isRequired,

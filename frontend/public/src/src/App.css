@@ -1,7 +1,50 @@
+/*Файл App.css:*/
 @font-face {
     font-family: 'Namu';
     src: url('./assets/fonts/NAMU-1400.eot'); /* Для старых браузеров */
     src: url('./assets/fonts/NAMU-1400.woff') format('woff'); /* Основной формат */
     font-weight: normal;
     font-style: normal;
+}
+
+.app-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Общие стили для заголовков */
+h1 {
+    font-family: 'Namu', serif; /* Используем шрифт NAMU */
+    font-weight: 1400; /* Жирность шрифта */
+    font-size: 26px; /* Размер шрифта */
+    margin: 0; /* Убираем отступы по умолчанию */
+}
+
+h2 {
+    font-family: 'Namu', serif; /* Используем шрифт NAMU */
+    font-weight: 1400; /* Жирность шрифта */
+    font-size: 18px; /* Размер шрифта */
+    margin: 0; /* Убираем отступы по умолчанию */
+}
+
+h3 {
+    font-family: 'Raleway', sans-serif; /* Используем шрифт Raleway */
+    font-weight: 500; /* Medium (обычно 500) */
+    font-size: 20px; /* Размер шрифта */
+    margin: 0; /* Убираем отступы по умолчанию */
+}
+
+h4 {
+    font-family: 'Raleway', sans-serif; /* Используем шрифт Raleway */
+    font-weight: 700; /* Medium (обычно 500) */
+    font-size: 20px; /* Размер шрифта */
+    margin: 0; /* Убираем отступы по умолчанию */
 }

@@ -50,7 +50,7 @@ const RecipeGridTheBest = () => {
 
     return (
         <Container fluid className="mt-0">
-            <h2 className="mb-4" style={{ fontFamily: FONT_FAMILIES.PRIMARY }}>Найкращі</h2>
+            <h1 className="mb-4">Найкращі</h1>
             <Row className="mb-0">
                 <Col xs={12} sm={6} md={4} className="mb-4" style={{ aspectRatio: '15/9' }}>
                     <RecipeCard

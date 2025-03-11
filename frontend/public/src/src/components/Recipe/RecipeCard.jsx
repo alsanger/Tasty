@@ -10,7 +10,8 @@ const RecipeCard = ({
                         recipeId,
                         showAuthor = false,
                         featuredText = '',
-                        onClick
+                        onClick,
+                        name = null
                     }) => {
     const [recipe, setRecipe] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -71,7 +72,7 @@ const RecipeCard = ({
                     <Card.Img
                         className="recipe-image"
                         src={`${BASE_URL}${recipe.image_url}`}
-                        alt={recipe.name}
+                        alt={name || recipe.name}
                     />
 
                     {featuredText && (
@@ -82,7 +83,7 @@ const RecipeCard = ({
                     )}
 
                     <div className="recipe-content">
-                        <h3 className="recipe-name" style={{ fontFamily: FONT_FAMILIES.PRIMARY }}>{recipe.name}</h3>
+                        <h1 className="recipe-name">{name || recipe.name}</h1>
 
                         {showAuthor && recipe.user && (
                             <div className="recipe-author">

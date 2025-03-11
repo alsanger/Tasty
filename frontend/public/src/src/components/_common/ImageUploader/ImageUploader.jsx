@@ -276,7 +276,7 @@ const ImageUploader = ({
 };
 
 ImageUploader.propTypes = {
-    type: PropTypes.oneOf(['avatar', 'avatars', 'category', 'categories', 'recipe', 'recipes']).isRequired,
+    type: PropTypes.oneOf(['avatar', 'avatars', 'Сategory', 'categories', 'recipe', 'recipes']).isRequired,
     id: PropTypes.number.isRequired,
     recipeStepId: PropTypes.number,
     currentImageUrl: PropTypes.string,

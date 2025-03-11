@@ -106,9 +106,7 @@ const RecipeCard2 = ({
                     </div>
                 </div>
                 <div className="recipe-details">
-                    <h4 className="recipe-name" style={{ fontFamily: FONT_FAMILIES.PRIMARY }}>
-                        {recipe.name}
-                    </h4>
+                    <h2 className="recipe-name">{recipe.name}</h2>
                     <p className="recipe-ingredients">
                         {ingredientsList}
                     </p>

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import Button from "../common/Button/Button.jsx"; // Подключаем ваш кастомный компонент кнопки
+import {Container} from 'react-bootstrap';
+import Button from "../_common/Button/Button.jsx"; // Подключаем ваш кастомный компонент кнопки
 import { getCountries } from "../../utils/fetchApi/countryApi.js";
 import { get, post } from "../../utils/fetchApi/baseApi.js";
 import { ENDPOINTS } from "../../utils/constants.js";
@@ -46,6 +47,7 @@ const CountryButtonsNavigation = () => {
     };
 
     return (
+        <Container fluid className="mt-3">
         <div className="country-buttons-nav">
             <Button
                 text="Всі рецепти"
@@ -63,103 +65,8 @@ const CountryButtonsNavigation = () => {
                 />
             ))}
         </div>
+        </Container>
     );
 };
 
 export default CountryButtonsNavigation;
-
-
-
-
-
-/*
-import React, { useState } from 'react';
-import Buttons from '../../common/Buttons/Buttons';
-import { GiChefToque } from 'react-icons/gi';
-
-const CountryButtonsNavigation = () => {
-    const [activeCountry, setActiveCountry] = useState('all');
-
-    const navigationButtons = [
-        {
-            id: 'all',
-            text: 'Всі рецепти',
-            icon: GiChefToque,
-            variant: 'default',
-            onClick: () => setActiveCountry('all'),
-            isActive: activeCountry === 'all'
-        },
-        {
-            id: 'ukraine',
-            text: 'Україна',
-            variant: 'default',
-            onClick: () => setActiveCountry('ukraine'),
-            isActive: activeCountry === 'ukraine'
-        },
-        {
-            id: 'italy',
-            text: 'Італія',
-            variant: 'default',
-            onClick: () => setActiveCountry('italy'),
-            isActive: activeCountry === 'italy'
-        },
-        {
-            id: 'france',
-            text: 'Франція',
-            variant: 'default',
-            onClick: () => setActiveCountry('france'),
-            isActive: activeCountry === 'france'
-        },
-        {
-            id: 'mexico',
-            text: 'Мексика',
-            variant: 'default',
-            onClick: () => setActiveCountry('mexico'),
-            isActive: activeCountry === 'mexico'
-        },
-        {
-            id: 'asia',
-            text: 'Азія',
-            variant: 'default',
-            onClick: () => setActiveCountry('asia'),
-            isActive: activeCountry === 'asia'
-        },
-        {
-            id: 'america',
-            text: 'Америка',
-            variant: 'default',
-            onClick: () => setActiveCountry('america'),
-            isActive: activeCountry === 'america'
-        },
-        {
-            id: 'germany',
-            text: 'Німеччина',
-            variant: 'default',
-            onClick: () => setActiveCountry('germany'),
-            isActive: activeCountry === 'germany'
-        },
-        {
-            id: 'georgia',
-            text: 'Грузія',
-            variant: 'default',
-            onClick: () => setActiveCountry('georgia'),
-            isActive: activeCountry === 'georgia'
-        },
-        {
-            id: 'turkey',
-            text: 'Туреччина',
-            variant: 'default',
-            onClick: () => setActiveCountry('turkey'),
-            isActive: activeCountry === 'turkey'
-        }
-    ];
-
-    return (
-        <Buttons
-            buttons={navigationButtons}
-            className="p-4"
-        />
-    );
-};
-
-export default CountryButtonsNavigation;*/

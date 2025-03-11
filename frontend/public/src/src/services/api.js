@@ -16,12 +16,3 @@ api.interceptors.request.use((config) => {
     }
     return config;
 });
-
-export const recipeService = {
-    getFeaturedRecipes: () => api.get(ENDPOINTS.FEATURED_RECIPES),
-    getCategories: () => api.get(ENDPOINTS.CATEGORIES),
-    getNewRecipes: () => api.get(ENDPOINTS.NEW_RECIPES),
-    getPopularRecipes: () => api.get(ENDPOINTS.POPULAR_RECIPES),
-    getBestRecipes: () => api.get(ENDPOINTS.BEST_RECIPES),
-    getAuthors: () => api.get(ENDPOINTS.AUTHORS),
-};

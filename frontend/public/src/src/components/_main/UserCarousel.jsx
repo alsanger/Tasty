@@ -103,7 +103,7 @@ const UserCarousel = ({onUserClick}) => {
 
     return (
         <Container fluid className="mt-3">
-            <h2 className="mb-4" style={{fontFamily: FONT_FAMILIES.PRIMARY}}>Популярні автори</h2>
+            <h1 className="mb-4">Популярні автори</h1>
             <div className="user-carousel">
                 <div className="carousel-container">
                     {showNavButtons && (

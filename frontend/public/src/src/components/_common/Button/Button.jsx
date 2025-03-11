@@ -46,7 +46,7 @@ const Button = ({
             {IconComponent && (
                 <IconComponent
                     className="button-icon"
-                    size={variant === 'header-icon' ? 24 : 20}
+                    size={variant === '_header-icon' ? 24 : 20}
                 />
             )}
             {text && <span className="button-text">{text}</span>}

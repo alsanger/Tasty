@@ -137,7 +137,7 @@ const Recipes2Carousel = ({
 
     return (
         <Container fluid className="mt-0">
-            <h2 className="mb-4" style={{fontFamily: FONT_FAMILIES.PRIMARY}}>{title}</h2>
+            <h1 className="mb-4">{title}</h1>
             <div className="recipes-carousel">
                 <div className="carousel-container">
                     {showNavButtons && (

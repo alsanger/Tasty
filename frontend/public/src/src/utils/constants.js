@@ -1,4 +1,4 @@
-// Файл constants.js
+// Файл constants.js:
 export const BASE_URL = 'http://localhost:8000';
 
 export const API_BASE_URL = `${BASE_URL}/api`;
@@ -25,10 +25,12 @@ export const ENDPOINTS = {
     USER_UNFOLLOW: '/v1/users/unfollow',
 
     // Рецепты
-    FEATURED_RECIPES: '/v1/recipes/top-by-period', // Топ рецепты за период
+    TOP_DAY_RECIPE: '/v1/recipes/top-by-period?limit=1&days=1', // Топ рецепт за день
+    TOP_WEEK_RECIPE: '/v1/recipes/top-by-period?limit=1&days=7', // Топ рецепт за неделю
+    TOP_MONTH_RECIPE: '/v1/recipes/top-by-period?limit=1&days=30', // Топ рецепт за месяц
+    TOP_TOP_RECIPE: '/v1/recipes/top-by-period?limit=3&days=365', // Топ рецепт за месяц
     NEW_RECIPES: '/v1/recipes/newest', // Новые рецепты
-    POPULAR_RECIPES: '/v1/recipes/top-rated', // Популярные рецепты
-    BEST_RECIPES: '/v1/recipes/top-rated', // Лучше рецепты (повторяется, может быть удалено)
+    BEST_RECIPES: '/v1/recipes/top-rated', // Лучше рецепты
     RECIPES: '/v1/recipes', // Список всех рецептов
     RECIPE_DETAIL: (id) => `/v1/recipes/${id}`, // Рецепт по ID
     SEARCH_RECIPES: '/v1/recipes/search', // Поиск рецептов
@@ -89,7 +91,7 @@ export const ENDPOINTS = {
     // Изображения
     IMAGE: {
         UPLOAD_USER_AVATAR: '/v1/upload-user-avatar',
-        UPLOAD_CATEGORY_IMAGE: '/v1/upload-category-image',
+        UPLOAD_CATEGORY_IMAGE: '/v1/upload-Сategory-image',
         UPLOAD_RECIPE_IMAGE: '/v1/upload-recipe-image',
         UPLOAD_RECIPE_STEP_IMAGE: '/v1/upload-recipe-step-image',
 

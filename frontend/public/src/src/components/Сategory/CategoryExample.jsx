@@ -13,7 +13,7 @@ const CategoryExample = () => {
                 const response = await getCategoryById(2); // ID категории "Основні страви"
                 setCategory(response.data);
             } catch (error) {
-                console.error('Error fetching category:', error);
+                console.error('Error fetching Сategory:', error);
             }
         };
 
