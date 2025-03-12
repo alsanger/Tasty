@@ -19,60 +19,34 @@ const Recipes2Carousel = ({
     const [error, setError] = useState(null);
     const [isAnimating, setIsAnimating] = useState(false);
 
-    // Загрузка рецептов с API
-    /*useEffect(() => {
+    useEffect(() => {
         const fetchRecipes = async () => {
             try {
+                console.log('Начало загрузки рецептов...');
                 setLoading(true);
+
                 const response = await getRecipesMethod();
+                console.log('Ответ от сервера:', response);
 
                 if (response && response.data) {
+                    console.log('Данные рецептов получены:', response.data);
                     setRecipes(response.data);
-                    console.log('Рецепты загружены:', response.data.length);
+                    console.log('Рецепты загружены. Количество:', response.data.length);
                 } else {
+                    console.error('Некорректный формат ответа:', response);
                     throw new Error('Некорректный формат ответа');
                 }
             } catch (err) {
                 console.error('Ошибка загрузки рецептов:', err);
                 setError('Не удалось загрузить рецепты');
             } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchRecipes();
-    }, []);*/
-    useEffect(() => {
-        const fetchRecipes = async () => {
-            try {
-                console.log('Начало загрузки рецептов...'); // Логируем начало загрузки
-                setLoading(true);
-
-                const response = await getRecipesMethod();
-                console.log('Ответ от сервера:', response); // Логируем ответ от сервера
-
-                if (response && response.data) {
-                    console.log('Данные рецептов получены:', response.data); // Логируем данные
-                    setRecipes(response.data);
-                    console.log('Рецепты загружены. Количество:', response.data.length); // Логируем количество рецептов
-                } else {
-                    console.error('Некорректный формат ответа:', response); // Логируем ошибку формата
-                    throw new Error('Некорректный формат ответа');
-                }
-            } catch (err) {
-                console.error('Ошибка загрузки рецептов:', err); // Логируем ошибку
-                setError('Не удалось загрузить рецепты');
-            } finally {
-                console.log('Загрузка завершена.'); // Логируем завершение загрузки
+                console.log('Загрузка завершена.');
                 setLoading(false);
             }
         };
 
         fetchRecipes();
     }, []);
-
-
-
 
     // Адаптивное отображение количества видимых рецептов
     useEffect(() => {
