@@ -1,13 +1,13 @@
-// Файл RecipeCardById2.jsx
+// Файл RecipeCardForCarouselById.jsx
 import React, { useState, useEffect } from 'react';
 import { Card, Spinner } from 'react-bootstrap';
 import { IoHeartOutline, IoHeart, IoTimeOutline } from "react-icons/io5";
 import { FaStar } from "react-icons/fa";
 import { getRecipeById } from '../../../utils/fetchApi/recipeApi.js';
-import './RecipeCardById2.scss';
+import './RecipeCardForCarouselById.scss';
 import { BASE_URL, FONT_FAMILIES } from "../../../utils/constants.js";
 
-const RecipeCardById2 = ({
+const RecipeCardForCarouselById = ({
                                   recipeId,
                                   onClick
                               }) => {
@@ -133,4 +133,4 @@ const RecipeCardById2 = ({
     );
 };
 
-export default RecipeCardById2;
+export default RecipeCardForCarouselById;

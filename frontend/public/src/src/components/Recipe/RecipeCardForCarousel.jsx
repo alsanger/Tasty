@@ -1,40 +1,17 @@
-// Файл RecipeCard2.jsx
-import React, { useState, useEffect } from 'react';
-import { Card, Spinner } from 'react-bootstrap';
-import { IoHeartOutline, IoHeart, IoTimeOutline } from "react-icons/io5";
-import { FaStar } from "react-icons/fa";
-import { getRecipeById } from '../../utils/fetchApi/recipeApi';
-import './RecipeCard2.scss';
-import { BASE_URL, FONT_FAMILIES } from "../../utils/constants.js";
+// Файл RecipeCardForCarousel.jsx
+import React, {useState} from 'react';
+import {Card} from 'react-bootstrap';
+import {IoHeartOutline, IoHeart, IoTimeOutline} from "react-icons/io5";
+import {FaStar} from "react-icons/fa";
+import './RecipeCardForCarousel.scss';
+import {BASE_URL} from "../../utils/constants.js";
 
-const RecipeCard2 = ({
-                                  recipeId,
-                                  onClick
-                              }) => {
-    const [recipe, setRecipe] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+const RecipeCardForCarousel = ({
+                                   recipe,
+                                   onClick
+                               }) => {
+
     const [isFavorite, setIsFavorite] = useState(false);
-
-    useEffect(() => {
-        const fetchRecipe = async () => {
-            try {
-                setLoading(true);
-                const response = await getRecipeById(recipeId);
-                setRecipe(response.data);
-                setError(null);
-            } catch (err) {
-                console.error('Ошибка при загрузке рецепта:', err);
-                setError('Не удалось загрузить рецепт');
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        if (recipeId) {
-            fetchRecipe();
-        }
-    }, [recipeId]);
 
     const handleClick = () => {
         if (onClick && recipe) {
@@ -68,27 +45,17 @@ const RecipeCard2 = ({
         return recipe.ingredients.map(ingredient => ingredient.name).join(', ');
     };
 
-    if (loading) {
-        return (
-            <div className="recipe-card-horizontal-container d-flex justify-content-center align-items-center">
-                <Spinner animation="border" role="status">
-                    <span className="visually-hidden">Загрузка...</span>
-                </Spinner>
-            </div>
-        );
-    }
-
-    if (error || !recipe) {
+    if (!recipe) {
         return (
             <div className="recipe-card-horizontal-container d-flex justify-content-center align-items-center">
                 <div className="text-center text-muted">
-                    {error || 'Рецепт не найден'}
+                    {'Рецепт не найден'}
                 </div>
             </div>
         );
     }
 
-    const averageRating = calculateAverageRating();
+    const rating = calculateAverageRating();
     const reviewsCount = recipe.reviews ? recipe.reviews.length : 0;
     const ingredientsList = getIngredientsList();
 
@@ -102,7 +69,8 @@ const RecipeCard2 = ({
                         alt={recipe.name}
                     />
                     <div className="favorite-button" onClick={handleFavoriteClick}>
-                        {isFavorite ? <IoHeart className="favorite-icon active" /> : <IoHeartOutline className="favorite-icon" />}
+                        {isFavorite ? <IoHeart className="favorite-icon active"/> :
+                            <IoHeartOutline className="favorite-icon"/>}
                     </div>
                 </div>
                 <div className="recipe-details">
@@ -112,7 +80,7 @@ const RecipeCard2 = ({
                     </p>
                     <div className="recipe-footer">
                         <div className="recipe-time">
-                            <IoTimeOutline className="time-icon" />
+                            <IoTimeOutline className="time-icon"/>
                             <span>{recipe.time} хв.</span>
                         </div>
                         <div className="recipe-rating">
@@ -120,7 +88,7 @@ const RecipeCard2 = ({
                                 {[...Array(5)].map((_, index) => (
                                     <FaStar
                                         key={index}
-                                        className={index < Math.round(averageRating) ? 'star-filled' : 'star-empty'}
+                                        className={index < Math.round(rating) ? 'star-filled' : 'star-empty'}
                                     />
                                 ))}
                             </div>
@@ -133,4 +101,4 @@ const RecipeCard2 = ({
     );
 };
 
-export default RecipeCard2;
+export default RecipeCardForCarousel;

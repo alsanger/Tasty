@@ -38,13 +38,13 @@ h2 {
 h3 {
     font-family: 'Raleway', sans-serif; /* Используем шрифт Raleway */
     font-weight: 500; /* Medium (обычно 500) */
-    font-size: 20px; /* Размер шрифта */
+    font-size: 16px; /* Размер шрифта */
     margin: 0; /* Убираем отступы по умолчанию */
 }
 
 h4 {
     font-family: 'Raleway', sans-serif; /* Используем шрифт Raleway */
     font-weight: 700; /* Medium (обычно 500) */
-    font-size: 20px; /* Размер шрифта */
+    font-size: 16px; /* Размер шрифта */
     margin: 0; /* Убираем отступы по умолчанию */
 }

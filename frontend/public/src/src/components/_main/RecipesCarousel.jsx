@@ -1,13 +1,12 @@
-// Файл Recipes2Carousel.jsx
+// Файл RecipesCarousel.jsx
 import React, { useState, useEffect } from 'react';
 import { Container } from 'react-bootstrap';
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
-import RecipeCard2 from '../Recipe/RecipeCard2.jsx';
 import {getRecipes} from '../../utils/fetchApi/recipeApi.js';
-import './Recipes2Carousel.scss';
-import {FONT_FAMILIES} from "../../utils/constants.js";
+import './RecipesCarousel.scss';
+import RecipeCardForCarousel from "../Recipe/RecipeCardForCarousel.jsx";
 
-const Recipes2Carousel = ({
+const RecipesCarousel = ({
                               onRecipeClick,
                               getRecipesMethod = getRecipes, // Метод по умолчанию
                               title = ""
@@ -136,8 +135,8 @@ const Recipes2Carousel = ({
                                     className="recipe-wrapper"
                                     style={{ width: `${100 / visibleCount}%` }}
                                 >
-                                    <RecipeCard2
-                                        recipeId={recipe.id}
+                                    <RecipeCardForCarousel
+                                        recipe={recipe}
                                         onClick={onRecipeClick}
                                     />
                                 </div>
@@ -161,4 +160,4 @@ const Recipes2Carousel = ({
     );
 };
 
-export default Recipes2Carousel;
+export default RecipesCarousel;

@@ -9,8 +9,8 @@ import {ENDPOINTS} from "../../utils/constants.js";
 import RecipeGridTheBest from "./RecipeGridTheBest.jsx";
 import RecipeGridDayWeekMonth from "./RecipeGridDayWeekMonth.jsx";
 import RecipesByDifficulty from "./RecipesByDifficulty.jsx";
-import Recipes2Carousel from "./Recipes2Carousel.jsx";
 import {getNewRecipes, getPopularRecipes} from '../../utils/fetchApi/recipeApi';
+import RecipesCarousel from "./RecipesCarousel.jsx";
 
 
 function Main() {
@@ -22,15 +22,15 @@ function Main() {
             <CountryButtonsNavigation/>
             <RecipeGridDayWeekMonth/>
             <CategoryCarousel/>
-            <Recipes2Carousel getRecipesMethod={getNewRecipes} title={"Новинки"}/>
-            <Recipes2Carousel getRecipesMethod={getPopularRecipes} title={"Популярні"}/>
+            <RecipesCarousel getRecipesMethod={getNewRecipes} title={"Новинки"}/>
+            <RecipesCarousel getRecipesMethod={getPopularRecipes} title={"Популярні"}/>
             <RecipeGridTheBest/>
             <UserCarousel/>
             <RecipesByDifficulty/>
 
 
 
-            <ImageUploader
+            {/*<ImageUploader
                 endpoint={ENDPOINTS.IMAGE.UPLOAD_USER_AVATAR}
                 id={user.id}
                 currentImageUrl={user.avatar_url}
@@ -43,7 +43,7 @@ function Main() {
                 currentImageUrl={user.avatar_url}
                 onImageUpdate={(newUrl) => handleAvatarUpdate(newUrl)}
                 button={{ text: 'Загрузить изображение рецепта' }}
-            />
+            />*/}
 
 
 
