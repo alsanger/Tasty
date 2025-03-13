@@ -1,9 +1,9 @@
 // Файл recipeCard.jsx:
 import React, { useState, useEffect } from 'react';
 import { Card, Spinner } from 'react-bootstrap';
-import { IoHeartOutline } from "react-icons/io5";
+import {IoHeart, IoHeartOutline} from "react-icons/io5";
 import './RecipeCard.scss';
-import {BASE_URL, FONT_FAMILIES} from "../../utils/constants.js";
+import { BASE_URL } from "../../utils/constants.js";
 
 const RecipeCard = ({
                         recipe,
@@ -12,6 +12,7 @@ const RecipeCard = ({
                         onClick,
                         name = null
                     }) => {
+    const [isFavorite, setIsFavorite] = useState(false);
 
     const handleClick = () => {
         if (onClick && recipe) {
@@ -19,6 +20,11 @@ const RecipeCard = ({
         } else if (recipe) {
             console.log(`Clicked on recipe: ${recipe.name} (ID: ${recipe.id})`);
         }
+    };
+
+    const handleFavoriteClick = (e) => {
+        e.stopPropagation(); // Предотвращаем срабатывание onClick всей карточки
+        setIsFavorite(!isFavorite);
     };
 
     return (
@@ -33,8 +39,8 @@ const RecipeCard = ({
                     />
 
                     {featuredText && (
-                        <div className="recipe-featured">
-                            <IoHeartOutline className="recipe-featured-icon" />
+                        <div className="recipe-featured" onClick={handleFavoriteClick}>
+                            {isFavorite ? <IoHeart className="recipe-featured-icon active" /> : <IoHeartOutline className="recipe-featured-icon" />}
                             <span>{featuredText}</span>
                         </div>
                     )}

@@ -33,7 +33,11 @@ class RecipeResource extends JsonResource
             ),
             'ingredients' => $this->whenLoaded('ingredients', fn() => $this->ingredients->map(fn($ingredient) => array_merge(
                 (new IngredientDecorator($ingredient))->toArray(),
-                ['quantity' => $ingredient->pivot->quantity]
+                [
+                    'quantity' => $ingredient->pivot->quantity,
+                    'unit' => $ingredient->unit->name,
+                    'short_name' => $ingredient->unit->short_name
+                    ]
             ))
             ),
             'reviews' => $this->whenLoaded('reviews', fn() => $this->reviews->map(fn($review) => array_merge(
