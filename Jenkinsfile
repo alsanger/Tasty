@@ -1,42 +1,48 @@
 pipeline {
     agent any
-
     environment {
-        DOCKER_HUB_CREDENTIALS = 'docker_hub_credentials'  // ID креденціалів у Jenkins
+        // Використовуємо облікові дані для Docker Hub
+        DOCKER_USERNAME = credentials('docker_hub_credentials') // автоматично підтягується username
+        DOCKER_PASSWORD = credentials('docker_hub_credentials') // автоматично підтягується password
     }
-
     stages {
-        stage('Checkout') {
+        stage('Prepare .env file') {
             steps {
-                git url: 'https://github.com/alsanger/Tasty.git', branch: 'main'  // Клонування коду
+                script {
+                    // Створення .env файлу
+                    writeFile file: '.env', text: """
+                    # Docker Hub credentials
+                    DOCKER_USERNAME=$DOCKER_USERNAME
+                    DOCKER_PASSWORD=$DOCKER_PASSWORD
+                    """
+                }
             }
         }
-
         stage('Login to Docker Hub') {
             steps {
                 script {
-                    docker.withRegistry('https://index.docker.io/v1/', DOCKER_HUB_CREDENTIALS) {
-                        echo "Successfully logged in to Docker Hub"
-                    }
+                    // Логін в Docker Hub
+                    sh 'echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin'
                 }
             }
         }
-
-        stage('Build and Push Images') {
+        stage('Build and Push Image') {
             steps {
                 script {
-                    sh '''
-                        docker-compose build
-                        docker-compose push
-                    '''
+                    // Створення образу за допомогою Docker Compose
+                    sh 'docker-compose build'
+
+                    // Тегування і публікація образу в Docker Hub
+                    sh 'docker tag your_image_name your_dockerhub_username/your_image_name:latest'
+                    sh 'docker push your_dockerhub_username/your_image_name:latest'
                 }
             }
         }
-
-        stage('Cleanup') {
-            steps {
-                sh 'docker system prune -af'  // Видаляємо зайві образи
-            }
+    }
+    post {
+        always {
+            // Видалити .env файл після завершення
+            sh 'rm -f .env'
         }
     }
 }
