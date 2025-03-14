@@ -2,26 +2,41 @@ pipeline {
     agent any
 
     environment {
-        DOCKERHUB_USER = "karasovvvvvv2"
+        DOCKER_HUB_CREDENTIALS = 'docker_hub_credentials'  // ID креденціалів у Jenkins
     }
 
     stages {
-        stage('Clone repo') {
+        stage('Checkout') {
             steps {
-                sshagent(['github_ssh_key']) {
+                git url: 'https://github.com/alsanger/Tasty.git', branch: 'main'  // Клонування коду
+            }
+        }
+
+        stage('Login to Docker Hub') {
+            steps {
+                script {
+                    docker.withRegistry('https://index.docker.io/v1/', DOCKER_HUB_CREDENTIALS) {
+                        echo "Successfully logged in to Docker Hub"
+                    }
+                }
+            }
+        }
+
+        stage('Build and Push Images') {
+            steps {
+                script {
                     sh '''
-                    rm -rf TeamPr
-                    git clone git@github.com:Volodymyr189996/alsanger/TeamPr.git
+                        docker-compose build
+                        docker-compose push
                     '''
                 }
             }
         }
 
-        stage('Build Docker Images') {
+        stage('Cleanup') {
             steps {
-                sh '''
-                docker build -t $DOCKERHUB_USER/tasty_backend:latest ./TeamPr/backend/
-                docker build -t $DOCKERHUB_USER/tasty_front
-
-
-
+                sh 'docker system prune -af'  // Видаляємо зайві образи
+            }
+        }
+    }
+}
