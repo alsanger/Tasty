@@ -1,47 +1,61 @@
 pipeline {
     agent any
     environment {
-        // Використовуємо облікові дані для Docker Hub
-        DOCKER_USERNAME = credentials('docker_hub_credentials') // автоматично підтягується username
-        DOCKER_PASSWORD = credentials('docker_hub_credentials') // автоматично підтягується password
+        DOCKER_USERNAME = credentials('docker_hub_credentials').username
+        DOCKER_PASSWORD = credentials('docker_hub_credentials').password
     }
     stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+        
         stage('Prepare .env file') {
             steps {
                 script {
-                    // Створення .env файлу
-                    writeFile file: '.env', text: """
-                    # Docker Hub credentials
-                    DOCKER_USERNAME=$DOCKER_USERNAME
-                    DOCKER_PASSWORD=$DOCKER_PASSWORD
-                    """
+                    // Створення .env файлу з обліковими даними
+                    sh '''
+                        echo "DOCKER_USERNAME=${DOCKER_USERNAME}" > .env
+                        echo "DOCKER_PASSWORD=${DOCKER_PASSWORD}" >> .env
+                    '''
                 }
             }
         }
+        
         stage('Login to Docker Hub') {
             steps {
                 script {
-                    // Логін в Docker Hub
-                    sh 'echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin'
+                    // Вхід до Docker Hub
+                    sh '''
+                        echo "${DOCKER_PASSWORD}" | docker login -u ${DOCKER_USERNAME} --password-stdin
+                    '''
                 }
             }
         }
+        
         stage('Build and Push Image') {
             steps {
                 script {
-                    // Створення образу за допомогою Docker Compose
+                    // Побудова та пуш Docker образу
                     sh 'docker-compose build'
-
-                    // Тегування і публікація образу в Docker Hub
-                    sh 'docker tag your_image_name your_dockerhub_username/your_image_name:latest'
-                    sh 'docker push your_dockerhub_username/your_image_name:latest'
+                    sh 'docker-compose push'
+                }
+            }
+        }
+        
+        stage('Cleanup') {
+            steps {
+                script {
+                    // Видалення .env файлу після використання
+                    sh 'rm -f .env'
                 }
             }
         }
     }
     post {
         always {
-            // Видалити .env файл після завершення
+            // Видалення .env файлу, навіть якщо пайплайн завершиться помилкою
             sh 'rm -f .env'
         }
     }
