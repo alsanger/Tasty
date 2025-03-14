@@ -1,9 +1,5 @@
 pipeline {
     agent any
-    environment {
-        DOCKER_USERNAME = credentials('docker_hub_credentials').username
-        DOCKER_PASSWORD = credentials('docker_hub_credentials').password
-    }
     stages {
         stage('Checkout') {
             steps {
@@ -14,11 +10,14 @@ pipeline {
         stage('Prepare .env file') {
             steps {
                 script {
-                    // Створення .env файлу з обліковими даними
-                    sh '''
-                        echo "DOCKER_USERNAME=${DOCKER_USERNAME}" > .env
-                        echo "DOCKER_PASSWORD=${DOCKER_PASSWORD}" >> .env
-                    '''
+                    // Включаємо блок withCredentials для безпечного використання секретних змінних
+                    withCredentials([usernamePassword(credentialsId: 'docker_hub_credentials', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
+                        // Створення .env файлу з обліковими даними
+                        sh '''
+                            echo "DOCKER_USERNAME=${DOCKER_USERNAME}" > .env
+                            echo "DOCKER_PASSWORD=${DOCKER_PASSWORD}" >> .env
+                        '''
+                    }
                 }
             }
         }
