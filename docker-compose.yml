@@ -11,6 +11,7 @@ services:
       - tasty_network
 
   tasty.admin:
+    image: karasovvvvvv2/tasty-admin:latest
     build:
       context: frontend/admin
       dockerfile: Dockerfile
@@ -21,6 +22,7 @@ services:
       - tasty_network
 
   tasty.public:
+    image: karasovvvvvv2/tasty-public:latest
     build:
       context: frontend/public
       dockerfile: Dockerfile
@@ -31,6 +33,7 @@ services:
       - tasty_network
 
   tasty.api:
+    image: karasovvvvvv2/tasty-api:latest
     build:
       context: backend
       dockerfile: Dockerfile_api
@@ -45,6 +48,7 @@ services:
       - tasty_network
 
   tasty.queue:
+    image: karasovvvvvv2/tasty-queue:latest
     build:
       context: backend
       dockerfile: Dockerfile_queue
@@ -74,4 +78,3 @@ networks:
   tasty_network:
     driver: bridge
     name: tasty_network
-
