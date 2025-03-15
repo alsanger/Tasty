@@ -9,6 +9,7 @@ use App\Http\Resources\Api\V1\Recipe\RecipeCollection;
 use App\Http\Resources\Api\V1\Recipe\RecipeResource;
 use App\Models\Recipe;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
 
 class RecipeController extends Controller
 {

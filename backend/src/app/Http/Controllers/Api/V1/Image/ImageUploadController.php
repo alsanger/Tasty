@@ -122,14 +122,17 @@ class ImageUploadController extends Controller
     // Загрузка изображения шага рецепта
     public function uploadRecipeStepImage(ImageUploadRequest $request): JsonResponse
     {
+        Log::info("uploadRecipeStepImage START");
+
         $file = $request->file('image');
         if (!$file) {
             Log::error('Файл не найден в запросе');
             return response()->json(['error' => 'Файл не найден'], 400);
         }
 
-        $recipeId = $request->input('id');
-        $stepId = $request->input('recipe_step_id');
+        Log::info('Входящие данные:', $request->all());
+        $recipeId = $request->input('recipe_id');
+        $stepId = $request->input('id');
 
         if (!$stepId) {
             return response()->json(['error' => 'ID шага рецепта не указан'], 400);
