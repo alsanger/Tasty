@@ -1,12 +1,13 @@
-// components/Recipe/Recipe.jsx
+// components/Recipe/RecipeWithIngredients.jsx
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Image } from 'react-bootstrap';
 import { IoHeartOutline, IoHeart } from 'react-icons/io5';
 import { LuMessageSquareMore } from 'react-icons/lu';
 import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa';
-import './Recipe.scss';
+import './RecipeWithIngredients.scss';
+import {BASE_URL} from "../../utils/constants.js";
 
-const Recipe = ({ recipe }) => {
+const RecipeWithIngredients = ({ recipe }) => {
     const [isFavorite, setIsFavorite] = useState(false);
 
     // Обчислення середнього рейтингу
@@ -77,7 +78,7 @@ const Recipe = ({ recipe }) => {
             <Row>
                 <Col md={6} className="recipe-image-col">
                     <div className="image-container">
-                        <Image src={recipe.image_url} alt={recipe.name} fluid />
+                        <Image src={`${BASE_URL}${recipe.image_url}`} alt={recipe.name} fluid />
                         <button
                             className="favorite-btn"
                             onClick={handleFavoriteClick}
@@ -88,10 +89,10 @@ const Recipe = ({ recipe }) => {
                 </Col>
                 <Col md={6} className="recipe-info-col">
                     <div className="recipe-info">
-                        <h2 className="recipe-title">{recipe.name}</h2>
+                        <h1 className="recipe-title">{recipe.name}</h1>
                         <p className="recipe-description">{recipe.description}</p>
 
-                        <h3 className="ingredients-title">Інгрідієнти</h3>
+                        <h3 className="ingredients-title">Інгредієнти</h3>
                         <ul className="ingredients-list">
                             {recipe.ingredients.map((ingredient) => (
                                 <li key={ingredient.id} className="ingredient-item">
@@ -126,4 +127,4 @@ const Recipe = ({ recipe }) => {
     );
 };
 
-export default Recipe;
+export default RecipeWithIngredients;

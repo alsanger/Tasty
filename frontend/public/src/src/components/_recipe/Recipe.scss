@@ -1,0 +1,203 @@
+// components/Recipe/Recipe.scss
+@use "../../styles/variables.scss" as *;
+
+.recipe-container {
+  margin: 30px 20px;
+  padding: 0;
+  //background-color: white;
+}
+
+// Стилизация левой колонки с изображением рецепта
+.recipe-image-col {
+  position: relative;
+  padding: 0;
+
+  .image-container {
+    position: relative;
+    margin-bottom: 20px;
+
+    img {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+
+    .favorite-btn {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      z-index: 10;
+
+      .heart-icon {
+        font-size: 35px;
+        color: $primary-color;
+
+        &.filled {
+          fill: $primary-color;
+        }
+      }
+    }
+  }
+}
+
+// Стилизация правой колонки с информацией о рецепте
+.recipe-info-col {
+  padding: 0 2rem;
+
+  .recipe-info {
+    position: sticky;
+    top: 0;
+    padding: 0;
+  }
+}
+
+// Стилизация заголовка рецепта
+.recipe-title {
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+}
+
+.recipe-description {
+  margin-bottom: 2rem;
+  line-height: 1.6;
+  font-size: 1rem;
+}
+
+// Стилизация секции ингредиентов
+.ingredients-title {
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+}
+
+.ingredients-list {
+  list-style-type: none;
+  padding: 0;
+  margin-bottom: 2rem;
+}
+
+.ingredient-item {
+  display: flex;
+  align-items: baseline;
+  margin-bottom: 0.5rem;
+
+  .ingredient-name {
+    flex-shrink: 0;
+  }
+
+  .ingredient-dots {
+    flex-grow: 1;
+    margin: 0 0.5rem;
+    border-bottom: 1px dotted #ccc;
+  }
+
+  .ingredient-quantity {
+    flex-shrink: 0;
+    text-align: right;
+  }
+}
+
+// Метаинформация про рецепт
+.recipe-meta {
+  .recipe-time, .recipe-calories {
+    margin-bottom: 0.5rem;
+  }
+
+  .recipe-rating {
+    display: flex;
+    align-items: center;
+    margin-top: 1rem;
+
+    .review-count {
+      margin-right: 0.5rem;
+    }
+
+    .message-icon {
+      margin-right: 0.75rem;
+    }
+
+    .rating-stars {
+      display: flex;
+
+      .star-icon {
+        color: #FFD700;
+        margin-right: 0.25rem;
+      }
+    }
+  }
+}
+
+// Стили для компонента шагов рецепта
+.recipe-steps {
+  // Основной контейнер для всех шагов рецепта
+  margin-bottom: 20px;
+}
+
+.recipe-step-item {
+  // Контейнер для одного шага рецепта
+  margin-bottom: 15px;
+}
+
+.recipe-step-content {
+  // Блок с номером шага и его описанием
+  display: flex;
+  position: relative;
+  background-color: $button-default-color; // Фон блока с описанием шага
+  border-radius: 10px; // Закругленные углы
+  padding: 15px 15px 15px 50px; // Отступ слева для номера шага
+  margin-bottom: 10px;
+}
+
+.recipe-step-number {
+  // Круг с номером шага
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 30px;
+  height: 30px;
+  border: 1px solid $primary-color; // Рамка круга с цветом primary
+  border-radius: 50%; // Круглая форма
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $primary-color; // Цвет текста номера шага
+  background-color: transparent; // Прозрачный фон
+  font-size: 16px; // Добавить размер шрифта
+  line-height: 1; // Добавить line-height: 1 для лучшего центрирования
+  padding-bottom: 2px; // Небольшой отступ снизу для визуального центрирования
+}
+
+.recipe-step-description {
+  // Текст описания шага
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.recipe-step-image {
+  // Контейнер для изображения шага
+  margin-top: 10px;
+  text-align: center;
+
+  img {
+    // Изображение шага
+    border-radius: 20px; // Закругленные углы
+    max-width: 100%; // Максимальная ширина - 100% контейнера
+    height: auto; // Автоматическая высота для сохранения пропорций
+  }
+}
+
+// Медиа запросы для адаптивности
+@media (max-width: 768px) {
+  .recipe-info-col {
+    padding: 0 1rem;
+
+    .recipe-info {
+      position: relative;
+      top: auto;
+    }
+  }
+}

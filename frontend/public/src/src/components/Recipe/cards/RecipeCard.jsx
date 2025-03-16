@@ -3,7 +3,8 @@ import React, { useState, useEffect } from 'react';
 import { Card, Spinner } from 'react-bootstrap';
 import {IoHeart, IoHeartOutline} from "react-icons/io5";
 import './RecipeCard.scss';
-import { BASE_URL } from "../../utils/constants.js";
+import { BASE_URL } from "../../../utils/constants.js";
+import {useNavigate} from "react-router-dom";
 
 const RecipeCard = ({
                         recipe,
@@ -12,13 +13,19 @@ const RecipeCard = ({
                         onClick,
                         name = null
                     }) => {
+    const navigate = useNavigate();
     const [isFavorite, setIsFavorite] = useState(false);
 
     const handleClick = () => {
         if (onClick && recipe) {
+            console.log(`Вызов внешней функции onClick с ID: ${recipe.id}`);
             onClick(recipe.id);
         } else if (recipe) {
-            console.log(`Clicked on recipe: ${recipe.name} (ID: ${recipe.id})`);
+            console.log(`Navigating to recipe page with ID: ${recipe.id}`);
+            // Переходим на страницу рецепта, передавая рецепт через state
+            navigate(`/recipe/${recipe.id}`, {
+                state: { recipe },  // Передаем recipe в state
+            });
         }
     };
 

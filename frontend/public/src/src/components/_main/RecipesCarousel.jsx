@@ -4,7 +4,7 @@ import { Container } from 'react-bootstrap';
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import {getRecipes} from '../../utils/fetchApi/recipeApi.js';
 import './RecipesCarousel.scss';
-import RecipeCardForCarousel from "../Recipe/RecipeCardForCarousel.jsx";
+import RecipeCardForCarousel from "../Recipe/cards/RecipeCardForCarousel.jsx";
 
 const RecipesCarousel = ({
                               onRecipeClick,
@@ -137,7 +137,6 @@ const RecipesCarousel = ({
                                 >
                                     <RecipeCardForCarousel
                                         recipe={recipe}
-                                        onClick={onRecipeClick}
                                     />
                                 </div>
                             ))}

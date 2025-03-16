@@ -6,6 +6,7 @@
         <option value="$PROJECT_DIR$/main/tests" />
         <option value="$PROJECT_DIR$/queue-service/tests" />
         <option value="$PROJECT_DIR$/api-service/tests" />
+        <option value="$PROJECT_DIR$/src/tests" />
       </list>
     </option>
   </component>

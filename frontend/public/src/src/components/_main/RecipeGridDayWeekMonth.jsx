@@ -1,8 +1,10 @@
 // Файл RecipeGridDayWeekMonth.jsx:
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
-import RecipeCard from '../Recipe/RecipeCard.jsx';
+import RecipeCard from '../Recipe/cards/RecipeCard.jsx';
 import { getTopDayRecipeRecipes, getTopWeekRecipeRecipes, getTopMonthRecipeRecipes } from '../../utils/fetchApi/recipeApi.js';
+import {useNavigate} from "react-router-dom";
+import recipe from "../_recipe/Recipe.jsx";
 
 const RecipeGridDayWeekMonth = () => {
     // Состояния для хранения ID рецептов
@@ -13,6 +15,9 @@ const RecipeGridDayWeekMonth = () => {
     // Состояния для индикации загрузки и ошибок
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+
+    // Хук для навигации
+    const navigate = useNavigate();
 
     // Загрузка рецептов при монтировании компонента
     useEffect(() => {
@@ -54,12 +59,6 @@ const RecipeGridDayWeekMonth = () => {
         fetchTopRecipes();
     }, []);
 
-    // Функция для обработки клика
-    const handleRecipeClick = (recipeId) => {
-        console.log(`Navigating to recipe page with ID: ${recipeId}`);
-        // navigate(`/recipes/${recipeId}`);
-    };
-
     if (loading) return <div className="mt-4">Загрузка рецептов...</div>;
     if (error) return <div className="mt-4">{error}</div>;
     if (!dayRecipe && !weekRecipe && !monthRecipe) return <div className="mt-4">Рецепты отсутствуют</div>;
@@ -73,7 +72,6 @@ const RecipeGridDayWeekMonth = () => {
                             recipe={dayRecipe}
                             showAuthor={true}
                             featuredText="Рецепт дня"
-                            onClick={handleRecipeClick}
                         />
                     )}
                 </Col>
@@ -83,7 +81,6 @@ const RecipeGridDayWeekMonth = () => {
                             recipe={weekRecipe}
                             showAuthor={true}
                             featuredText="Рецепт тижня"
-                            onClick={handleRecipeClick}
                         />
                     )}
                 </Col>
@@ -93,7 +90,6 @@ const RecipeGridDayWeekMonth = () => {
                             recipe={monthRecipe}
                             showAuthor={true}
                             featuredText="Рецепт місяця"
-                            onClick={handleRecipeClick}
                         />
                     )}
                 </Col>

@@ -2,9 +2,9 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Spinner } from 'react-bootstrap';
 import { IoHeartOutline } from "react-icons/io5";
-import { getRecipeById } from '../../../utils/fetchApi/recipeApi.js';
+import { getRecipeById } from '../../../../utils/fetchApi/recipeApi.js';
 import './RecipeCardById.scss';
-import {BASE_URL, FONT_FAMILIES} from "../../../utils/constants.js";
+import {BASE_URL, FONT_FAMILIES} from "../../../../utils/constants.js";
 
 const RecipeCardById = ({
                         recipeId,

@@ -4,20 +4,26 @@ import {Card} from 'react-bootstrap';
 import {IoHeartOutline, IoHeart, IoTimeOutline} from "react-icons/io5";
 import {FaStar} from "react-icons/fa";
 import './RecipeCardForCarousel.scss';
-import {BASE_URL} from "../../utils/constants.js";
+import {BASE_URL} from "../../../utils/constants.js";
+import {useNavigate} from "react-router-dom";
 
 const RecipeCardForCarousel = ({
                                    recipe,
                                    onClick
                                }) => {
-
+    const navigate = useNavigate();
     const [isFavorite, setIsFavorite] = useState(false);
 
     const handleClick = () => {
         if (onClick && recipe) {
+            console.log(`Вызов внешней функции onClick с ID: ${recipe.id}`);
             onClick(recipe.id);
         } else if (recipe) {
-            console.log(`Clicked on recipe: ${recipe.name} (ID: ${recipe.id})`);
+            console.log(`Navigating to recipe page with ID: ${recipe.id}`);
+            // Переходим на страницу рецепта, передавая рецепт через state
+            navigate(`/recipe/${recipe.id}`, {
+                state: { recipe },  // Передаем recipe в state
+            });
         }
     };
 

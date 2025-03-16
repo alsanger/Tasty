@@ -61,12 +61,16 @@ class RecipeSearchController extends Controller
         // Фильтр по калорийности
         if ($request->filled('min_calories')) {
             $query->whereHas('ingredients', function ($q) use ($request) {
-                $q->havingRaw('SUM(ingredients.calories * ingredient_recipe.quantity) >= ?', [$request->min_calories]);
+                $q->select('recipe_id')
+                    ->groupBy('recipe_id')
+                    ->havingRaw('SUM(ingredients.calories * ingredient_recipe.quantity) >= ?', [$request->min_calories]);
             });
         }
         if ($request->filled('max_calories')) {
             $query->whereHas('ingredients', function ($q) use ($request) {
-                $q->havingRaw('SUM(ingredients.calories * ingredient_recipe.quantity) <= ?', [$request->max_calories]);
+                $q->select('recipe_id')
+                    ->groupBy('recipe_id')
+                    ->havingRaw('SUM(ingredients.calories * ingredient_recipe.quantity) <= ?', [$request->max_calories]);
             });
         }
 
@@ -108,7 +112,9 @@ class RecipeSearchController extends Controller
         // Фильтр по минимальному рейтингу
         if ($request->filled('min_rating')) {
             $query->whereHas('reviews', function ($q) use ($request) {
-                $q->havingRaw('AVG(rating) >= ?', [$request->min_rating]);
+                $q->select('recipe_id')
+                    ->groupBy('recipe_id')
+                    ->havingRaw('AVG(rating) >= ?', [$request->min_rating]);
             });
         }
 
@@ -133,7 +139,7 @@ class RecipeSearchController extends Controller
                         ->orderBy('reviews_avg_rating', $direction);
                     break;
                 case 'calories':
-                    $query->orderByRaw('(SELECT SUM(ingredients.calories * ingredient_recipe.quantity) FROM ingredient_recipe JOIN ingredients ON ingredients.id = ingredient_recipe.ingredient_id WHERE ingredient_recipe.recipe_id = recipes.id)' . $direction);
+                    $query->orderByRaw('(SELECT SUM(ingredients.calories * ingredient_recipe.quantity) FROM ingredient_recipe JOIN ingredients ON ingredients.id = ingredient_recipe.ingredient_id WHERE ingredient_recipe.recipe_id = recipes.id GROUP BY ingredient_recipe.recipe_id)' . $direction);
                     break;
                 case 'time':
                     $query->orderBy('time', $direction);
@@ -151,6 +157,9 @@ class RecipeSearchController extends Controller
         $perPage = $request->per_page ?? 30;
         $recipes = $query->paginate($perPage);
 
+        Log::info("--------------------");
+        Log::info($recipes);
+        Log::info("--------------------");
         return new RecipeCollection($recipes);
     }
 

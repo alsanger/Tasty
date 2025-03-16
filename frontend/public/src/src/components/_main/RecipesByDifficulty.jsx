@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
-import RecipeCardById from "../Recipe/byId/RecipeCardById.jsx";
+import RecipeCardById from "../Recipe/cards/byId/RecipeCardById.jsx";
 
 const RecipesByDifficulty = () => {
     // Функция для обработки клика

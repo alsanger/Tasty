@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
-import RecipeCard from '../Recipe/RecipeCard.jsx';
+import RecipeCard from '../Recipe/cards/RecipeCard.jsx';
 import {FONT_FAMILIES} from "../../utils/constants.js";
 import {getPopularRecipes} from "../../utils/fetchApi/recipeApi.js";
 
@@ -37,13 +37,6 @@ const RecipeGridTheBest = () => {
         fetchTopRecipes();
     }, []);
 
-    // Функция для обработки клика
-    const handleRecipeClick = (recipeId) => {
-        console.log(`Navigating to recipe page with ID: ${recipeId}`);
-        // navigate(`/recipes/${recipeId}`);
-    };
-
-
     if (loading) return <div className="mt-4">Загрузка рецептов...</div>;
     if (error) return <div className="mt-4">{error}</div>;
     if (!bestRecipes) return <div className="mt-4">Рецепты отсутствуют</div>;
@@ -56,21 +49,18 @@ const RecipeGridTheBest = () => {
                     <RecipeCard
                         recipe={bestRecipes[0]}
                         showAuthor={false}
-                        onClick={handleRecipeClick}
                     />
                 </Col>
                 <Col xs={12} sm={6} md={4} className="mb-4" style={{ aspectRatio: '15/9' }}>
                     <RecipeCard
                         recipe={bestRecipes[1]}
                         showAuthor={false}
-                        onClick={handleRecipeClick}
                     />
                 </Col>
                 <Col xs={12} sm={6} md={4} className="mb-4" style={{ aspectRatio: '15/9' }}>
                     <RecipeCard
                         recipe={bestRecipes[2]}
                         showAuthor={false}
-                        onClick={handleRecipeClick}
                     />
                 </Col>
             </Row>

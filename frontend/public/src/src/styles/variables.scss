@@ -1,4 +1,4 @@
-// Файл variables.scss:
+// Файл styles/variables.scss:
 // Цвета
 $primary-color: #06A561;
 $secondary-color: #454545;
@@ -133,6 +133,7 @@ $transition: all 0.2s ease;
   font-size: $font-size-small;
   border-radius: $border-radius-large;
   transition: $transition;
+  background-color: $button-default-color;
 
   &:focus {
     box-shadow: none;

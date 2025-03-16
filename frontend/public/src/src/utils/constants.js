@@ -1,4 +1,4 @@
-// Файл constants.js:
+// Файл utils/fetchApi/constants.js:
 export const BASE_URL = 'http://localhost:8000';
 
 export const API_BASE_URL = `${BASE_URL}/api`;
@@ -46,6 +46,13 @@ export const ENDPOINTS = {
     UPDATE_CATEGORY: (id) => `/v1/categories/${id}`, // Обновление категории
     DELETE_CATEGORY: (id) => `/v1/categories/${id}`, // Удаление категории
 
+    // Методы приготовления еды
+    COOKING_METHODS: '/v1/cooking-methods', // Список способов приготовления
+    COOKING_METHOD_DETAIL: (id) => `/v1/cooking-methods/${id}`, // Детали способа приготовления
+    CREATE_COOKING_METHOD: '/v1/cooking-methods', // Создание способа приготовления
+    UPDATE_COOKING_METHOD: (id) => `/v1/cooking-methods/${id}`, // Обновление способа приготовления
+    DELETE_COOKING_METHOD: (id) => `/v1/cooking-methods/${id}`, // Удаление способа приготовления
+
     // Авторы
     AUTHORS: '/v1/top-authors', // Топ авторов
     AUTHOR_DETAIL: (id) => `/v1/authors/${id}`, // Детали автора
@@ -91,7 +98,7 @@ export const ENDPOINTS = {
     // Изображения
     IMAGE: {
         UPLOAD_USER_AVATAR: '/v1/upload-user-avatar',
-        UPLOAD_CATEGORY_IMAGE: '/v1/upload-Сategory-image',
+        UPLOAD_CATEGORY_IMAGE: '/v1/upload-category-image',
         UPLOAD_RECIPE_IMAGE: '/v1/upload-recipe-image',
         UPLOAD_RECIPE_STEP_IMAGE: '/v1/upload-recipe-step-image',
 

@@ -1,3 +1,4 @@
+// Файл components/_common/Input/Input.jsx
 import { Form } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import "./Input.scss";

@@ -1,3 +1,4 @@
+// Файл components/_common/Button/Button.jsx
 import { Button as BootstrapButton } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import React from 'react';

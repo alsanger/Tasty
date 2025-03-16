@@ -13,13 +13,11 @@ import {getNewRecipes, getPopularRecipes} from '../../utils/fetchApi/recipeApi';
 import RecipesCarousel from "./RecipesCarousel.jsx";
 
 
-function Main() {
+const Main = () => {
     const { user } = useUser();
 
-
     return (
-        <div className="site-main main-content">
-            <CountryButtonsNavigation/>
+        <div>
             <RecipeGridDayWeekMonth/>
             <CategoryCarousel/>
             <RecipesCarousel getRecipesMethod={getNewRecipes} title={"Новинки"}/>
@@ -29,24 +27,22 @@ function Main() {
             <RecipesByDifficulty/>
 
 
-
-            {/*<ImageUploader
+            <ImageUploader
                 endpoint={ENDPOINTS.IMAGE.UPLOAD_USER_AVATAR}
                 id={user.id}
-                currentImageUrl={user.avatar_url}
-                onImageUpdate={(newUrl) => handleAvatarUpdate(newUrl)}
                 button={{ text: 'Загрузить аватар' }}
             />
             <ImageUploader
                 endpoint={ENDPOINTS.IMAGE.UPLOAD_RECIPE_IMAGE}
-                id={21}
-                currentImageUrl={user.avatar_url}
-                onImageUpdate={(newUrl) => handleAvatarUpdate(newUrl)}
+                id={22}
                 button={{ text: 'Загрузить изображение рецепта' }}
-            />*/}
-
-
-
+            />
+            <ImageUploader
+                endpoint={ENDPOINTS.IMAGE.UPLOAD_RECIPE_STEP_IMAGE}
+                id={10}
+                recipeId={22}
+                button={{ text: 'Загрузить изображение шага рецепта' }}
+            />
         </div>
     );
 }

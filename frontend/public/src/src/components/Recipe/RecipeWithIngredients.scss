@@ -1,12 +1,12 @@
-// components/Recipe/Recipe.scss
+// components/Recipe/RecipeWithIngredients.scss
 @use "../../styles/variables.scss" as *;
 
 .recipe-container {
-  margin-bottom: 2rem;
+  margin: 30px 20px;
   padding: 0;
 }
 
-// Стилізація лівої колонки з зображенням
+// Стилизация левой колонки с изображением рецепта
 .recipe-image-col {
   position: relative;
   padding: 0;
@@ -18,6 +18,7 @@
       width: 100%;
       height: auto;
       object-fit: cover;
+      border-radius: 20px;
     }
 
     .favorite-btn {
@@ -30,7 +31,7 @@
       z-index: 10;
 
       .heart-icon {
-        font-size: 28px;
+        font-size: 35px;
         color: $primary-color;
 
         &.filled {
@@ -41,23 +42,23 @@
   }
 }
 
-// Стилізація правої колонки з інформацією
+// Стилизация правой колонки с информацией о рецепте
 .recipe-info-col {
   padding: 0 2rem;
 
   .recipe-info {
     position: sticky;
-    top: 0;  // Це може бути змінено, щоб враховувати висоту хедера
-    padding: 2rem 0;
+    top: 0;
+    padding: 0;
   }
 }
 
-// Стилізація заголовка рецепта
+// Стилизация заголовка рецепта
 .recipe-title {
   margin-bottom: 1.5rem;
   font-weight: 700;
 
-  // Тут можна додати додаткові настройки шрифту:
+  // Тут можно добавить свои настройки шрифта:
   // font-size: 2.5rem;
   // line-height: 1.2;
   // font-family: 'Your Font', sans-serif;
@@ -67,12 +68,13 @@
 .recipe-description {
   margin-bottom: 2rem;
   line-height: 1.6;
+  font-size: 1rem;
 }
 
-// Стилізація секції інгредієнтів
+// Стилизация секции ингредиентов
 .ingredients-title {
   margin-bottom: 1rem;
-  font-weight: 600;
+  font-size: 1.2rem;
 }
 
 .ingredients-list {
@@ -102,7 +104,7 @@
   }
 }
 
-// Метаінформація про рецепт
+// Метаинформация про рецепт
 .recipe-meta {
   .recipe-time, .recipe-calories {
     margin-bottom: 0.5rem;
@@ -132,7 +134,7 @@
   }
 }
 
-// Медіа-запити для адаптивності
+// Медиа запросы для адаптивности
 @media (max-width: 768px) {
   .recipe-info-col {
     padding: 0 1rem;

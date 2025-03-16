@@ -1,16 +1,18 @@
 //Файл ImageUploader.jsx:
-import React, { useState, useRef } from 'react';
-import { Alert, Spinner, Image } from 'react-bootstrap';
+import React, {useState, useRef} from 'react';
+import {Alert, Spinner, Image} from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import Button from '../Button/Button';
-import { uploadImage } from '../../../utils/fetchApi/image';
+import {uploadImage, uploadImageForRecipeStep} from '../../../utils/fetchApi/image';
 import './ImageUploader.scss';
 
 const ImageUploader = ({
                            endpoint,
                            id,
+                           recipeId = null, // Для RecipeStep
                            currentImageUrl = null,
-                           onImageUpdate = () => {},
+                           onImageUpdate = () => {
+                           },
                            button = {}
                        }) => {
     const [loading, setLoading] = useState(false);
@@ -26,7 +28,7 @@ const ImageUploader = ({
     };
 
     // Объединяем дефолтные и переданные пропсы для кнопки
-    const buttonProps = { ...defaultButtonProps, ...button };
+    const buttonProps = {...defaultButtonProps, ...button};
 
     // Функция для открытия диалога выбора файла
     const handleButtonClick = () => {
@@ -52,7 +54,10 @@ const ImageUploader = ({
 
         try {
             console.log('Действие: Загрузка файла начата —', file.name);
-            const response = await uploadImage(file, endpoint, id);
+            const response = (recipeId) ?
+                await uploadImageForRecipeStep(file, endpoint, id, recipeId) :
+                await uploadImage(file, endpoint, id);
+
             if (response && response.image_url) {
                 setImageUrl(response.image_url);
                 onImageUpdate(response.image_url);
@@ -93,7 +98,7 @@ const ImageUploader = ({
                 ref={fileInputRef}
                 onChange={handleFileChange}
                 accept="image/*"
-                style={{ display: 'none' }}
+                style={{display: 'none'}}
                 disabled={loading}
             />
 
@@ -123,6 +128,7 @@ const ImageUploader = ({
 ImageUploader.propTypes = {
     endpoint: PropTypes.string.isRequired,
     id: PropTypes.number.isRequired,
+    recipeId: PropTypes.number,
     currentImageUrl: PropTypes.string,
     onImageUpdate: PropTypes.func,
     button: PropTypes.object
