@@ -25,6 +25,7 @@ class RecipeSearchRequest extends FormRequest
             'countries' => ['array', 'nullable'],
             'cooking_methods' => ['array', 'nullable'],
             'min_rating' => ['numeric', 'min:1', 'max:5', 'nullable'],
+            'min_time' => ['integer', 'nullable'],
             'max_time' => ['integer', 'nullable'],
             'order_by' => ['string', 'in:name,rating,calories,time,difficulty', 'nullable'],
             'order_direction' => ['string', 'in:asc,desc', 'nullable'],

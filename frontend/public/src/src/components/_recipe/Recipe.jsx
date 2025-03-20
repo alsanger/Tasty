@@ -1,4 +1,4 @@
-// components/Recipe/Recipe.jsx
+// Файл components/Recipe/Recipe.jsx
 import React, {useState, useEffect} from 'react';
 import {useLocation} from 'react-router-dom';
 import {Container, Row, Col, Image} from 'react-bootstrap';

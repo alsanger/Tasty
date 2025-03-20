@@ -1,3 +1,4 @@
+// Файл components/RecipeFilterSidebar/components/CookingMethodFilter.jsx:
 import React, { useState, useEffect } from 'react';
 import { Form } from 'react-bootstrap';
 import axios from 'axios';

@@ -21,6 +21,7 @@ class RecipeSearchController extends Controller
 {
     public function search(RecipeSearchRequest $request): RecipeCollection
     {
+        Log::info(request());
         $query = Recipe::query()
             ->with([
                 'user',
@@ -40,22 +41,50 @@ class RecipeSearchController extends Controller
 
         // Поиск по 'user_id'
         if ($request->filled('user_id')) {
-            $query->where('user_id', $request->user_id);
+            // Если user_id — это массив
+            if (is_array($request->user_id)) {
+                $query->whereIn('user_id', $request->user_id);
+            }
+            // Если user_id — это одно значение
+            else {
+                $query->where('user_id', $request->user_id);
+            }
         }
 
         // Фильтр по странам
         if ($request->filled('countries')) {
-            $query->whereIn('country_id', $request->countries);
+            // Если countries — это массив
+            if (is_array($request->countries)) {
+                $query->whereIn('country_id', $request->countries);
+            }
+            // Если countries — это одно значение
+            else {
+                $query->where('country_id', $request->countries);
+            }
         }
 
         // Фильтр по категориям
         if ($request->filled('categories')) {
-            $query->whereIn('category_id', $request->categories);
+            // Если categories — это массив
+            if (is_array($request->categories)) {
+                $query->whereIn('category_id', $request->categories);
+            }
+            // Если categories — это одно значение
+            else {
+                $query->where('category_id', $request->categories);
+            }
         }
 
         // Фильтр по способу приготовления
         if ($request->filled('cooking_methods')) {
-            $query->whereIn('cooking_method_id', $request->cooking_methods);
+            // Если cooking_methods — это массив
+            if (is_array($request->cooking_methods)) {
+                $query->whereIn('cooking_method_id', $request->cooking_methods);
+            }
+            // Если cooking_methods — это одно значение
+            else {
+                $query->where('cooking_method_id', $request->cooking_methods);
+            }
         }
 
         // Фильтр по калорийности
@@ -66,6 +95,31 @@ class RecipeSearchController extends Controller
                     ->havingRaw('SUM(ingredients.calories * ingredient_recipe.quantity) >= ?', [$request->min_calories]);
             });
         }
+
+        /*// Логирование для проверки калорийности
+        $recipesForLog = Recipe::with(['ingredients' => function ($query) {
+            $query->withPivot('quantity'); // Загружаем количество ингредиентов
+        }])->get();
+
+        foreach ($recipesForLog as $recipe) {
+            $ingredientsLog = [];
+            $totalCalories = 0;
+
+            foreach ($recipe->ingredients as $ingredient) {
+                $calories = $ingredient->calories;
+                $quantity = $ingredient->pivot->quantity;
+                $totalCalories += $calories * $quantity;
+
+                $ingredientsLog[] = "{$ingredient->name} (ID: {$ingredient->id}): {$calories} калорий * {$quantity} = " . ($calories * $quantity);
+            }
+
+            Log::info("Рецепт: {$recipe->name} (ID: {$recipe->id})");
+            Log::info("Ингредиенты и расчет калорий:");
+            Log::info(implode("\n", $ingredientsLog));
+            Log::info("Общая калорийность: {$totalCalories}");
+            Log::info("--------------------");
+        }*/
+
         if ($request->filled('max_calories')) {
             $query->whereHas('ingredients', function ($q) use ($request) {
                 $q->select('recipe_id')
@@ -74,14 +128,18 @@ class RecipeSearchController extends Controller
             });
         }
 
-        // Поиск по ингредиентам (включение)
+        // Поиск по ингредиентам (все ингредиенты из массива должны быть в рецепте)
         if ($request->filled('ingredients_include')) {
-            $query->whereHas('ingredients', function ($q) use ($request) {
-                $q->whereIn('ingredients.id', $request->ingredients_include);
-            });
+            $ingredientIds = $request->ingredients_include;
+
+            foreach ($ingredientIds as $ingredientId) {
+                $query->whereHas('ingredients', function ($q) use ($ingredientId) {
+                    $q->where('ingredients.id', $ingredientId);
+                });
+            }
         }
 
-        // Поиск по ингредиентам (исключение)
+        // Поиск по ингредиентам (любой из ингредиентов из массива не должен быть в рецепте)
         if ($request->filled('ingredients_exclude')) {
             $query->whereDoesntHave('ingredients', function ($q) use ($request) {
                 $q->whereIn('ingredients.id', $request->ingredients_exclude);
@@ -102,6 +160,11 @@ class RecipeSearchController extends Controller
             $query->whereHas('ingredients', function ($q) use ($request) {
                 $q->whereIn('ingredients.id', $request->fridge_ingredients);
             });
+        }
+
+        // Фильтр по минимальному времени приготовления
+        if ($request->filled('min_time')) {
+            $query->where('time', '>=', $request->min_time);
         }
 
         // Фильтр по максимальному времени приготовления
@@ -157,8 +220,12 @@ class RecipeSearchController extends Controller
         $perPage = $request->per_page ?? 30;
         $recipes = $query->paginate($perPage);
 
+
         Log::info("--------------------");
-        Log::info($recipes);
+        // Логирование наименований рецептов через запятую
+        $recipeNames = $recipes->getCollection()->pluck('name')->implode(', ');
+        Log::info("Найденные рецепты: " . $recipeNames);
+
         Log::info("--------------------");
         return new RecipeCollection($recipes);
     }

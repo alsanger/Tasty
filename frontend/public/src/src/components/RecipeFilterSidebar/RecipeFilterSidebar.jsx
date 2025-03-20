@@ -1,4 +1,4 @@
-// components/RecipeFilterSidebar.jsx
+// Файл components/RecipeFilterSidebar/RecipeFilterSidebar.jsx
 import React, { useState, useEffect, useRef } from 'react';
 import { Accordion } from 'react-bootstrap';
 import TimeFilter from './components/TimeFilter';
@@ -8,11 +8,11 @@ import IngredientFilter from './components/IngredientFilter';
 import AuthorFilter from './components/AuthorFilter';
 import CuisineFilter from './components/CuisineFilter';
 import CookingMethodFilter from './components/CookingMethodFilter';
-import Button from '../_common/Button/Button'; // Імпортуємо кастомний компонент кнопки
 import './RecipeFilterSidebar.scss';
 
-const RecipeFilterSidebar = ({ initialFilters = {}, onFilterChange, onSearch }) => {
+const RecipeFilterSidebar = ({ initialFilters = {}, onFilterChange }) => {
     const [filters, setFilters] = useState({
+        min_time: initialFilters.min_time || null,
         max_time: initialFilters.max_time || null,
         min_calories: initialFilters.min_calories || '',
         max_calories: initialFilters.max_calories || '',
@@ -25,15 +25,21 @@ const RecipeFilterSidebar = ({ initialFilters = {}, onFilterChange, onSearch }) 
         cooking_methods: initialFilters.cooking_methods || []
     });
 
-    // Використовуємо useRef для відстеження змін initialFilters
+    // Используем useRef для отслеживания изменений initialFilters
     const initialFiltersRef = useRef(initialFilters);
+    // Флаг для предотвращения вызова onFilterChange при первом рендере
+    const isFirstRender = useRef(true);
+    // Флаг для предотвращения лишних обновлений из-за изменения initialFilters
+    const isUpdatingFromProps = useRef(false);
 
-    // Оновлюємо стан, коли initialFilters змінюється ззовні
+    // Обновляем состояние при изменении initialFilters
     useEffect(() => {
-        // Перевіряємо, чи дійсно змінилися initialFilters
         if (JSON.stringify(initialFiltersRef.current) !== JSON.stringify(initialFilters)) {
+            console.log("⚡ Обнаружены изменения в initialFilters:", initialFilters);
             initialFiltersRef.current = initialFilters;
+            isUpdatingFromProps.current = true;
             setFilters({
+                min_time: initialFilters.min_time || null,
                 max_time: initialFilters.max_time || null,
                 min_calories: initialFilters.min_calories || '',
                 max_calories: initialFilters.max_calories || '',
@@ -48,22 +54,26 @@ const RecipeFilterSidebar = ({ initialFilters = {}, onFilterChange, onSearch }) 
         }
     }, [initialFilters]);
 
-    // Використовуємо окремий useEffect для сповіщення батьківського компонента
-    const isFirstRender = useRef(true);
+    // Используем useEffect для уведомления родительского компонента о смене фильтров
     useEffect(() => {
-        // Пропускаємо перший рендер
         if (isFirstRender.current) {
             isFirstRender.current = false;
             return;
         }
 
-        // Відправляємо зміни фільтрів батьківському компоненту
+        if (isUpdatingFromProps.current) {
+            isUpdatingFromProps.current = false;
+            return;
+        }
+
+        console.log("📢 Фильтры обновлены:", filters);
         if (onFilterChange) {
             onFilterChange(filters);
         }
     }, [filters, onFilterChange]);
 
     const updateFilter = (key, value) => {
+        console.log(`🛠 Обновление фильтра ${key}:`, value);
         setFilters(prev => ({
             ...prev,
             [key]: value
@@ -103,12 +113,6 @@ const RecipeFilterSidebar = ({ initialFilters = {}, onFilterChange, onSearch }) 
         updateFilter('cooking_methods', methods);
     };
 
-    const handleSearch = () => {
-        if (onSearch) {
-            onSearch(filters);
-        }
-    };
-
     return (
         <div className="recipe-filter-sidebar">
             <Accordion defaultActiveKey={['0']} alwaysOpen>
@@ -129,6 +133,7 @@ const RecipeFilterSidebar = ({ initialFilters = {}, onFilterChange, onSearch }) 
                             minCalories={filters.min_calories}
                             maxCalories={filters.max_calories}
                             onChange={handleCaloriesChange}
+                            showOkButton={true}
                         />
                     </Accordion.Body>
                 </Accordion.Item>
@@ -177,7 +182,7 @@ const RecipeFilterSidebar = ({ initialFilters = {}, onFilterChange, onSearch }) 
                 </Accordion.Item>
 
                 <Accordion.Item eventKey="6">
-                    <Accordion.Header>Кухня світу</Accordion.Header>
+                    <Accordion.Header>Кухні світу</Accordion.Header>
                     <Accordion.Body>
                         <CuisineFilter
                             selectedCuisines={filters.countries}
@@ -196,13 +201,6 @@ const RecipeFilterSidebar = ({ initialFilters = {}, onFilterChange, onSearch }) 
                     </Accordion.Body>
                 </Accordion.Item>
             </Accordion>
-            <div className="ms-2 my-2">
-                <Button
-                    text="Застосувати фільтр"
-                    onClick={handleSearch}
-                    isActive={true}
-                />
-            </div>
         </div>
     );
 };

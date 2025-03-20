@@ -1,3 +1,4 @@
+// Файл components/RecipeFilterSidebar/components/CuisineFilter.jsx:
 import React, { useState, useEffect } from 'react';
 import { Form } from 'react-bootstrap';
 import Input from '../../_common/Input/Input';

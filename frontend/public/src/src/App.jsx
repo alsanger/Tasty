@@ -51,7 +51,7 @@ function App() {
                         <Routes>
                             <Route exact path="/" element={<Main/>}/> {/* Главная страница */}
                             <Route path="/recipe/:id" element={<Recipe/>}/> {/* Страница рецепта, с параметром id */}
-                            <Route path="/recipes-page" element={<RecipesPage/>}/>
+                            <Route path="/recipes" element={<RecipesPage/>}/>
                         </Routes>
                     </div>
                     <Footer/>
