@@ -1,16 +1,18 @@
-// Файл RecipeCardForCarousel.jsx
+// Файл components/Recipe/cards/RecipeCardMini.jsx
 import React, {useState} from 'react';
 import {Card} from 'react-bootstrap';
 import {IoHeartOutline, IoHeart, IoTimeOutline} from "react-icons/io5";
 import {FaStar} from "react-icons/fa";
-import './RecipeCardForCarousel.scss';
+import './RecipeCardMini.scss';
 import {BASE_URL} from "../../../utils/constants.js";
 import {useNavigate} from "react-router-dom";
 
-const RecipeCardForCarousel = ({
-                                   recipe,
-                                   onClick
-                               }) => {
+const RecipeCardMini = ({
+                                    recipe,
+                                    onClick,
+                                    width = 200,
+                                    height = 350,
+                                }) => {
     const navigate = useNavigate();
     const [isFavorite, setIsFavorite] = useState(false);
 
@@ -22,7 +24,7 @@ const RecipeCardForCarousel = ({
             console.log(`Navigating to recipe page with ID: ${recipe.id}`);
             // Переходим на страницу рецепта, передавая рецепт через state
             navigate(`/recipe/${recipe.id}`, {
-                state: { recipe },  // Передаем recipe в state
+                state: {recipe},  // Передаем recipe в state
             });
         }
     };
@@ -66,7 +68,7 @@ const RecipeCardForCarousel = ({
     const ingredientsList = getIngredientsList();
 
     return (
-        <div className="recipe-card-horizontal-container">
+        <div className="recipe-card-horizontal-container" style={{ width: `${width}px`, height: `${height}px` }}>
             <Card className="recipe-card-horizontal" onClick={handleClick}>
                 <div className="recipe-image-container">
                     <Card.Img
@@ -107,4 +109,4 @@ const RecipeCardForCarousel = ({
     );
 };
 
-export default RecipeCardForCarousel;
+export default RecipeCardMini;

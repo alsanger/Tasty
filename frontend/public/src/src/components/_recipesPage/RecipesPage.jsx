@@ -1,11 +1,12 @@
 // Файл components/_recipesPage/RecipesPage.jsx
-import React, { useState, useEffect, useRef } from 'react';
+/*import React, { useState, useEffect, useRef } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { useLocation, useSearchParams } from 'react-router-dom';
 import RecipeFilterSidebar from '../../components/RecipeFilterSidebar/RecipeFilterSidebar';
 import axios from 'axios';
 import { API_BASE_URL, ENDPOINTS } from '../../utils/constants.js';
 import './RecipesPage.scss';
+import RecipeCardMini from "../Recipe/cards/RecipeCardMini.jsx";
 
 const RecipesPage = () => {
     const [searchParams] = useSearchParams();
@@ -14,6 +15,7 @@ const RecipesPage = () => {
     // Получаем параметры из URL
     const getInitialFilters = () => {
         const initialFilters = {
+            name: '',
             min_time: null,
             max_time: null,
             min_calories: '',
@@ -110,8 +112,11 @@ const RecipesPage = () => {
                                 ) : (
                                     recipes.map(recipe => (
                                         <div key={recipe.id} className="recipe-card">
-                                            <h3>{recipe.name}</h3>
-                                            {/* Інша інформація про рецепт */}
+                                            <RecipeCardMini
+                                                recipe={recipe}
+                                                width={300}
+                                                height={320}
+                                            />
                                         </div>
                                     ))
                                 )}
@@ -124,49 +129,73 @@ const RecipesPage = () => {
     );
 };
 
-export default RecipesPage;
+export default RecipesPage;*/
 
-
-/*
-// Файл components/_recipesPage/RecipesPage.jsx до добавления функционала перенаправления с предустановленной фильтрацией
+// Файл components/_recipesPage/RecipesPage.jsx
 import React, { useState, useEffect, useRef } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
+import { useLocation, useSearchParams } from 'react-router-dom';
 import RecipeFilterSidebar from '../../components/RecipeFilterSidebar/RecipeFilterSidebar';
 import axios from 'axios';
 import { API_BASE_URL, ENDPOINTS } from '../../utils/constants.js';
 import './RecipesPage.scss';
+import RecipeCardMini from "../Recipe/cards/RecipeCardMini.jsx";
 
 const RecipesPage = () => {
-    const [recipes, setRecipes] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [filters, setFilters] = useState({
-        // Начальные значения фильтров
-        min_time: null,
-        max_time: null,
-        min_calories: '',
-        max_calories: '',
-        difficulty_min: 1,
-        difficulty_max: 10,
-        ingredients_include: [],
-        ingredients_exclude: [],
-        user_id: [],
-        countries: [],
-        cooking_methods: []
-    });
+    const [searchParams] = useSearchParams();
+    const location = useLocation();
 
-    // Флаг для отслеживания первой загрузки
-    const isInitialMount = useRef(true);
+    // Получаем параметры из URL
+    const getInitialFilters = () => {
+        const initialFilters = {
+            name: '',
+            min_time: null,
+            max_time: null,
+            min_calories: '',
+            max_calories: '',
+            difficulty_min: 1,
+            difficulty_max: 10,
+            ingredients_include: [],
+            ingredients_exclude: [],
+            user_id: [],
+            countries: [],
+            cooking_methods: []
+        };
 
-    // Загрузка рецептов только при изменении фильтров
-    useEffect(() => {
-        // При первом рендере загружаем все рецепты
-        if (isInitialMount.current) {
-            isInitialMount.current = false;
-            fetchRecipes({});
-            return;
+        // Получаем параметр name из URL
+        const nameParam = searchParams.get('name');
+        if (nameParam) {
+            initialFilters.name = nameParam;
         }
 
-        // При последующих изменениях фильтров
+        // Парсим ID стран из URL
+        const countriesParam = searchParams.get('countries');
+        if (countriesParam) {
+            // Если страна указана, добавляем ее в массив стран
+            initialFilters.countries = countriesParam.split(',').map(id => parseInt(id, 10));
+        }
+
+        // Можно добавить парсинг других параметров по аналогии
+
+        return initialFilters;
+    };
+
+    const [recipes, setRecipes] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [filters, setFilters] = useState(getInitialFilters());
+    const isInitialMount = useRef(true);
+
+    // Следим за изменениями URL
+    useEffect(() => {
+        setFilters(getInitialFilters());
+    }, [location.search]);
+
+    useEffect(() => {
+        if (isInitialMount.current) {
+            isInitialMount.current = false;
+            fetchRecipes(filters);
+            return;
+        }
         fetchRecipes(filters);
     }, [filters]);
 
@@ -177,7 +206,6 @@ const RecipesPage = () => {
     const fetchRecipes = async (searchFilters = {}) => {
         setLoading(true);
         try {
-            // Формируем параметры запроса, исключая пустые значения
             const requestData = Object.entries(searchFilters).reduce((acc, [key, value]) => {
                 if (value !== null && value !== '' &&
                     (Array.isArray(value) ? value.length > 0 : true)) {
@@ -186,7 +214,6 @@ const RecipesPage = () => {
                 return acc;
             }, {});
 
-            // Добавляем дополнительные параметры при необходимости
             requestData.per_page = 10;
             requestData.order_by = 'name';
             requestData.order_direction = 'asc';
@@ -224,8 +251,11 @@ const RecipesPage = () => {
                                 ) : (
                                     recipes.map(recipe => (
                                         <div key={recipe.id} className="recipe-card">
-                                            <h3>{recipe.name}</h3>
-                                            {/!* Інша інформація про рецепт *!/}
+                                            <RecipeCardMini
+                                                recipe={recipe}
+                                                width={300}
+                                                height={320}
+                                            />
                                         </div>
                                     ))
                                 )}
@@ -238,4 +268,4 @@ const RecipesPage = () => {
     );
 };
 
-export default RecipesPage;*/
+export default RecipesPage;

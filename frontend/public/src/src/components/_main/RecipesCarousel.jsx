@@ -4,7 +4,7 @@ import { Container } from 'react-bootstrap';
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import {getRecipes} from '../../utils/fetchApi/recipeApi.js';
 import './RecipesCarousel.scss';
-import RecipeCardForCarousel from "../Recipe/cards/RecipeCardForCarousel.jsx";
+import RecipeCardMini from "../Recipe/cards/RecipeCardMini.jsx";
 
 const RecipesCarousel = ({
                               onRecipeClick,
@@ -135,8 +135,10 @@ const RecipesCarousel = ({
                                     className="recipe-wrapper"
                                     style={{ width: `${100 / visibleCount}%` }}
                                 >
-                                    <RecipeCardForCarousel
+                                    <RecipeCardMini
                                         recipe={recipe}
+                                        width={200}
+                                        height={350}
                                     />
                                 </div>
                             ))}

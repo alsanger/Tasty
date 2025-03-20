@@ -39,8 +39,8 @@ const Main = () => {
             />
             <ImageUploader
                 endpoint={ENDPOINTS.IMAGE.UPLOAD_RECIPE_STEP_IMAGE}
-                id={10}
-                recipeId={22}
+                id={31}
+                recipeId={19}
                 button={{ text: 'Загрузить изображение шага рецепта' }}
             />
         </div>

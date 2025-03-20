@@ -3,3 +3,9 @@
 .recipes-page {
   margin: 20px 0;
 }
+
+.recipes-grid {
+  display: flex;
+  flex-wrap: wrap; // Перенос элементов на новую строку
+  gap: 16px; // Отступ между карточками
+}

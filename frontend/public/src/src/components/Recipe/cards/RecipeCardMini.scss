@@ -1,10 +1,7 @@
-// Файл RecipeCardForCarousel.scss
+// Файл components/Recipe/cards/RecipeCardMini.scss
 @use '../../../styles/variables' as *;
 
 .recipe-card-horizontal-container {
-  width: 200px; // Фиксированная ширина
-  height: 350px; // Фиксированная высота
-
   .recipe-card-horizontal {
     width: 100%;
     height: 100%;
