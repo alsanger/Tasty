@@ -47,3 +47,7 @@ h4 {
     font-size: 16px; /* Размер шрифта */
     margin: 0; /* Убираем отступы по умолчанию */
 }
+
+p span {
+    font-family: 'Raleway', sans-serif; /* Используем шрифт Raleway */
+}

@@ -1,4 +1,4 @@
-// Файл baseApi.js:
+// Файл utils/fetchApi/baseApi.js:
 import { API_BASE_URL } from '../constants';
 import axios from 'axios';
 

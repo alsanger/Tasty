@@ -1,3 +1,4 @@
+// Файл utils/fetchApi/userApi.js
 import {get, post, put, remove} from './baseApi.js';
 import {ENDPOINTS} from '../constants.js';
 
