@@ -24,7 +24,8 @@ class RecipeController extends Controller
                 'ingredients',
                 'ingredients.unit',
                 'recipeSteps',
-                'reviews.user'])
+                'reviews.user',
+                'likes.user'])
             ->paginate(30);
         return new RecipeCollection($recipes);
     }
@@ -56,7 +57,8 @@ class RecipeController extends Controller
             'ingredients',
             'ingredients.unit',
             'recipeSteps',
-            'reviews.user']));
+            'reviews.user',
+            'likes.user']));
     }
 
     public function show(Recipe $recipe): RecipeResource
@@ -70,7 +72,8 @@ class RecipeController extends Controller
             'ingredients',
             'ingredients.unit',
             'recipeSteps',
-            'reviews.user']));
+            'reviews.user',
+            'likes.user']));
     }
 
     public function update(UpdateRecipeRequest $request, Recipe $recipe): RecipeResource
@@ -104,7 +107,8 @@ class RecipeController extends Controller
             'ingredients',
             'ingredients.unit',
             'recipeSteps',
-            'reviews.user']));
+            'reviews.user',
+            'likes.user']));
     }
 
     public function destroy(Recipe $recipe): JsonResponse

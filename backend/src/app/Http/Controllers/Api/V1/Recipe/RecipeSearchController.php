@@ -31,7 +31,8 @@ class RecipeSearchController extends Controller
                 'ingredients',
                 'ingredients.unit',
                 'recipeSteps',
-                'reviews'
+                'reviews',
+                'likes'
             ]);
 
         // Поиск по названию
@@ -242,7 +243,7 @@ class RecipeSearchController extends Controller
         // Будем расширять период поиска, пока не найдем хотя бы один рецепт
         while ($recipes->isEmpty() && $days <= 365) {
             $recipes = Recipe::query()
-                ->with(['user', 'category', 'cookingMethod', 'country', 'ingredients', 'ingredients.unit', 'recipeSteps', 'reviews'])
+                ->with(['user', 'category', 'cookingMethod', 'country', 'ingredients', 'ingredients.unit', 'recipeSteps', 'reviews', 'likes'])
                 ->whereHas('reviews', function($query) use ($days) {
                     $query->where('created_at', '>=', now()->subDays($days));
                 })
@@ -262,7 +263,7 @@ class RecipeSearchController extends Controller
         // Если всё ещё пусто после всех попыток, берем лучшие рецепты за всё время
         if ($recipes->isEmpty()) {
             $recipes = Recipe::query()
-                ->with(['user', 'category', 'cookingMethod', 'country', 'ingredients', 'ingredients.unit', 'recipeSteps', 'reviews'])
+                ->with(['user', 'category', 'cookingMethod', 'country', 'ingredients', 'ingredients.unit', 'recipeSteps', 'reviews', 'likes'])
                 ->whereHas('reviews')
                 ->get()
                 ->sortByDesc(function($recipe) {
@@ -275,7 +276,7 @@ class RecipeSearchController extends Controller
         // Если и это не помогло (вообще нет рецептов с отзывами), берем просто последние рецепты
         if ($recipes->isEmpty()) {
             $recipes = Recipe::query()
-                ->with(['user', 'category', 'cookingMethod', 'country', 'ingredients', 'ingredients.unit', 'recipeSteps', 'reviews'])
+                ->with(['user', 'category', 'cookingMethod', 'country', 'ingredients', 'ingredients.unit', 'recipeSteps', 'reviews', 'likes'])
                 ->latest()
                 ->take($limit)
                 ->get()
@@ -495,7 +496,7 @@ class RecipeSearchController extends Controller
         $limit = $request->input('limit', 10);
 
         $recipes = Recipe::query()
-            ->with(['user', 'category', 'cookingMethod', 'country', 'ingredients', 'ingredients.unit', 'recipeSteps', 'reviews'])
+            ->with(['user', 'category', 'cookingMethod', 'country', 'ingredients', 'ingredients.unit', 'recipeSteps', 'reviews', 'likes'])
             ->latest()
             ->limit($limit)
             ->get()
@@ -516,7 +517,7 @@ class RecipeSearchController extends Controller
         $limit = $request->input('limit', 10);
 
         $recipes = Recipe::query()
-            ->with(['user', 'category', 'cookingMethod', 'country', 'ingredients', 'ingredients.unit', 'recipeSteps', 'reviews'])
+            ->with(['user', 'category', 'cookingMethod', 'country', 'ingredients', 'ingredients.unit', 'recipeSteps', 'reviews', 'likes'])
             /*->has('reviews')*/
             ->get()
             ->sortByDesc(function($recipe) {

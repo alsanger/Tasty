@@ -55,6 +55,12 @@ class Recipe extends Model
         return $this->hasMany(Review::class);
     }
 
+    // Связь рецепта с лайками
+    public function likes(): HasMany
+    {
+        return $this->hasMany(Like::class);
+    }
+
     // Связь рецепта с ингредиентами
     public function ingredients(): BelongsToMany
     {

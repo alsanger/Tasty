@@ -8,6 +8,7 @@ use App\Models\CookingPlan;
 use App\Models\Country;
 use App\Models\Fridge;
 use App\Models\Ingredient;
+use App\Models\Like;
 use App\Models\Recipe;
 use App\Models\RecipeStep;
 use App\Models\Review;
@@ -19,6 +20,7 @@ use App\Policies\CookingPlanPolicy;
 use App\Policies\CountryPolicy;
 use App\Policies\FridgePolicy;
 use App\Policies\IngredientPolicy;
+use App\Policies\LikePolicy;
 use App\Policies\RecipePolicy;
 use App\Policies\RecipeStepPolicy;
 use App\Policies\ReviewPolicy;
@@ -42,6 +44,7 @@ class AuthServiceProvider extends ServiceProvider
         Country::class => CountryPolicy::class,
         Fridge::class => FridgePolicy::class,
         Ingredient::class => IngredientPolicy::class,
+        Like::class => LikePolicy::class,
         Recipe::class => RecipePolicy::class,
         RecipeStep::class => RecipeStepPolicy::class,
         Review::class => ReviewPolicy::class,

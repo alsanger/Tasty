@@ -48,6 +48,11 @@ class RecipeResource extends JsonResource
                 ]]
             ))
             ),
+            'likes' => $this->whenLoaded('likes', fn() => $this->likes->map(fn($like) => [
+                'id' => $like->id,
+                'user_id' => $like->user_id,
+                'display_name' => $like->user?->display_name
+            ])),
             'recipeSteps' => $this->whenLoaded('recipeSteps', fn() => $this->recipeSteps
                 ->map(fn($step) => (new RecipeStepDecorator($step))->toArray())
                 ->sortBy('step_number')

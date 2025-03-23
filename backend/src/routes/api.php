@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\V1\Country\CountryController;
 use App\Http\Controllers\Api\V1\Fridge\FridgeController;
 use App\Http\Controllers\Api\V1\Image\ImageUploadController;
 use App\Http\Controllers\Api\V1\Ingredient\IngredientController;
+use App\Http\Controllers\Api\V1\Like\LikeController;
 use App\Http\Controllers\Api\V1\Recipe\RecipeController;
 use App\Http\Controllers\Api\V1\Recipe\RecipeSearchController;
 use App\Http\Controllers\Api\V1\RecipeStep\RecipeStepController;
@@ -51,8 +52,12 @@ Route::group(['prefix' => 'v1'], function () {
     Route::get('/recipes/{recipe}/steps', [RecipeStepController::class, 'index']); // Получение списка шагов рецепта
     Route::get('/recipe-steps/{recipeStep}', [RecipeStepController::class, 'show']); // Получение одного шага рецепта
     // Маршруты для работы с отзывами:
-    Route::get('/reviews', [ReviewController::class, 'index']);  // Получение списка отзывов
-    Route::get('/reviews/{review}', [ReviewController::class, 'show']);  // Получение одного отзыва
+    Route::get('/reviews', [ReviewController::class, 'index']);  // Получение списка лайков
+    Route::get('/reviews/{review}', [ReviewController::class, 'show']);  // Получение одного лайка
+    // Маршруты для работы с лайками:
+    Route::get('/likes', [LikeController::class, 'index']);  // Получение списка отзывов
+    Route::get('/likes-by-recipe/{id}', [LikeController::class, 'likesByRecipe']);  // Получение списка отзывов по рецепту
+    Route::get('/likes/{like}', [LikeController::class, 'show']);  // Получение одного отзыва
     // Маршруты для работы с единицами измерения ингредиентов:
     Route::get('/units', [UnitController::class, 'index']);  // Получение списка units
     Route::get('/units/{unit}', [UnitController::class, 'show']); // Получение одного unit
@@ -109,6 +114,10 @@ Route::group(['prefix' => 'v1'], function () {
         Route::post('/reviews', [ReviewController::class, 'store']);  // Создание отзыва
         Route::put('/reviews/{review}', [ReviewController::class, 'update']);  // Обновление отзыва
         Route::delete('/reviews/{review}', [ReviewController::class, 'destroy']);  // Удаление отзыва
+        // Маршруты для работы с лайками:
+        Route::post('/likes', [LikeController::class, 'store']);  // Создание лайка
+        Route::put('/likes/{like}', [LikeController::class, 'update']);  // Обновление лайка
+        Route::delete('/likes/{like}', [LikeController::class, 'destroy']);  // Удаление лайка
         // Маршруты для работы с единицами измерения ингредиентов:
         Route::post('/units', [UnitController::class, 'store']);  // Создание unit
         Route::put('/units/{unit}', [UnitController::class, 'update']);  // Обновление unit

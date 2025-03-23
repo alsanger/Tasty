@@ -88,6 +88,13 @@ export const ENDPOINTS = {
     RECIPE_REVIEWS: (recipeId) => `/v1/recipes/${recipeId}/reviews`, // Отзывы на рецепт
     USER_REVIEWS: (userId) => `/v1/users/${userId}/reviews`, // Отзывы пользователя
 
+    // Лайки
+    CREATE_LIKE: '/v1/likes', // Создание лайка
+    LIKES: '/v1/likes', // Список всех лайков
+    LIKES_DETAIL: (id) => `/v1/likes/${id}`, // Детали лайка
+    DELETE_LIKE: (id) => `/v1/likes/${id}`, // Удаление лайка
+    LIKES_BY_RECIPE: (id) => `/v1/likes/${id}`, // Список всех лайков конкретного рецепта
+
     // Единицы измерения
     UNITS: '/v1/units', // Список единиц измерений
     UNIT_DETAIL: (id) => `/v1/units/${id}`, // Детали единицы измерения
