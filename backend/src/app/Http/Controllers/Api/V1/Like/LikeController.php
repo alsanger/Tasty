@@ -16,7 +16,22 @@ class LikeController extends Controller
     public function index(): LikeCollection
     {
         $likes = Like::query()
-            ->with('recipe', 'user')
+            ->with([
+                'recipe' => function($query) {
+                    $query->with([
+                        'user',
+                        'category',
+                        'cookingMethod',
+                        'country',
+                        'ingredients',
+                        'ingredients.unit',
+                        'recipeSteps',
+                        'reviews.user',
+                        'likes.user'
+                    ]);
+                },
+                'user'
+            ])
             ->paginate(30);
 
         return new LikeCollection($likes);
@@ -27,12 +42,42 @@ class LikeController extends Controller
         Log::info("User with id {$request->user()->id} created a like");
         $like = Like::create($request->validated());
 
-        return new LikeResource($like->load('recipe', 'user'));
+        return new LikeResource($like->load([
+            'recipe' => function($query) {
+                $query->with([
+                    'user',
+                    'category',
+                    'cookingMethod',
+                    'country',
+                    'ingredients',
+                    'ingredients.unit',
+                    'recipeSteps',
+                    'reviews.user',
+                    'likes.user'
+                ]);
+            },
+            'user'
+        ]));
     }
 
     public function show(Like $like): LikeResource
     {
-        return new LikeResource($like->load('recipe', 'user'));
+        return new LikeResource($like->load([
+            'recipe' => function($query) {
+                $query->with([
+                    'user',
+                    'category',
+                    'cookingMethod',
+                    'country',
+                    'ingredients',
+                    'ingredients.unit',
+                    'recipeSteps',
+                    'reviews.user',
+                    'likes.user'
+                ]);
+            },
+            'user'
+        ]));
     }
 
     public function update(UpdateLikeRequest $request, Like $like): LikeResource
@@ -42,7 +87,22 @@ class LikeController extends Controller
 
         $like->update($request->validated());
 
-        return new LikeResource($like->load('recipe', 'user'));
+        return new LikeResource($like->load([
+            'recipe' => function($query) {
+                $query->with([
+                    'user',
+                    'category',
+                    'cookingMethod',
+                    'country',
+                    'ingredients',
+                    'ingredients.unit',
+                    'recipeSteps',
+                    'reviews.user',
+                    'likes.user'
+                ]);
+            },
+            'user'
+        ]));
     }
 
     public function destroy(Like $like)
@@ -60,7 +120,47 @@ class LikeController extends Controller
     {
         $likes = Like::query()
             ->where('recipe_id', $id)
-            ->with('recipe', 'user')
+            ->with([
+                'recipe' => function($query) {
+                    $query->with([
+                        'user',
+                        'category',
+                        'cookingMethod',
+                        'country',
+                        'ingredients',
+                        'ingredients.unit',
+                        'recipeSteps',
+                        'reviews.user',
+                        'likes.user'
+                    ]);
+                },
+                'user'
+            ])
+            ->paginate(30);
+
+        return new LikeCollection($likes);
+    }
+
+    public function likesByUser($id): LikeCollection
+    {
+        $likes = Like::query()
+            ->where('user_id', $id)
+            ->with([
+                'recipe' => function($query) {
+                    $query->with([
+                        'user',
+                        'category',
+                        'cookingMethod',
+                        'country',
+                        'ingredients',
+                        'ingredients.unit',
+                        'recipeSteps',
+                        'reviews.user',
+                        'likes.user'
+                    ]);
+                },
+                'user'
+            ])
             ->paginate(30);
 
         return new LikeCollection($likes);

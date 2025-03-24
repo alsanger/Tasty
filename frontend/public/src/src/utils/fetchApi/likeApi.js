@@ -14,6 +14,11 @@ export const getLikesByRecipeId = async (recipeId) => {
     return get(ENDPOINTS.LIKES_BY_RECIPE(recipeId));
 };
 
+// Получение списка лайков конкретного пользователя по id
+export const getLikesByUserId = async (userId) => {
+    return get(ENDPOINTS.LIKES_BY_USER(userId));
+};
+
 // Получение одного лайка по ID
 export const getLikeById = async (likeId) => {
     return get(ENDPOINTS.LIKES_DETAIL(likeId));

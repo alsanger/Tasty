@@ -1,4 +1,4 @@
-// Файл recipeApi.js
+// Файл utils/fetchApi/recipeApi.js
 import { get, post, put, remove } from './baseApi.js';
 import { ENDPOINTS } from '../constants.js';
 
@@ -54,7 +54,7 @@ export const getPopularRecipes = async (params = {}) => {
 
 // Поиск рецептов
 export const searchRecipes = async (queryParams = {}) => {
-    return get(ENDPOINTS.SEARCH_RECIPES, queryParams);
+    return post(ENDPOINTS.SEARCH_RECIPES, queryParams);
 };
 
 // Получение рецептов пользователя по ID пользователя

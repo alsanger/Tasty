@@ -6,6 +6,7 @@ import ProfileHeader from './ProfileHeader/ProfileHeader';
 import { getUserById } from '../../utils/fetchApi/userApi';
 import { useUser } from '../../contexts/UserContext';
 import './ProfilePage.scss';
+import UserProfileRecipes from "./UserProfileRecipes/UserProfileRecipes.jsx";
 
 const ProfilePage = () => {
     const { id } = useParams();
@@ -67,6 +68,10 @@ const ProfilePage = () => {
     return (
         <Container fluid className="profile-page-container">
             <ProfileHeader
+                userData={userData}
+                currentUserId={user?.id}
+            />
+            <UserProfileRecipes
                 userData={userData}
                 currentUserId={user?.id}
             />

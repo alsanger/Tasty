@@ -1,13 +1,11 @@
 // Файл utils/fetchApi/constants.js:
 export const BASE_URL = 'http://localhost:8000';
-
 export const API_BASE_URL = `${BASE_URL}/api`;
 
 export const FONT_FAMILIES = {
     PRIMARY: "'NAMU', serif",
     SECONDARY: "'Raleway', sans-serif",
 };
-
 export const FONT_LINKS = [
     "https://fonts.googleapis.com/css2?family=Monomakh&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap"
 ];
@@ -93,7 +91,8 @@ export const ENDPOINTS = {
     LIKES: '/v1/likes', // Список всех лайков
     LIKES_DETAIL: (id) => `/v1/likes/${id}`, // Детали лайка
     DELETE_LIKE: (id) => `/v1/likes/${id}`, // Удаление лайка
-    LIKES_BY_RECIPE: (id) => `/v1/likes/${id}`, // Список всех лайков конкретного рецепта
+    LIKES_BY_RECIPE: (id) => `/v1/likes-by-recipe/${id}`, // Список всех лайков конкретного рецепта
+    LIKES_BY_USER: (id) => `/v1/likes-by-user/${id}`, // Список всех лайков конкретного пользователя
 
     // Единицы измерения
     UNITS: '/v1/units', // Список единиц измерений
