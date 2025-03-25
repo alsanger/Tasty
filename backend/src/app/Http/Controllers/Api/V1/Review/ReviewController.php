@@ -9,6 +9,7 @@ use App\Http\Resources\Api\V1\Review\ReviewCollection;
 use App\Http\Resources\Api\V1\Review\ReviewResource;
 use App\Models\Review;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
 
 class ReviewController extends Controller
 {
@@ -23,6 +24,7 @@ class ReviewController extends Controller
 
     public function store(StoreReviewRequest $request): ReviewResource
     {
+        Log::info("Попали в контроллер создания отзыва");
         // Создание отзыва
         $review = Review::create($request->validated());
 

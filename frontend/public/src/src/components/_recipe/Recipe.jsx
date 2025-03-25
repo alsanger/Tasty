@@ -1,17 +1,20 @@
 // Файл components/Recipe/Recipe.jsx
-import React, {useState, useEffect} from 'react';
-import {useLocation} from 'react-router-dom';
-import {Container, Row, Col, Image} from 'react-bootstrap';
-import {IoHeart, IoHeartOutline} from 'react-icons/io5';
-import {LuMessageSquareMore} from 'react-icons/lu';
-import {BASE_URL} from "../../utils/constants.js";
+import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+import { Container, Row, Col, Image, Spinner } from 'react-bootstrap';
+import { IoHeart, IoHeartOutline } from 'react-icons/io5';
+import { LuMessageSquareMore } from 'react-icons/lu';
+import { BASE_URL } from "../../utils/constants.js";
 import './Recipe.scss';
-import {FaRegStar, FaStar, FaStarHalfAlt} from "react-icons/fa";
+import { FaRegStar, FaStar, FaStarHalfAlt } from "react-icons/fa";
+import Reviews from "../Reviews/Reviews.jsx";
+import { getRecipeById } from '../../utils/fetchApi/recipeApi.js';
 
 const Recipe = () => {
     const location = useLocation();
-    const {recipe} = location.state || {};
+    const [recipe, setRecipe] = useState(location.state?.recipe || null);
     const [isFavorite, setIsFavorite] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     // Проверка наличия данных о рецепте
     if (!recipe) {
@@ -21,6 +24,19 @@ const Recipe = () => {
     // Функция для обработки клика по кнопке "избранное"
     const handleFavoriteClick = () => {
         setIsFavorite(!isFavorite);
+    };
+
+    // Функция для обновления данных рецепта
+    const updateRecipeData = async () => {
+        setIsLoading(true);
+        try {
+            const response = await getRecipeById(recipe.id);
+            setRecipe(response.data);
+        } catch (error) {
+            console.error('Ошибка при обновлении данных рецепта:', error);
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     // Функция для форматирования числового значения (удаления лишних нулей)
@@ -74,7 +90,7 @@ const Recipe = () => {
     // Отображение звездочек рейтинга
     const renderStars = (rating) => {
         const stars = [];
-        const roundedRating = Math.round(rating * 2) / 2; // Округлення до 0.5
+        const roundedRating = Math.round(rating * 2) / 2;
 
         for (let i = 1; i <= 5; i++) {
             if (i <= roundedRating) {
@@ -99,6 +115,13 @@ const Recipe = () => {
 
     return (
         <Container fluid className="recipe-container">
+            {isLoading && (
+                <div className="text-center my-3">
+                    <Spinner animation="border" role="status">
+                        <span className="visually-hidden">Загрузка...</span>
+                    </Spinner>
+                </div>
+            )}
             <Row>
                 <Col md={6} className="recipe-image-col">
                     <div className="image-container">
@@ -168,6 +191,15 @@ const Recipe = () => {
                             </div>
                         </div>
                     </div>
+                </Col>
+            </Row>
+            <Row className="recipe-reviews-section">
+                <Col>
+                    <Reviews
+                        recipeId={recipe.id}
+                        initialReviews={recipe.reviews}
+                        onRecipeUpdate={updateRecipeData}
+                    />
                 </Col>
             </Row>
         </Container>

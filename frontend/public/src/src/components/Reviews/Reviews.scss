@@ -1,0 +1,9 @@
+// Файл components/Reviews/Reviews.scss
+@import '../../styles/variables.scss';
+
+.reviews-container {
+  width: 100%;
+  background-color: white;
+  border-radius: $border-radius;
+  padding: 20px;
+}

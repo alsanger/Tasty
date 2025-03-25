@@ -31,7 +31,6 @@ class UpdateReviewRequest extends FormRequest
                 'max:5', // Оценка должна быть не больше 5
             ],
             'review' => [
-                'required',
                 'string',
                 'max:5000', // Ограничение на длину отзыва
             ],

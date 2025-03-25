@@ -56,9 +56,9 @@ Route::group(['prefix' => 'v1'], function () {
     Route::get('/reviews/{review}', [ReviewController::class, 'show']);  // Получение одного лайка
     // Маршруты для работы с лайками:
     Route::get('/likes', [LikeController::class, 'index']);  // Получение списка отзывов
-    Route::get('/likes-by-recipe/{id}', [LikeController::class, 'likesByRecipe']);  // Получение списка отзывов по рецепту
-    Route::get('/likes-by-user/{id}', [LikeController::class, 'likesByUser']);  // Получение списка отзывов пользователя
-    Route::get('/likes/{like}', [LikeController::class, 'show']);  // Получение одного отзыва
+    Route::get('/likes-by-recipe/{id}', [LikeController::class, 'likesByRecipe']);  // Получение списка лайков по рецепту
+    Route::get('/likes-by-user/{id}', [LikeController::class, 'likesByUser']);  // Получение списка лайков пользователя
+    Route::get('/likes/{like}', [LikeController::class, 'show']);  // Получение одного лайка
     // Маршруты для работы с единицами измерения ингредиентов:
     Route::get('/units', [UnitController::class, 'index']);  // Получение списка units
     Route::get('/units/{unit}', [UnitController::class, 'show']); // Получение одного unit

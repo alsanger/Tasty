@@ -1,0 +1,109 @@
+/*
+// Файл components/Reviews/ReviewsList/ReviewsList.scss
+@import '../../../styles/variables.scss';
+
+.reviews-list {
+  margin-top: 20px;
+
+  .review-item {
+    border-bottom: 1px solid $border-color;
+    padding: 15px 0;
+
+    .review-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+
+      .reviewer-name {
+        font-weight: 600;
+        color: $text-color;
+      }
+
+      .review-rating {
+        display: flex;
+
+        .rating-star {
+          color: #FFD700;
+          margin-right: 3px;
+        }
+      }
+
+      .review-date {
+        color: $secondary-color;
+        font-size: 0.8rem;
+      }
+    }
+
+    .review-text {
+      color: $text-color;
+      margin-bottom: 10px;
+    }
+  }
+}*/
+
+// Файл components/Reviews/ReviewsList/ReviewsList.scss
+@import '../../../styles/variables.scss';
+
+.reviews-list {
+  margin-top: 20px;
+
+  .review-col {
+    margin-bottom: 20px;
+  }
+
+  .review-item {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    border: 1px solid $border-color;
+    border-radius: 12px;
+    padding: 15px;
+
+    .review-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+
+      .reviewer-name {
+        font-weight: 600;
+        color: $text-color;
+      }
+
+      .review-rating {
+        display: flex;
+
+        .rating-star {
+          margin-right: 3px;
+
+          &.filled {
+            color: #FFD700;
+          }
+
+          &:not(.filled) {
+            color: #e4e5e9;
+          }
+        }
+      }
+    }
+
+    .review-text {
+      color: $text-color;
+      margin-bottom: 10px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      height: 4.5rem; // Примерно 3 строки
+    }
+
+    .review-date {
+      color: $secondary-color;
+      font-size: 0.8rem;
+      margin-top: auto;
+      text-align: right;
+    }
+  }
+}
