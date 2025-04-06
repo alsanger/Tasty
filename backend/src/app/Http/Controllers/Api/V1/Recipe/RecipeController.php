@@ -8,11 +8,18 @@ use App\Http\Requests\Api\V1\Recipe\UpdateRecipeRequest;
 use App\Http\Resources\Api\V1\Recipe\RecipeCollection;
 use App\Http\Resources\Api\V1\Recipe\RecipeResource;
 use App\Models\Recipe;
+use App\Services\ImageUploadService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
 
 class RecipeController extends Controller
 {
+    protected $imageUploadService;
+
+    public function __construct(ImageUploadService $imageUploadService)
+    {
+        $this->imageUploadService = $imageUploadService;
+    }
     public function index(): RecipeCollection
     {
         $recipes = Recipe::query()
@@ -32,8 +39,28 @@ class RecipeController extends Controller
 
     public function store(StoreRecipeRequest $request): RecipeResource
     {
+        Log::info('Входящие данные:', $request->all());
+
         // Создаем новый рецепт с валидированными данными
-        $recipe = Recipe::create($request->validated());
+        $validatedData = $request->validated();
+
+        // Удаляем поле image из валидированных данных, так как это файл, а не строка
+        if (isset($validatedData['image'])) {
+            unset($validatedData['image']);
+        }
+
+        $recipe = Recipe::create($validatedData);
+
+        // Обрабатываем основное изображение рецепта, если оно загружено
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $imageUrl = $this->imageUploadService->uploadRecipeImage($file, $recipe->id);
+
+            if ($imageUrl) {
+                $recipe->image_url = "/storage/$imageUrl";
+                $recipe->save();
+            }
+        }
 
         // Привязываем ингредиенты, если они передаются
         if ($request->has('ingredients')) {
@@ -45,8 +72,36 @@ class RecipeController extends Controller
             }
         }
 
-        // Пересчитываем сложность рецепта
-        //$recipe->update(['difficulty' => RecipeService::calculateDifficulty($recipe)]);
+        // Добавляем шаги приготовления, если они переданы
+        if ($request->has('recipeSteps')) {
+            foreach ($request->recipeSteps as $index => $stepData) {
+                // Номер шага определяется порядком в массиве (+1, так как шаги обычно начинаются с 1)
+                $stepNumber = $index + 1;
+
+                // Сначала создаем шаг без изображения
+                $recipeStep = $recipe->recipeSteps()->create([
+                    'step_number' => $stepNumber,
+                    'description' => $stepData['description'],
+                    'image_url' => isset($stepData['image_url']) ? $stepData['image_url'] : null,
+                ]);
+
+                // Проверяем, содержит ли шаг изображение и это объект UploadedFile
+                if (isset($stepData['image']) && $stepData['image'] instanceof \Illuminate\Http\UploadedFile) {
+                    // Загружаем изображение через сервис
+                    $uploadedImageUrl = $this->imageUploadService->uploadRecipeStepImage(
+                        $stepData['image'],
+                        $recipe->id,
+                        $recipeStep->id
+                    );
+
+                    if ($uploadedImageUrl) {
+                        // Обновляем URL изображения в шаге
+                        $recipeStep->image_url = "/storage/$uploadedImageUrl";
+                        $recipeStep->save();
+                    }
+                }
+            }
+        }
 
         // Загружаем связанные данные и возвращаем ресурс
         return new RecipeResource($recipe->load([

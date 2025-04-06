@@ -18,6 +18,7 @@ class IngredientController extends Controller
     public function index(): IngredientCollection
     {
         $ingredients = Ingredient::query()
+            ->orderBy('name')
             ->with('unit')
             ->paginate(10000); // Умышленно установлено большое количество элементов на странице
         return new IngredientCollection($ingredients);

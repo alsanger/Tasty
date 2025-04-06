@@ -14,7 +14,9 @@ class UnitController extends Controller
 {
     public function index(): UnitCollection
     {
-        $units = Unit::query()->paginate(100);
+        $units = Unit::query()
+            ->orderBy('name')
+            ->paginate(100);
         return new UnitCollection($units);
     }
 

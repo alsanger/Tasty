@@ -14,7 +14,7 @@ class CountryController extends Controller
 {
     public function index(): CountryCollection
     {
-        $countries = Country::query()->paginate(100);
+        $countries = Country::query()->orderBy('name')->paginate(100);
         return new CountryCollection($countries);
     }
 

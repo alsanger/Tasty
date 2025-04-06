@@ -17,19 +17,19 @@ class StoreRecipeRequest extends FormRequest
         return [
             'user_id' => [
                 'nullable',
-                'exists:users,id', // Проверка, что user_id существует в таблице users, если оно не null
+                'exists:users,id',
             ],
             'country_id' => [
                 'nullable',
-                'exists:countries,id', // Проверка, что country_id существует в таблице countries, если оно не null
+                'exists:countries,id',
             ],
             'category_id' => [
                 'required',
-                'exists:categories,id', // Проверка, что category_id существует в таблице categories
+                'exists:categories,id',
             ],
             'cooking_method_id' => [
                 'required',
-                'exists:cooking_methods,id', // Проверка, что cooking_method_id существует в таблице cooking_methods
+                'exists:cooking_methods,id',
             ],
             'name' => [
                 'required',
@@ -38,37 +38,59 @@ class StoreRecipeRequest extends FormRequest
             ],
             'description' => [
                 'required',
-                'string', // Описание должно быть строкой
+                'string',
             ],
             'time' => [
                 'nullable',
-                'integer', // Время должно быть целым числом
+                'integer',
             ],
             'image_url' => [
                 'nullable',
                 'max:255',
             ],
+            'image' => [
+                'nullable',
+                'file',
+                'mimes:jpg,jpeg,png,gif,webp,bmp,svg',
+                'max:5120', // 5MB максимальный размер
+            ],
             'ingredients' => [
                 'array',
-                'min:1', // Убедитесь, что хотя бы один элемент есть
+                'min:1',
             ],
             'ingredients.*.ingredient_id' => [
                 'required',
-                'exists:ingredients,id', // Проверка, что ingredient_id существует в таблице ingredients
+                'exists:ingredients,id',
             ],
             'ingredients.*.quantity' => [
                 'required',
-                'integer', // Проверка, что количество является целым числом
-                'min:1', // Минимальное количество должно быть 1
+                'integer',
+                'min:1',
+            ],
+
+            // Правила для шагов приготовления с поддержкой загрузки файлов
+            'recipeSteps' => [
+                'sometimes',
+                'array',
+            ],
+            'recipeSteps.*.description' => [
+                'required',
+                'string',
+                'max:5000',
+            ],
+            'recipeSteps.*.image_url' => [
+                'nullable',
+                'max:255',
+            ],
+            'recipeSteps.*.image' => [
+                'nullable',
+                'file',
+                'mimes:jpg,jpeg,png,gif,webp,bmp,svg',
+                'max:5120',
             ],
         ];
     }
 
-    /**
-     * Get custom attribute names for validator errors.
-     *
-     * @return array<string, string>
-     */
     /*public function attributes(): array
     {
         return [
@@ -82,11 +104,6 @@ class StoreRecipeRequest extends FormRequest
         ];
     }*/
 
-    /**
-     * Get the custom error messages for validation rules.
-     *
-     * @return array<string, string>
-     */
     /*public function messages(): array
     {
         return [

@@ -15,7 +15,9 @@ class CookingMethodController extends Controller
 {
     public function index(): CookingMethodCollection
     {
-        $cookingMethods = CookingMethod::query()->paginate(100);
+        $cookingMethods = CookingMethod::query()
+            ->orderBy('name')
+            ->paginate(100);
         return new CookingMethodCollection($cookingMethods);
     }
 

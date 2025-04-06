@@ -14,7 +14,9 @@ class CategoryController extends Controller
 {
     public function index(): CategoryCollection
     {
-        $categories = Category::query()->paginate(100);
+        $categories = Category::query()
+            ->orderBy('name')
+            ->paginate(100);
         return new CategoryCollection($categories);
     }
 
