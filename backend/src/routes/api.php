@@ -62,9 +62,6 @@ Route::group(['prefix' => 'v1'], function () {
     // Маршруты для работы с единицами измерения ингредиентов:
     Route::get('/units', [UnitController::class, 'index']);  // Получение списка units
     Route::get('/units/{unit}', [UnitController::class, 'show']); // Получение одного unit
-    // Маршруты для работы с планами приготовления еды:
-    Route::get('/cooking-plans', [CookingPlanController::class, 'index']);  // Получение списка планов приготовления еды
-    Route::get('/cooking-plans/{cookingPlan}', [CookingPlanController::class, 'show']); // Получение одного плана приготовления еды
     // Маршруты для работы с пользователями:
     Route::get('/users', [UserController::class, 'index']);  // Получение списка пользователей
     Route::get('users/{user}', [UserController::class, 'show']);  // Получение одного пользователя
@@ -89,6 +86,8 @@ Route::group(['prefix' => 'v1'], function () {
         Route::post('/cooking-plans', [CookingPlanController::class, 'store']);  // Создание плана приготовления еды
         Route::put('/cooking-plans/{cookingPlan}', [CookingPlanController::class, 'update']);  // Обновление плана приготовления еды
         Route::delete('/cooking-plans/{cookingPlan}', [CookingPlanController::class, 'destroy']);  // Удаление плана приготовления еды
+        Route::get('/cooking-plans', [CookingPlanController::class, 'index']);  // Получение списка планов приготовления еды
+        Route::get('/cooking-plans/{cookingPlan}', [CookingPlanController::class, 'show']); // Получение одного плана приготовления еды
         // Маршруты для работы со странами рецептов:
         Route::post('/countries', [CountryController::class, 'store']);  // Добавление страны
         Route::put('/countries/{country}', [CountryController::class, 'update']);  // Обновление страны
@@ -99,6 +98,7 @@ Route::group(['prefix' => 'v1'], function () {
         Route::post('/fridges', [FridgeController::class, 'store']);  // Создание "холодильника"
         Route::put('/fridges/{fridge}', [FridgeController::class, 'update']);  // Обновление "холодильника"
         Route::delete('/fridges/{fridge}', [FridgeController::class, 'destroy']);  // Удаление "холодильника"
+        Route::get('/fridge-user/{user}', [FridgeController::class, 'fridgeByUser']);  // Получение "холодильника" конкретного пользователя
         // Маршруты для работы с ингредиентами:
         Route::post('/ingredients', [IngredientController::class, 'store']);  // Создание ингредиента
         Route::put('/ingredients/{ingredient}', [IngredientController::class, 'update']);  // Обновление ингредиента

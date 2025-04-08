@@ -8,7 +8,9 @@ use App\Http\Requests\Api\V1\Fridge\UpdateFridgeRequest;
 use App\Http\Resources\Api\V1\Fridge\FridgeCollection;
 use App\Http\Resources\Api\V1\Fridge\FridgeResource;
 use App\Models\Fridge;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
 
 class FridgeController extends Controller
 {
@@ -83,5 +85,17 @@ class FridgeController extends Controller
         $fridge->delete();
 
         return response()->json(['message' => 'Холодильник успешно удален'], 200);
+    }
+
+    public function fridgeByUser(User $user): FridgeResource
+    {
+        $fridge = Fridge::query()
+            ->where('user_id', $user->id)
+            ->with(['user', 'ingredients.unit'])
+            ->firstOrFail();
+
+        $this->authorize('fridgeByUser', $fridge);
+
+        return new FridgeResource($fridge);
     }
 }

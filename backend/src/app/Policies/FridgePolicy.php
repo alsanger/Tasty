@@ -38,4 +38,10 @@ class FridgePolicy
         // Пользователь может удалить свой "холодильник", а администратор любой "холодильник"
         return $user->id === $fridge->user_id || $this->isAdmin($user);
     }
+
+    public function fridgeByUser(User $user, Fridge $fridge): bool
+    {
+        // Пользователь может просматривать свой "холодильник", а администратор любой "холодильник"
+        return $user->id === $fridge->user_id || $this->isAdmin($user);
+    }
 }

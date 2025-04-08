@@ -21,11 +21,6 @@ class UpdateFridgeRequest extends FormRequest
         ];
     }
 
-    /**
-     * Get custom attribute names for validator errors.
-     *
-     * @return array<string, string>
-     */
     /*public function attributes(): array
     {
         return [
@@ -33,11 +28,6 @@ class UpdateFridgeRequest extends FormRequest
         ];
     }*/
 
-    /**
-     * Get the custom error messages for validation rules.
-     *
-     * @return array<string, string>
-     */
     /*public function messages(): array
     {
         return [
