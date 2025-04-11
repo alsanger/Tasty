@@ -38,4 +38,10 @@ class CookingPlanPolicy
         // Пользователь может удалить свой план рецептов приготовления еды, а администратор любой план
         return $user->id === $cookingPlan->user_id || $this->isAdmin($user);
     }
+
+    public function viewByUser(User $currentUser, User $targetUser): bool
+    {
+        // Пользователь может просматривать свои планы, а администратор — любые
+        return $currentUser->id === $targetUser->id || $this->isAdmin($currentUser);
+    }
 }

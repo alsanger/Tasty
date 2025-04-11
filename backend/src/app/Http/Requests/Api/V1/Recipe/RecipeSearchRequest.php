@@ -27,9 +27,11 @@ class RecipeSearchRequest extends FormRequest
             'min_rating' => ['numeric', 'min:1', 'max:5', 'nullable'],
             'min_time' => ['integer', 'nullable'],
             'max_time' => ['integer', 'nullable'],
+            'min_difficulty' => ['integer', 'min:1', 'max:10', 'nullable'],
+            'max_difficulty' => ['integer', 'min:1', 'max:10', 'nullable'],
+            'fridge' => ['boolean', 'nullable'],
             'order_by' => ['string', 'in:name,rating,calories,time,difficulty', 'nullable'],
             'order_direction' => ['string', 'in:asc,desc', 'nullable'],
-            'fridge_ingredients' => ['array', 'nullable'],
             'page' => ['integer', 'nullable'],
             'per_page' => ['integer', 'min:1', 'max:100', 'nullable'],
         ];

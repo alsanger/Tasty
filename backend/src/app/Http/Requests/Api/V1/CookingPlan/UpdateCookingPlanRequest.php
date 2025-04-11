@@ -15,6 +15,7 @@ class UpdateCookingPlanRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'user_id' => ['required', 'exists:users,id'], // Проверка, что user_id существует в таблице users
             'recipes' => ['array'],
             'recipes.*.recipe_id' => ['required', 'exists:recipes,id'],
             'recipes.*.date' => ['nullable', 'date'],

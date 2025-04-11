@@ -88,6 +88,7 @@ Route::group(['prefix' => 'v1'], function () {
         Route::delete('/cooking-plans/{cookingPlan}', [CookingPlanController::class, 'destroy']);  // Удаление плана приготовления еды
         Route::get('/cooking-plans', [CookingPlanController::class, 'index']);  // Получение списка планов приготовления еды
         Route::get('/cooking-plans/{cookingPlan}', [CookingPlanController::class, 'show']); // Получение одного плана приготовления еды
+        Route::get('/cooking-plans-user/{user}', [CookingPlanController::class, 'cookingPlansByUser']);  // Получение планов приготовления еды конкретного пользователя
         // Маршруты для работы со странами рецептов:
         Route::post('/countries', [CountryController::class, 'store']);  // Добавление страны
         Route::put('/countries/{country}', [CountryController::class, 'update']);  // Обновление страны

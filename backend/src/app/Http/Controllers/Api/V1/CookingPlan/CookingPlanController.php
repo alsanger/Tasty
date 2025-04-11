@@ -8,6 +8,7 @@ use App\Http\Requests\Api\V1\CookingPlan\UpdateCookingPlanRequest;
 use App\Http\Resources\Api\V1\CookingPlan\CookingPlanCollection;
 use App\Http\Resources\Api\V1\CookingPlan\CookingPlanResource;
 use App\Models\CookingPlan;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
 
 class CookingPlanController extends Controller
@@ -89,5 +90,17 @@ class CookingPlanController extends Controller
         $cookingPlan->delete();
 
         return response()->json(['message' => 'План пприготування їжі був успішно видалений'], 200);
+    }
+
+    public function  cookingPlansByUser(User $user): CookingPlanCollection
+    {
+        $this->authorize('viewByUser', [CookingPlan::class, $user]);
+
+        $cookingPlans = CookingPlan::query()
+            ->where('user_id', $user->id)
+            ->with(['user', 'recipes', 'recipes.ingredients', 'recipes.ingredients.unit'])
+            ->paginate(30);
+
+        return new CookingPlanCollection($cookingPlans);
     }
 }

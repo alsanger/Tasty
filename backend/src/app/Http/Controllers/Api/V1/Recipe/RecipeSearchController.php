@@ -9,6 +9,7 @@ use App\Http\Requests\Api\V1\Recipe\TopAuthorsRequest;
 use App\Http\Requests\Api\V1\Recipe\TopRecipesRequest;
 use App\Http\Resources\Api\V1\Recipe\RecipeCollection;
 use App\Http\Resources\Api\V1\User\UserCollection;
+use App\Models\Fridge;
 use App\Models\Recipe;
 use App\Models\User;
 use App\Services\RecipeService;
@@ -34,6 +35,40 @@ class RecipeSearchController extends Controller
                 'reviews',
                 'likes'
             ]);
+
+        // Поиск рецептов по ингредиентам из холодильника
+        if ($request->filled('fridge') && $request->fridge === true) {
+            if ($request->filled('user_id')) {
+                // Получаем холодильник пользователя
+                $fridge = Fridge::query()
+                    ->where('user_id', $request->user_id)
+                    ->first();
+
+                if ($fridge) {
+                    // Получаем ID ингредиентов, которые есть в холодильнике (количество > 0)
+                    $fridgeIngredients = $fridge->ingredients()
+                        ->wherePivot('quantity', '>', 0)
+                        ->pluck('ingredients.id')
+                        ->toArray();
+
+                    if (count($fridgeIngredients) > 0) {
+                        // Находим рецепты, которые содержат ТОЛЬКО ингредиенты из холодильника
+                        $query->whereDoesntHave('ingredients', function ($q) use ($fridgeIngredients) {
+                            $q->whereNotIn('ingredients.id', $fridgeIngredients);
+                        });
+                    } else {
+                        // Если в холодильнике нет ингредиентов, возвращаем пустой результат
+                        $query->whereRaw('1 = 0');
+                    }
+                } else {
+                    // Если холодильник не найден, возвращаем пустой результат
+                    $query->whereRaw('1 = 0');
+                }
+            } else {
+                // Если user_id не указан, но fridge=true, возвращаем пустой результат
+                $query->whereRaw('1 = 0');
+            }
+        }
 
         // Поиск по названию
         if ($request->filled('name')) {
