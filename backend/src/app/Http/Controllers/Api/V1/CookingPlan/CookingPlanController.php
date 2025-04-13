@@ -98,7 +98,7 @@ class CookingPlanController extends Controller
 
         $cookingPlans = CookingPlan::query()
             ->where('user_id', $user->id)
-            ->with(['user', 'recipes', 'recipes.ingredients', 'recipes.ingredients.unit'])
+            ->with(['user', 'recipes', 'recipes.ingredients', 'recipes.ingredients.unit', 'recipes.reviews'])
             ->paginate(30);
 
         return new CookingPlanCollection($cookingPlans);

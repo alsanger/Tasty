@@ -5,6 +5,7 @@ namespace App\Http\Resources\Api\V1\CookingPlan;
 use App\Decorators\CookingPlanDecorator;
 use App\Decorators\IngredientDecorator;
 use App\Decorators\RecipeDecorator;
+use App\Decorators\ReviewDecorator;
 use App\Decorators\UnitDecorator;
 use App\Decorators\UserDecorator;
 use App\Models\CookingPlan;
@@ -35,7 +36,18 @@ class CookingPlanResource extends JsonResource
                                         (new IngredientDecorator($ingredient))->toArray(),
                                         ['unit' => (new UnitDecorator($ingredient->unit))->toArray()]
                                     );
-                                })
+                                }),
+                                'reviews' => $recipe->reviews->map(function ($review) {
+                                    return array_merge(
+                                        (new ReviewDecorator($review))->toArray(),
+                                        [
+                                            'user' => [
+                                                'display_name' => $review->user->display_name,
+                                                'avatar_url' => $review->user->avatar_url,
+                                            ]
+                                        ]
+                                    );
+                                }),
                             ]
                         );
                     });

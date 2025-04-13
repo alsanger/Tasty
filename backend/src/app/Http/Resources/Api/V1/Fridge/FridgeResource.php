@@ -12,11 +12,6 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class FridgeResource extends JsonResource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @return array<string, mixed>
-     */
     public function toArray(Request $request): array
     {
         return array_merge(
@@ -29,7 +24,7 @@ class FridgeResource extends JsonResource
             ],
             [
                 'ingredients' => $this->whenLoaded('ingredients', function () {
-                    return $this->ingredients->map(function ($ingredient) {
+                    return $this->ingredients->sortBy('name')->values()->map(function ($ingredient) {
                         return array_merge(
                             (new IngredientDecorator($ingredient))->toArray(),
                             [

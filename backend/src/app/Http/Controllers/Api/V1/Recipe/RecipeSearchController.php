@@ -35,37 +35,55 @@ class RecipeSearchController extends Controller
                 'reviews',
                 'likes'
             ]);
+        //$recipes = $query->get();
+        //Log::info('Результат запроса:', $recipes->toArray());
 
         // Поиск рецептов по ингредиентам из холодильника
         if ($request->filled('fridge') && $request->fridge === true) {
-            if ($request->filled('user_id')) {
+            Log::info('Запущен режим фильтрации по холодильнику');
+
+            if ($request->filled('current_user_id')) {
+                Log::info("Получен current_user_id: {$request->current_user_id}");
+
                 // Получаем холодильник пользователя
                 $fridge = Fridge::query()
-                    ->where('user_id', $request->user_id)
+                    ->where('user_id', $request->current_user_id)
                     ->first();
 
                 if ($fridge) {
+                    Log::info("Холодильник найден: ID {$fridge->id}");
+
                     // Получаем ID ингредиентов, которые есть в холодильнике (количество > 0)
                     $fridgeIngredients = $fridge->ingredients()
                         ->wherePivot('quantity', '>', 0)
                         ->pluck('ingredients.id')
                         ->toArray();
 
+                    Log::info('ID ингредиентов в холодильнике:', $fridgeIngredients);
+
                     if (count($fridgeIngredients) > 0) {
                         // Находим рецепты, которые содержат ТОЛЬКО ингредиенты из холодильника
                         $query->whereDoesntHave('ingredients', function ($q) use ($fridgeIngredients) {
                             $q->whereNotIn('ingredients.id', $fridgeIngredients);
                         });
+
+                        Log::info('Фильтр рецептов применён: выбраны рецепты только с ингредиентами из холодильника');
                     } else {
+                        Log::warning('Холодильник пуст (нет ингредиентов с quantity > 0)');
+
                         // Если в холодильнике нет ингредиентов, возвращаем пустой результат
                         $query->whereRaw('1 = 0');
                     }
                 } else {
+                    Log::warning('Холодильник не найден для данного пользователя');
+
                     // Если холодильник не найден, возвращаем пустой результат
                     $query->whereRaw('1 = 0');
                 }
             } else {
-                // Если user_id не указан, но fridge=true, возвращаем пустой результат
+                Log::warning('Не передан current_user_id при включённом fridge=true');
+
+                // Если current_user_id не указан, но fridge=true, возвращаем пустой результат
                 $query->whereRaw('1 = 0');
             }
         }
@@ -80,8 +98,7 @@ class RecipeSearchController extends Controller
             // Если user_id — это массив
             if (is_array($request->user_id)) {
                 $query->whereIn('user_id', $request->user_id);
-            }
-            // Если user_id — это одно значение
+            } // Если user_id — это одно значение
             else {
                 $query->where('user_id', $request->user_id);
             }
@@ -92,8 +109,7 @@ class RecipeSearchController extends Controller
             // Если countries — это массив
             if (is_array($request->countries)) {
                 $query->whereIn('country_id', $request->countries);
-            }
-            // Если countries — это одно значение
+            } // Если countries — это одно значение
             else {
                 $query->where('country_id', $request->countries);
             }
@@ -104,8 +120,7 @@ class RecipeSearchController extends Controller
             // Если categories — это массив
             if (is_array($request->categories)) {
                 $query->whereIn('category_id', $request->categories);
-            }
-            // Если categories — это одно значение
+            } // Если categories — это одно значение
             else {
                 $query->where('category_id', $request->categories);
             }
@@ -116,8 +131,7 @@ class RecipeSearchController extends Controller
             // Если cooking_methods — это массив
             if (is_array($request->cooking_methods)) {
                 $query->whereIn('cooking_method_id', $request->cooking_methods);
-            }
-            // Если cooking_methods — это одно значение
+            } // Если cooking_methods — это одно значение
             else {
                 $query->where('cooking_method_id', $request->cooking_methods);
             }
@@ -131,30 +145,6 @@ class RecipeSearchController extends Controller
                     ->havingRaw('SUM(ingredients.calories * ingredient_recipe.quantity) >= ?', [$request->min_calories]);
             });
         }
-
-        /*// Логирование для проверки калорийности
-        $recipesForLog = Recipe::with(['ingredients' => function ($query) {
-            $query->withPivot('quantity'); // Загружаем количество ингредиентов
-        }])->get();
-
-        foreach ($recipesForLog as $recipe) {
-            $ingredientsLog = [];
-            $totalCalories = 0;
-
-            foreach ($recipe->ingredients as $ingredient) {
-                $calories = $ingredient->calories;
-                $quantity = $ingredient->pivot->quantity;
-                $totalCalories += $calories * $quantity;
-
-                $ingredientsLog[] = "{$ingredient->name} (ID: {$ingredient->id}): {$calories} калорий * {$quantity} = " . ($calories * $quantity);
-            }
-
-            Log::info("Рецепт: {$recipe->name} (ID: {$recipe->id})");
-            Log::info("Ингредиенты и расчет калорий:");
-            Log::info(implode("\n", $ingredientsLog));
-            Log::info("Общая калорийность: {$totalCalories}");
-            Log::info("--------------------");
-        }*/
 
         if ($request->filled('max_calories')) {
             $query->whereHas('ingredients', function ($q) use ($request) {
@@ -279,11 +269,11 @@ class RecipeSearchController extends Controller
         while ($recipes->isEmpty() && $days <= 365) {
             $recipes = Recipe::query()
                 ->with(['user', 'category', 'cookingMethod', 'country', 'ingredients', 'ingredients.unit', 'recipeSteps', 'reviews', 'likes'])
-                ->whereHas('reviews', function($query) use ($days) {
+                ->whereHas('reviews', function ($query) use ($days) {
                     $query->where('created_at', '>=', now()->subDays($days));
                 })
                 ->get()
-                ->sortByDesc(function($recipe) {
+                ->sortByDesc(function ($recipe) {
                     return RecipeService::calculateRating($recipe);
                 })
                 ->take($limit)
@@ -301,7 +291,7 @@ class RecipeSearchController extends Controller
                 ->with(['user', 'category', 'cookingMethod', 'country', 'ingredients', 'ingredients.unit', 'recipeSteps', 'reviews', 'likes'])
                 ->whereHas('reviews')
                 ->get()
-                ->sortByDesc(function($recipe) {
+                ->sortByDesc(function ($recipe) {
                     return RecipeService::calculateRating($recipe);
                 })
                 ->take($limit)
@@ -555,7 +545,7 @@ class RecipeSearchController extends Controller
             ->with(['user', 'category', 'cookingMethod', 'country', 'ingredients', 'ingredients.unit', 'recipeSteps', 'reviews', 'likes'])
             /*->has('reviews')*/
             ->get()
-            ->sortByDesc(function($recipe) {
+            ->sortByDesc(function ($recipe) {
                 return RecipeService::calculateRating($recipe);
             })
             ->take($limit)
