@@ -30,6 +30,14 @@ class RecipeSearchRequest extends FormRequest
             'min_difficulty' => ['integer', 'min:1', 'max:10', 'nullable'],
             'max_difficulty' => ['integer', 'min:1', 'max:10', 'nullable'],
             'fridge' => ['boolean', 'nullable'],
+            'current_user_id' => [
+                'nullable',
+                'exists:users,id', // Проверка, что user_id существует в таблице users, если оно не null
+            ],
+            'user_id' => [
+                'exists:users,id', // Проверка, что user_id существует в таблице users, если оно не null
+                'nullable',
+            ],
             'order_by' => ['string', 'in:name,rating,calories,time,difficulty', 'nullable'],
             'order_direction' => ['string', 'in:asc,desc', 'nullable'],
             'page' => ['integer', 'nullable'],
