@@ -38,7 +38,7 @@ const RegisterModal = ({show, onHide, onShowLogin}) => {
         return isValid;
     };
 
-    const handleSubmit = async (e) => {
+    /*const handleSubmit = async (e) => {
         e.preventDefault();
 
         if (!validateForm()) {
@@ -53,16 +53,14 @@ const RegisterModal = ({show, onHide, onShowLogin}) => {
             console.log("end")
             console.log(response.data)
 
-            /*
-            if (response.data) {
-                await login(response.data);
-                setErrors({});
-                window.location.href = '/?registration=success';
-            } else {
-                throw new Error('Неверный формат ответа от сервера');
-            }
+                //if (response.data) {
+                //await login(response.data);
+                //setErrors({});
+                //window.location.href = '/?registration=success';
+            //} else {
+                //throw new Error('Неверный формат ответа от сервера');
+            //}
 
-             */
 
         } catch (err) {
             console.error("Ошибка при регистрации:", err);
@@ -81,6 +79,58 @@ const RegisterModal = ({show, onHide, onShowLogin}) => {
                 }
 
                 setErrors(serverErrors); // Устанавливаем ошибки в состояние
+            } else {
+                setErrors({
+                    general: "Помилка з'єднання з сервером. Спробуйте пізніше."
+                });
+            }
+        } finally {
+            setLoading(false);
+        }
+    };*/
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        if (!validateForm()) {
+            return;
+        }
+
+        setLoading(true);
+        try {
+            const response = await userApi.register(formData);
+            console.log("Регистрация успешна:", response);
+
+            if (response.data) {
+                // Преобразуем данные от API регистрации в формат, ожидаемый функцией login
+                const loginData = {
+                    user: response.data,
+                    token: response.data.token
+                };
+
+                // Используем контекст для входа, как в LoginModal
+                login(loginData);
+                setErrors({});
+                onHide();
+            } else {
+                throw new Error('Неверный формат ответа от сервера');
+            }
+        } catch (err) {
+            console.error("Ошибка при регистрации:", err);
+
+            if (err.response?.data) {
+                const { message, errors } = err.response.data;
+
+                const serverErrors = {};
+                if (message) {
+                    serverErrors.general = message;
+                }
+                if (errors) {
+                    Object.entries(errors).forEach(([key, messages]) => {
+                        serverErrors[key] = Array.isArray(messages) ? messages.join('. ') : messages;
+                    });
+                }
+
+                setErrors(serverErrors);
             } else {
                 setErrors({
                     general: "Помилка з'єднання з сервером. Спробуйте пізніше."

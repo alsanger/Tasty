@@ -38,6 +38,13 @@ class RecipeSearchRequest extends FormRequest
                 'exists:users,id', // Проверка, что user_id существует в таблице users, если оно не null
                 'nullable',
             ],
+            'authors' => [
+                'array',
+                'nullable',
+            ],
+            'authors.*' => [
+                'exists:users,id',
+            ],
             'order_by' => ['string', 'in:name,rating,calories,time,difficulty', 'nullable'],
             'order_direction' => ['string', 'in:asc,desc', 'nullable'],
             'page' => ['integer', 'nullable'],

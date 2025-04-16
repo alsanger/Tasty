@@ -93,8 +93,21 @@ class RecipeSearchController extends Controller
             $query->whereRaw('LOWER(name) like ?', ['%' . strtolower($request->name) . '%']);
         }
 
-        // Поиск по 'user_id'
+        /*// Поиск по 'user_id'
         if ($request->filled('user_id')) {
+            // Если user_id — это массив
+            if (is_array($request->user_id)) {
+                $query->whereIn('user_id', $request->user_id);
+            } // Если user_id — это одно значение
+            else {
+                $query->where('user_id', $request->user_id);
+            }
+        }*/
+
+        // Поиск по 'authors' или 'user_id'
+        if ($request->filled('authors')) {
+            $query->whereIn('user_id', $request->authors);
+        } elseif ($request->filled('user_id')) {
             // Если user_id — это массив
             if (is_array($request->user_id)) {
                 $query->whereIn('user_id', $request->user_id);
@@ -246,13 +259,9 @@ class RecipeSearchController extends Controller
         $perPage = $request->per_page ?? 30;
         $recipes = $query->paginate($perPage);
 
-
-        Log::info("--------------------");
         // Логирование наименований рецептов через запятую
-        $recipeNames = $recipes->getCollection()->pluck('name')->implode(', ');
-        Log::info("Найденные рецепты: " . $recipeNames);
+        $recipes->getCollection()->pluck('name')->implode(', ');
 
-        Log::info("--------------------");
         return new RecipeCollection($recipes);
     }
 
