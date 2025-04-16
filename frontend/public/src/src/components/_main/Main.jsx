@@ -26,7 +26,7 @@ const Main = () => {
             <RecipesByDifficulty/>
 
 
-            <ImageUploader
+           {/* <ImageUploader
                 endpoint={ENDPOINTS.IMAGE.UPLOAD_USER_AVATAR}
                 id={user?.id}
                 button={{ text: 'Загрузить аватар' }}
@@ -41,7 +41,7 @@ const Main = () => {
                 id={31}
                 recipeId={19}
                 button={{ text: 'Загрузить изображение шага рецепта' }}
-            />
+            />*/}
         </div>
     );
 }

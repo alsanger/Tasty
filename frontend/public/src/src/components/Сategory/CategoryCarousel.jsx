@@ -1,18 +1,30 @@
 // Файл CategoryCarousel.jsx
 import React, { useState, useEffect } from 'react';
-import {Container} from 'react-bootstrap';
+import { Container } from 'react-bootstrap';
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
+import { useNavigate } from 'react-router-dom'; // Добавлен импорт useNavigate
 import Category from './Category.jsx';
 import { getCategories } from '../../utils/fetchApi/categoryApi';
 import './CategoryCarousel.scss';
 
 const CategoryCarousel = ({ onCategoryClick }) => {
+  const navigate = useNavigate(); // Добавлен хук для навигации
   const [startIndex, setStartIndex] = useState(0);
   const [visibleCount, setVisibleCount] = useState(5);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isAnimating, setIsAnimating] = useState(false);
+
+  const handleCategoryClick = (category) => {
+    if (onCategoryClick) {
+      console.log(`Вызов внешней функции onCategoryClick с ID: ${category?.id}`); // Исправлено
+      onCategoryClick(category?.id);
+    } else {
+      console.log(`Navigating to recipes with category ID: ${category?.id}`); // Добавлен лог
+      navigate(`/recipes?categories=${category?.id}`); // Исправлено
+    }
+  };
 
   // Загрузка категорий с API
   useEffect(() => {
@@ -102,7 +114,7 @@ const CategoryCarousel = ({ onCategoryClick }) => {
 
   return (
       <Container fluid className="mt-0">
-      <div className="category-carousel">
+        <div className="category-carousel">
           <div className="carousel-container">
             {showNavButtons && (
                 <button
@@ -128,7 +140,7 @@ const CategoryCarousel = ({ onCategoryClick }) => {
                     >
                       <Category
                           category={category}
-                          onClick={onCategoryClick}
+                          onClick={() => handleCategoryClick(category)} // Изменено на handleCategoryClick
                       />
                     </div>
                 ))}
@@ -146,7 +158,7 @@ const CategoryCarousel = ({ onCategoryClick }) => {
                 </button>
             )}
           </div>
-      </div>
+        </div>
       </Container>
   );
 };

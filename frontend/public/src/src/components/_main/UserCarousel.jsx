@@ -22,10 +22,6 @@ const UserCarousel = ({ onUserClick }) => {
             console.log(`Вызов внешней функции onUserClick с ID: ${user?.id}`);
             onUserClick(user?.id);
         } else {
-            console.log(`Navigating to user profile with ID: ${user?.id}`);
-            /*navigate(`/profile/${user?.id}`, {
-                state: { user },
-            });*/
             navigate(`/recipes?authors=${user?.id}`);
         }
     };

@@ -29,7 +29,8 @@ const RecipesPage = () => {
             authors: [],
             countries: [],
             cooking_methods: [],
-            fridge: false
+            fridge: false,
+            categories: [],
         };
 
         // Получаем параметр name из URL
@@ -38,11 +39,13 @@ const RecipesPage = () => {
             initialFilters.name = nameParam;
         }
 
-        // Получаем параметр user_id из URL
-        /*const userIdParam = searchParams.get('user_id');
-        if (userIdParam) {
-            initialFilters.user_id = userIdParam;
-        }*/
+        // Парсим ID категорий из URL
+        const categoriesParam = searchParams.get('categories');
+        if (categoriesParam) {
+            // Если категории указаны, добавляем их в массив категорий
+            initialFilters.categories = categoriesParam.split(',').map(id => parseInt(id));
+        }
+
         // Парсим ID авторов из URL
         const authorsParam = searchParams.get('authors');
         if (authorsParam) {
