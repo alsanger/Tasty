@@ -1,7 +1,7 @@
 import {Modal} from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import './MessageModal.scss';
-import logo from "../../../assets/images/logo.svg";
+import logo from "../../../../assets/images/logo.svg";
 
 const MessageModal = ({show, onHide, message}) => {
     // Определяем класс в зависимости от типа сообщения

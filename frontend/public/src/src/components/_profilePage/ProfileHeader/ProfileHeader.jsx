@@ -1,14 +1,19 @@
 // Файл components/_profilePage/ProfileHeader/ProfileHeader.jsx
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import {Container, Row, Col, Image} from 'react-bootstrap';
 import PropTypes from 'prop-types';
+import {RxAvatar} from 'react-icons/rx'; // Добавляем импорт RxAvatar
 import Button from '../../_common/Button/Button';
 import backgroundImage from '../../../assets/images/profileImage.jpg';
 import './ProfileHeader.scss';
 import {BASE_URL} from "../../../utils/constants.js";
-import { followUser, unfollowUser } from '../../../utils/fetchApi/followerApi';
+import {followUser, unfollowUser} from '../../../utils/fetchApi/followerApi';
+import {logout} from "../../../utils/fetchApi/userApi.js";
+import {useUser} from "../../../contexts/UserContext.jsx";
 
 const ProfileHeader = ({userData, currentUserId}) => {
+
+    const {user, isAuthenticated} = useUser();
     // Проверяем, свой ли профиль просматривает пользователь
     const isOwnProfile = userData.id === currentUserId;
 
@@ -65,6 +70,37 @@ const ProfileHeader = ({userData, currentUserId}) => {
         console.log('Переход на страницу подписок');
     };
 
+    /*const logoutButtonClick = async () => {
+        try {
+            await logout();
+            console.log('Выход из профиля');
+            //window.location.reload(); // Полная перезагрузка страницы. Или можно сделать редирект на главную страницу или страницу входа
+        } catch (error) {
+            console.error('Ошибка при выходе из профиля:', error);
+        }
+    };*/
+    const logoutButtonClick = async () => {
+        try {
+            // 1. Выполняем выход
+            await logout();
+
+            // 2. Очищаем клиентское состояние
+            localStorage.clear(); // Очищаем localStorage (если там есть токен)
+            sessionStorage.clear(); // Аналогично для sessionStorage
+
+            // 3. Сбрасываем кеш запросов
+            if (window.queryClient) {
+                queryClient.clear();
+            }
+
+            // 4. Перенаправляем на главную
+            window.location.href = '/'; // Или '/login' если нужно
+
+        } catch (error) {
+            console.error('Ошибка при выходе:', error);
+        }
+    };
+
     // Определяем текст кнопки
     const buttonText = isOwnProfile
         ? "Редагувати профіль"
@@ -72,6 +108,27 @@ const ProfileHeader = ({userData, currentUserId}) => {
 
     // Определяем активность кнопки - только "Підписатися" должна быть активной
     const buttonIsActive = !isOwnProfile && !isFollowing;
+
+    // Проверяем наличие аватарки у пользователя
+    const hasAvatar = userData.avatar_url && userData.avatar_url !== '';
+
+    // Формируем строку имени пользователя, отображая только существующие имя и фамилию
+    const renderName = () => {
+        const firstName = userData.first_name && userData.first_name.trim() !== '' ? userData.first_name : '';
+        const lastName = userData.last_name && userData.last_name.trim() !== '' ? userData.last_name : '';
+
+        if (firstName && lastName) {
+            return `${firstName} ${lastName}`;
+        } else if (firstName) {
+            return firstName;
+        } else if (lastName) {
+            return lastName;
+        } else {
+            return ''; // Возвращаем пустую строку, если имя и фамилия отсутствуют
+        }
+    };
+
+    const displayName = renderName();
 
     return (
         <div className="profile-header">
@@ -84,16 +141,22 @@ const ProfileHeader = ({userData, currentUserId}) => {
                 <Row className="justify-content-center">
                     <Col xs="auto" className="text-center">
                         <div className="avatar-container">
-                            <Image
-                                src={`${BASE_URL}${userData.avatar_url}`}
-                                roundedCircle
-                                className="profile-avatar"
-                                alt={`${userData.first_name} ${userData.last_name}`}
-                            />
+                            {hasAvatar ? (
+                                <Image
+                                    src={`${BASE_URL}${userData.avatar_url}`}
+                                    roundedCircle
+                                    className="profile-avatar"
+                                    alt={displayName || userData.display_name}
+                                />
+                            ) : (
+                                <div className="default-avatar-container">
+                                    <RxAvatar size={105} className="profile-avatar"/>
+                                </div>
+                            )}
                         </div>
 
                         <div className="profile-info">
-                            <p className="profile-name">{`${userData.first_name} ${userData.last_name}`}</p>
+                            {displayName && <p className="profile-name">{displayName}</p>}
                             <p className="display-name">{userData.display_name}</p>
 
                             <div className="followers-section">
@@ -108,11 +171,23 @@ const ProfileHeader = ({userData, currentUserId}) => {
                             </span>
                             </div>
 
+                            {isAuthenticated && user && (
+                                <Button
+                                    className="button"
+                                    text={buttonText}
+                                    onClick={handleButtonClick}
+                                    isActive={buttonIsActive}
+                                />
+                            )}
+
+                            {isAuthenticated && user && isOwnProfile && (
                             <Button
-                                text={buttonText}
-                                onClick={handleButtonClick}
-                                isActive={buttonIsActive}
+                                className="button"
+                                text="Вийти з профілю"
+                                onClick={logoutButtonClick}
+                                isActive={false}
                             />
+                            )}
                         </div>
                     </Col>
                 </Row>
@@ -124,10 +199,10 @@ const ProfileHeader = ({userData, currentUserId}) => {
 ProfileHeader.propTypes = {
     userData: PropTypes.shape({
         id: PropTypes.number.isRequired,
-        first_name: PropTypes.string.isRequired,
-        last_name: PropTypes.string.isRequired,
+        first_name: PropTypes.string,  // Может отсутствовать
+        last_name: PropTypes.string,   // Может отсутствовать
         display_name: PropTypes.string.isRequired,
-        avatar_url: PropTypes.string.isRequired,
+        avatar_url: PropTypes.string,  // Может отсутствовать
         followers: PropTypes.shape({
             total: PropTypes.number.isRequired,
             data: PropTypes.array.isRequired

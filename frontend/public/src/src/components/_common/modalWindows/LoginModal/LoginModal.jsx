@@ -1,15 +1,17 @@
 import {useState} from 'react';
-import { userApi } from '../../../utils/fetchApi/index.js';
+import { userApi } from '../../../../utils/fetchApi/index.js';
 import {Modal, Form, Spinner} from 'react-bootstrap';
-import Input from '../../_common/Input/Input.jsx';
-import Button from '../../_common/Button/Button.jsx';
+import Input from '../../Input/Input.jsx';
+import Button from '../../Button/Button.jsx';
 import './LoginModal.scss';
-import logo from '../../../assets/images/logo.svg';
-import {useUser} from "../../../contexts/UserContext.jsx";
+import logo from '../../../../assets/images/logo.svg';
+import {useUser} from "../../../../contexts/UserContext.jsx";
+import {useModal} from "../../../../contexts/ModalContext.jsx";
 
-const LoginModal = ({show, onHide, onShowRegister}) => {
+const LoginModal = ({show, onHide}) => {
 
     const { login } = useUser();
+    const { showModal } = useModal();
 
     const [formData, setFormData] = useState({
         email: '',
@@ -24,6 +26,11 @@ const LoginModal = ({show, onHide, onShowRegister}) => {
             ...prev,
             [name]: value
         }));
+    };
+
+    const handleRegisterClick = () => {
+        onHide(); // Закрываем текущее модальное окно
+        showModal('register'); // Открываем модальное окно регистрации
     };
 
     const handleSubmit = async (e) => {
@@ -118,9 +125,7 @@ const LoginModal = ({show, onHide, onShowRegister}) => {
 
                 <div className="text-center mt-3 d-flex align-items-center justify-content-center">
                     <span>Ще не маєте аккаунт?</span>
-                    <button className="register-link" onClick={() => {
-                        onShowRegister();
-                    }}>
+                    <button className="register-link" onClick={handleRegisterClick}>
                         Зареєструйтесь!
                     </button>
                 </div>

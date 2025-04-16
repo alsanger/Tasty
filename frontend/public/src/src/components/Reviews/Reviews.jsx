@@ -3,9 +3,11 @@ import React, { useState } from 'react';
 import ReviewForm from './ReviewForm/ReviewForm';
 import ReviewsList from './ReviewsList/ReviewsList';
 import './Reviews.scss';
+import {useUser} from "../../contexts/UserContext.jsx";
 
 const Reviews = ({ recipeId, initialReviews, onRecipeUpdate }) => {
     const [reviews, setReviews] = useState(initialReviews || []);
+    const {user, isAuthenticated} = useUser();
 
     const handleReviewAdded = (newReview) => {
         const updatedReviews = [...reviews, newReview];
@@ -19,10 +21,12 @@ const Reviews = ({ recipeId, initialReviews, onRecipeUpdate }) => {
 
     return (
         <div className="reviews-container">
+            {isAuthenticated && user && (
             <ReviewForm
                 recipeId={recipeId}
                 onReviewAdded={handleReviewAdded}
             />
+            )}
             <ReviewsList reviews={reviews} />
         </div>
     );

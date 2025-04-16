@@ -3,8 +3,8 @@ import React, { useState, useEffect } from 'react';
 import { Card, Spinner } from 'react-bootstrap';
 import { IoHeart, IoHeartOutline } from "react-icons/io5";
 import { getRecipeById } from '../../../../utils/fetchApi/recipeApi.js';
-import { createLike, deleteLike } from '../../../../utils/fetchApi/likeApi.js';
 import { useUser } from '../../../../contexts/UserContext.jsx';
+import { useRecipeLikes } from '../../../../hooks/useRecipeLikes.jsx';
 import './RecipeCardById.scss';
 import { BASE_URL, FONT_FAMILIES } from "../../../../utils/constants.js";
 
@@ -20,9 +20,7 @@ const RecipeCardById = ({
     const [recipe, setRecipe] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [isFavorite, setIsFavorite] = useState(false);
-    const [isLikeLoading, setIsLikeLoading] = useState(false);
-    const [likeId, setLikeId] = useState(null);
+    const { isFavorite, isLoading, toggleLike } = useRecipeLikes(recipe, onLikeChange);
 
     useEffect(() => {
         const fetchRecipe = async () => {
@@ -44,20 +42,6 @@ const RecipeCardById = ({
         }
     }, [recipeId]);
 
-    // Проверяем, лайкнул ли текущий пользователь рецепт и сохраняем ID лайка
-    useEffect(() => {
-        if (recipe?.likes && user) {
-            const userLike = recipe.likes.find(like => like.user_id === user.id);
-            if (userLike) {
-                setIsFavorite(true);
-                setLikeId(userLike.id);
-            } else {
-                setIsFavorite(false);
-                setLikeId(null);
-            }
-        }
-    }, [recipe, user]);
-
     const handleClick = () => {
         if (onClick && recipe) {
             onClick(recipe.id);
@@ -66,47 +50,8 @@ const RecipeCardById = ({
         }
     };
 
-    const handleFavoriteClick = async (e) => {
-        e.stopPropagation(); // Предотвращаем срабатывание onClick всей карточки
-
-        // Если пользователь не авторизован, выходим из функции
-        if (!isAuthenticated || !user) {
-            // Можно добавить редирект на страницу логина или показать сообщение
-            return;
-        }
-
-        setIsLikeLoading(true);
-
-        try {
-            if (isFavorite && likeId) {
-                // Удаляем лайк, используя сохраненный ID лайка
-                await deleteLike(likeId);
-                setLikeId(null);
-            } else {
-                // Добавляем лайк
-                const likeData = {
-                    recipe_id: recipe.id,
-                    user_id: user.id
-                };
-                const response = await createLike(likeData);
-
-                // Предполагаем, что ответ содержит ID созданного лайка
-                if (response && response.id) {
-                    setLikeId(response.id);
-                }
-            }
-
-            // Обновляем состояние после успешного запроса
-            setIsFavorite(!isFavorite);
-
-            // Вызываем колбэк для обновления родительского компонента, если он предоставлен
-            onLikeChange(recipe.id, !isFavorite);
-
-        } catch (error) {
-            console.error('Ошибка при обработке лайка:', error);
-        } finally {
-            setIsLikeLoading(false);
-        }
+    const handleFavoriteClick = (e) => {
+        toggleLike(e);
     };
 
     if (loading) {

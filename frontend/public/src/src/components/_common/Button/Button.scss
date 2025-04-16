@@ -139,4 +139,47 @@
     display: inline;
     margin-left: 4px;
   }
+
+  &.avatar-button {
+    @include button-icon;
+    overflow: hidden;
+    padding: 0;
+    width: 38px;
+    height: 38px;
+    border-radius: 50% !important;
+    border: 1px solid $primary-color !important;
+    background-color: transparent !important;
+
+    // Сделаем плавный переход для бордера
+    transition: border-width 0.2s ease-in-out;
+
+    &:hover, &:focus {
+      border-width: 2px !important;
+      background-color: transparent !important;
+    }
+
+    &:active {
+      background-color: transparent !important;
+    }
+
+    // Убираем изменение цветов для активного состояния
+    &.active {
+      background-color: transparent !important;
+
+      &:hover, &:focus {
+        background-color: transparent !important;
+      }
+
+      &:active {
+        background-color: transparent !important;
+      }
+    }
+
+    .avatar-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+  }
 }

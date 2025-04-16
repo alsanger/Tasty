@@ -1,5 +1,6 @@
 // Файл components/Reviews/ReviewsForm/ReviewForm.scss
-@import '../../../styles/variables.scss';
+@use '../../../styles/variables.scss' as *;
+@use "sass:color";
 
 .review-form {
   width: 49%;
@@ -62,7 +63,7 @@
           transition: color 0.3s ease;
 
           &:hover {
-            color: darken($primary-color, 10%);
+            color: color.scale($primary-color, $lightness: -10%);
           }
         }
       }

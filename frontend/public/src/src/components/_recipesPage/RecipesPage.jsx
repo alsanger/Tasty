@@ -7,10 +7,12 @@ import axios from 'axios';
 import { API_BASE_URL, ENDPOINTS } from '../../utils/constants.js';
 import './RecipesPage.scss';
 import RecipeCardMini from "../Recipe/cards/RecipeCardMini.jsx";
+import { useUser } from '../../contexts/UserContext';
 
 const RecipesPage = () => {
     const [searchParams] = useSearchParams();
     const location = useLocation();
+    const { user } = useUser(); // Получаем пользователя через хук
 
     // Получаем параметры из URL
     const getInitialFilters = () => {
@@ -24,15 +26,44 @@ const RecipesPage = () => {
             difficulty_max: 10,
             ingredients_include: [],
             ingredients_exclude: [],
-            user_id: [],
+            authors: [],
             countries: [],
-            cooking_methods: []
+            cooking_methods: [],
+            fridge: false
         };
 
         // Получаем параметр name из URL
         const nameParam = searchParams.get('name');
         if (nameParam) {
             initialFilters.name = nameParam;
+        }
+
+        // Получаем параметр user_id из URL
+        /*const userIdParam = searchParams.get('user_id');
+        if (userIdParam) {
+            initialFilters.user_id = userIdParam;
+        }*/
+        // Парсим ID авторов из URL
+        const authorsParam = searchParams.get('authors');
+        if (authorsParam) {
+            // Если авторы указаны, добавляем их в массив авторов
+            initialFilters.authors = authorsParam.split(',').map(id => parseInt(id));
+        }
+
+        // Получаем параметры difficulty_min и difficulty_max из URL
+        const difficultyMinParam = searchParams.get('difficulty_min');
+        if (difficultyMinParam) {
+            initialFilters.difficulty_min = difficultyMinParam;
+        }
+        const difficultyMaxParam = searchParams.get('difficulty_max');
+        if (difficultyMaxParam) {
+            initialFilters.difficulty_max = difficultyMaxParam;
+        }
+
+        // Получаем параметр fridge из URL
+        const fridgeParam = searchParams.get('fridge');
+        if (fridgeParam === 'true') {
+            initialFilters.fridge = true;
         }
 
         // Парсим ID стран из URL
@@ -80,6 +111,12 @@ const RecipesPage = () => {
                 }
                 return acc;
             }, {});
+
+            // Добавляем fridge и current_user_id если включен умный холодильник и пользователь авторизован
+            if (searchFilters.fridge && user?.id) {
+                requestData.fridge = searchFilters.fridge;
+                requestData.current_user_id = user.id;
+            }
 
             requestData.per_page = 10;
             requestData.order_by = 'name';

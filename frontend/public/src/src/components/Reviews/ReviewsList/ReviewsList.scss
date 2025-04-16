@@ -43,7 +43,7 @@
 }*/
 
 // Файл components/Reviews/ReviewsList/ReviewsList.scss
-@import '../../../styles/variables.scss';
+@use '../../../styles/variables.scss' as *;
 
 .reviews-list {
   margin-top: 20px;

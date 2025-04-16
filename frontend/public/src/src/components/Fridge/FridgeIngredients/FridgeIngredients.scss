@@ -1,0 +1,123 @@
+// Файл components/Fridge/FridgeIngredients/FridgeIngredients.scss
+@use '../../../styles/variables' as *;
+
+.fridge-ingredients-container {
+  margin-bottom: 1rem;
+
+  .fridge-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  h5 {
+    margin-bottom: 1rem;
+    font-weight: 600;
+    color: $text-color;
+  }
+
+  .panel-title {
+    margin-bottom: 20px;
+    padding-top: 10px;
+    border-top: 1px solid $border-color;
+    font-weight: 650;
+    color: $text-color;
+  }
+
+  .search-input {
+    margin-bottom: 1rem;
+    .form-control {
+      @include form-control-base;
+    }
+  }
+
+  .ingredients-list {
+    border-radius: 8px;
+    overflow: hidden;
+
+    .ingredient-select {
+      @include form-control-base;
+      font-size: 16px;
+
+      &:focus {
+        border-color: $primary-color;
+        box-shadow: none;
+      }
+
+      option {
+        color: $text-color;
+        font-size: 16px;
+      }
+    }
+
+    .ingredient-row {
+      display: flex;
+      align-items: center;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid $border-color;
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      .ingredient-name {
+        font-weight: 500;
+        color: $text-color;
+        display: flex;
+        align-items: center;
+      }
+
+      .quantity-input-col {
+        position: relative;
+
+        .quantity-input {
+          @include form-control-base;
+          padding-right: 40px;
+          appearance: textfield;
+          -moz-appearance: textfield;
+
+          &::-webkit-outer-spin-button,
+          &::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+          }
+        }
+
+        .quantity-unit {
+          position: absolute;
+          right: 25px;
+          top: 50%;
+          transform: translateY(-50%);
+          color: $placeholder-color;
+        }
+      }
+
+      .delete-button-col {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .delete-ingredient-btn {
+          background: none;
+          border: none;
+          color: #dc3545;
+          padding: 0;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          cursor: pointer;
+
+          &:hover {
+            color: #AF2A37FF;
+          }
+        }
+      }
+    }
+
+    .no-ingredients {
+      text-align: center;
+      color: $placeholder-color;
+      padding: 2rem 0;
+    }
+  }
+}

@@ -2,14 +2,6 @@
 export const BASE_URL = 'http://localhost:8000';
 export const API_BASE_URL = `${BASE_URL}/api`;
 
-export const FONT_FAMILIES = {
-    PRIMARY: "'NAMU', serif",
-    SECONDARY: "'Raleway', sans-serif",
-};
-export const FONT_LINKS = [
-    "https://fonts.googleapis.com/css2?family=Monomakh&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap"
-];
-
 export const ENDPOINTS = {
     // Аутентификация и пользователи
     LOGIN: '/v1/login',
@@ -37,6 +29,13 @@ export const ENDPOINTS = {
     DELETE_RECIPE: (id) => `/v1/recipes/${id}`, // Удаление рецепта
     USER_RECIPES: (userId) => `/v1/users/${userId}/recipes`, // Рецепты пользователя
 
+    // Шаги рецептов
+    RECIPE_STEPS: (recipeId) => `/v1/recipes/${recipeId}/steps`,
+    RECIPE_STEP_DETAIL: (id) => `/v1/recipe-steps/${id}`,
+    CREATE_RECIPE_STEP: '/v1/recipe-steps',
+    UPDATE_RECIPE_STEP: (id) => `/v1/recipe-steps/${id}`,
+    DELETE_RECIPE_STEP: (id) => `/v1/recipe-steps/${id}`,
+
     // Категории
     CATEGORIES: '/v1/categories', // Категории рецептов
     CATEGORY_DETAIL: (id) => `/v1/categories/${id}`, // Детали категории
@@ -50,6 +49,14 @@ export const ENDPOINTS = {
     CREATE_COOKING_METHOD: '/v1/cooking-methods', // Создание способа приготовления
     UPDATE_COOKING_METHOD: (id) => `/v1/cooking-methods/${id}`, // Обновление способа приготовления
     DELETE_COOKING_METHOD: (id) => `/v1/cooking-methods/${id}`, // Удаление способа приготовления
+
+    // Планы приготовления еды
+    COOKING_PLANS: '/v1/cooking-plans', // Список планов
+    COOKING_PLAN_DETAIL: (id) => `/v1/cooking-plans/${id}`, // Детали плана
+    CREATE_COOKING_PLAN: '/v1/cooking-plans', // Создание плана
+    UPDATE_COOKING_PLAN: (id) => `/v1/cooking-plans/${id}`, // Обновление плана
+    DELETE_COOKING_PLAN: (id) => `/v1/cooking-plans/${id}`, // Удаление плана
+    USER_COOKING_PLAN: (userId) => `/v1/cooking-plans-user/${userId}`, // План пользователя
 
     // Авторы
     AUTHORS: '/v1/top-authors', // Топ авторов
@@ -75,7 +82,7 @@ export const ENDPOINTS = {
     CREATE_FRIDGE: '/v1/fridges', // Создание холодильника
     UPDATE_FRIDGE: (id) => `/v1/fridges/${id}`, // Обновление холодильника
     DELETE_FRIDGE: (id) => `/v1/fridges/${id}`, // Удаление холодильника
-    USER_FRIDGES: (userId) => `/v1/users/${userId}/fridges`, // Холодильники пользователя
+    USER_FRIDGE: (userId) => `/v1/fridge-user/${userId}`, // Холодильник пользователя
 
     // Отзывы
     REVIEWS: '/v1/reviews', // Список отзывов
@@ -115,3 +122,13 @@ export const ENDPOINTS = {
     // Поиск
     SEARCH: '/v1/search', // Общий поиск
 };
+
+export const FONT_FAMILIES = {
+    PRIMARY: "'NAMU', serif",
+    SECONDARY: "'Raleway', sans-serif",
+};
+export const FONT_LINKS = [
+    "https://fonts.googleapis.com/css2?family=Monomakh&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap"
+];
+
+export const preferredCountries = ["Україна", "Італія", "Франція", "Мексика", "США", "Німеччина", "Грузія", "Туреччина", "Китай", "Японія", "Азія", "Індія"];

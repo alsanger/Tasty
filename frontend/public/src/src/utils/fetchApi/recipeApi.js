@@ -13,8 +13,11 @@ export const getRecipeById = async (recipeId) => {
 };
 
 // Создание рецептов
-export const createRecipe = async (recipeData) => {
+/*export const createRecipe = async (recipeData) => {
     return post(ENDPOINTS.CREATE_RECIPE, recipeData);
+};*/
+export const createRecipe = async (recipeData) => {
+    return post(ENDPOINTS.CREATE_RECIPE, recipeData, true);
 };
 
 // Обновление рецептов

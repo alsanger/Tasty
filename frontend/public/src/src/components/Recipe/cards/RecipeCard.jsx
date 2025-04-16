@@ -6,7 +6,7 @@ import './RecipeCard.scss';
 import { BASE_URL } from "../../../utils/constants.js";
 import { useNavigate } from "react-router-dom";
 import { useUser } from '../../../contexts/UserContext.jsx';
-import { createLike, deleteLike } from '../../../utils/fetchApi/likeApi.js';
+import { useRecipeLikes } from '../../../hooks/useRecipeLikes.jsx';
 
 const RecipeCard = ({
                         recipe,
@@ -18,23 +18,7 @@ const RecipeCard = ({
                     }) => {
     const navigate = useNavigate();
     const { user, isAuthenticated } = useUser();
-    const [isFavorite, setIsFavorite] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
-    const [likeId, setLikeId] = useState(null);
-
-    // Проверяем, лайкнул ли текущий пользователь рецепт и сохраняем ID лайка
-    useEffect(() => {
-        if (recipe?.likes && user) {
-            const userLike = recipe.likes.find(like => like.user_id === user.id);
-            if (userLike) {
-                setIsFavorite(true);
-                setLikeId(userLike.id);
-            } else {
-                setIsFavorite(false);
-                setLikeId(null);
-            }
-        }
-    }, [recipe, user]);
+    const { isFavorite, isLoading, toggleLike } = useRecipeLikes(recipe, onLikeChange);
 
     const handleClick = () => {
         if (onClick && recipe) {
@@ -48,47 +32,8 @@ const RecipeCard = ({
         }
     };
 
-    const handleFavoriteClick = async (e) => {
-        e.stopPropagation(); // Предотвращаем срабатывание onClick всей карточки
-
-        // Если пользователь не авторизован, выходим из функции
-        if (!isAuthenticated || !user) {
-            // Можно добавить редирект на страницу логина или показать сообщение
-            return;
-        }
-
-        setIsLoading(true);
-
-        try {
-            if (isFavorite && likeId) {
-                // Удаляем лайк, используя сохраненный ID лайка
-                await deleteLike(likeId);
-                setLikeId(null);
-            } else {
-                // Добавляем лайк
-                const likeData = {
-                    recipe_id: recipe.id,
-                    user_id: user.id
-                };
-                const response = await createLike(likeData);
-
-                // Предполагаем, что ответ содержит ID созданного лайка
-                if (response && response.id) {
-                    setLikeId(response.id);
-                }
-            }
-
-            // Обновляем состояние после успешного запроса
-            setIsFavorite(!isFavorite);
-
-            // Вызываем колбэк для обновления родительского компонента, если он предоставлен
-            onLikeChange(recipe.id, !isFavorite);
-
-        } catch (error) {
-            console.error('Ошибка при обработке лайка:', error);
-        } finally {
-            setIsLoading(false);
-        }
+    const handleFavoriteClick = (e) => {
+        toggleLike(e);
     };
 
     return (

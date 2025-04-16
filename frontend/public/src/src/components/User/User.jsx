@@ -12,9 +12,9 @@ const User = ({ user, onClick }) => {
 
     const handleClick = () => {
         if (onClick) {
-            onClick(user.id);
+            onClick(user?.id);
         } else {
-            console.log(`Clicked on user: ${user.display_name} (ID: ${user.id})`);
+            console.log(`Clicked on user: ${user?.display_name} (ID: ${user?.id})`);
         }
     };
 

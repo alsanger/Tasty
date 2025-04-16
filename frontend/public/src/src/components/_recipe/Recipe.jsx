@@ -1,6 +1,6 @@
 // Файл components/Recipe/Recipe.jsx
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Container, Row, Col, Image, Spinner } from 'react-bootstrap';
 import { IoHeart, IoHeartOutline } from 'react-icons/io5';
 import { LuMessageSquareMore } from 'react-icons/lu';
@@ -9,49 +9,184 @@ import './Recipe.scss';
 import { FaRegStar, FaStar, FaStarHalfAlt } from "react-icons/fa";
 import Reviews from "../Reviews/Reviews.jsx";
 import { getRecipeById } from '../../utils/fetchApi/recipeApi.js';
+import Button from "../_common/Button/Button.jsx";
+import { useUser } from "../../contexts/UserContext.jsx";
+import { updateCookingPlan, getUserCookingPlans } from '../../utils/fetchApi/cookingPlanApi.js';
+import { useRecipeLikes } from '../../hooks/useRecipeLikes.jsx';
 
 const Recipe = () => {
     const location = useLocation();
     const [recipe, setRecipe] = useState(location.state?.recipe || null);
-    const [isFavorite, setIsFavorite] = useState(false);
+    const [isAddingToPlan, setIsAddingToPlan] = useState(false);
+    const [isInPlan, setIsInPlan] = useState(false);
+    const [userPlan, setUserPlan] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
+    const { user, isAuthenticated } = useUser();
+    const navigate = useNavigate();
 
-    // Проверка наличия данных о рецепте
-    if (!recipe) {
-        return <p>No recipe data available!</p>;
-    }
+    // Загрузка рецепта если его нет в состоянии
+    useEffect(() => {
+        if (!recipe && location.pathname.includes('/recipe/')) {
+            const recipeId = location.pathname.split('/').pop();
+            if (recipeId) {
+                setIsLoading(true);
+                getRecipeById(recipeId)
+                    .then(response => {
+                        setRecipe(response.data);
+                    })
+                    .catch(error => {
+                        console.error('Ошибка при загрузке рецепта:', error);
+                    })
+                    .finally(() => {
+                        setIsLoading(false);
+                    });
+            }
+        }
+    }, [location, recipe]);
 
-    // Функция для обработки клика по кнопке "избранное"
-    const handleFavoriteClick = () => {
-        setIsFavorite(!isFavorite);
-    };
-
-    // Функция для обновления данных рецепта
+    // Обновление данных рецепта
     const updateRecipeData = async () => {
+        if (!recipe?.id) return null;
+
         setIsLoading(true);
         try {
             const response = await getRecipeById(recipe.id);
             setRecipe(response.data);
+            return response.data;
         } catch (error) {
             console.error('Ошибка при обновлении данных рецепта:', error);
+            return null;
         } finally {
             setIsLoading(false);
         }
     };
 
-    // Функция для форматирования числового значения (удаления лишних нулей)
+    // Колбэк для обновления после изменения лайка
+    const handleLikeChange = async () => {
+        console.log(`Лайк изменен для рецепта ${recipe?.id}`);
+        // Здесь не вызываем updateRecipeData, так как обновление состояния
+        // уже происходит оптимистично в хуке useRecipeLikes
+    };
+
+    // Используем хук для управления лайками
+    const { isFavorite, isLoading: isLikeLoading, toggleLike } = useRecipeLikes(recipe, handleLikeChange);
+
+    // Проверка наличия плана пользователя
+    useEffect(() => {
+        if (isAuthenticated && user?.id && recipe?.id) {
+            checkIfRecipeInPlan();
+        }
+    }, [isAuthenticated, user, recipe]);
+
+    if (!recipe && isLoading) {
+        return (
+            <div className="text-center my-5">
+                <Spinner animation="border" role="status">
+                    <span className="visually-hidden">Загрузка...</span>
+                </Spinner>
+            </div>
+        );
+    }
+
+    if (!recipe) {
+        return <p>Рецепт не найден!</p>;
+    }
+
+    // Функция для проверки, находится ли рецепт в плане приготовления
+    const checkIfRecipeInPlan = async () => {
+        try {
+            const response = await getUserCookingPlans(user.id);
+
+            if (response.data && response.data.length > 0) {
+                const plan = response.data[0];
+                setUserPlan(plan);
+
+                const recipeInPlan = plan.recipes?.some(item => item.id === recipe.id);
+                setIsInPlan(recipeInPlan);
+            } else {
+                setUserPlan(null);
+                setIsInPlan(false);
+            }
+        } catch (error) {
+            console.error('Ошибка при получении планов пользователя:', error);
+        }
+    };
+
+    // Обработчик клика по кнопке лайка
+    const handleFavoriteClick = (e) => {
+        e.stopPropagation(); // Предотвращаем всплытие события
+        toggleLike(e);
+    };
+
+    // Обработчик клика по автору
+    const handleAuthorClick = () => {
+        navigate(`/profile/${recipe.user.id}`, {
+            state: { user },
+        });
+    };
+
+    // Функция для обработки добавления рецепта в план приготовления
+    const handleAddToPlanClick = async () => {
+        // Проверяем, авторизован ли пользователь
+        if (!isAuthenticated || !user?.id) {
+            console.error('Пользователь не авторизован');
+            return;
+        }
+        // Проверяем, если уже в плане — ничего не делаем
+        if (isInPlan) return;
+
+        setIsAddingToPlan(true);
+
+        try {
+            // Проверяем наличие плана
+            if (!userPlan) {
+                console.error('Отсутствует план пользователя');
+                return;
+            }
+
+            // Получаем список существующих рецептов
+            const existingRecipes = userPlan.recipes || [];
+
+            // Формируем массив для отправки на сервер
+            const recipesToUpdate = [
+                ...existingRecipes.map(item => ({ recipe_id: item.id })),
+                { recipe_id: recipe.id } // Добавляем новый рецепт
+            ];
+
+            // Формируем данные для запроса с сохранением всех рецептов
+            const planData = {
+                user_id: user.id,
+                recipes: recipesToUpdate
+            };
+
+            // Отправляем запрос на обновление плана
+            const response = await updateCookingPlan(userPlan.id, planData);
+
+            // Обновляем состояние - рецепт теперь в плане
+            setIsInPlan(true);
+
+            // Обновляем план в состоянии
+            await checkIfRecipeInPlan();
+
+        } catch (error) {
+            console.error('Ошибка при добавлении рецепта в план:', error);
+            if (error.response) {
+                console.error('Данные ответа:', error.response.data);
+                console.error('Статус:', error.response.status);
+            }
+        } finally {
+            setIsAddingToPlan(false);
+        }
+    };
+
+    // Функция для форматирования числового значения
     const formatQuantity = (quantity) => {
         if (quantity === undefined || quantity === null) return '';
 
-        // Преобразуем в число
         const num = parseFloat(quantity);
-
-        // Проверяем, является ли число целым
         if (Number.isInteger(num)) {
             return num.toString();
         }
-
-        // Удаляем лишние нули после запятой
         return num.toString().replace(/\.?0+$/, '');
     };
 
@@ -130,8 +265,13 @@ const Recipe = () => {
                             className="favorite-btn"
                             onClick={handleFavoriteClick}
                         >
-                            {isFavorite ? <IoHeart className="heart-icon filled"/> :
-                                <IoHeartOutline className="heart-icon"/>}
+                            {isLikeLoading ? (
+                                <Spinner animation="border" size="sm" />
+                            ) : (
+                                isFavorite ?
+                                    <IoHeart className="heart-icon filled"/> :
+                                    <IoHeartOutline className="heart-icon"/>
+                            )}
                         </button>
                     </div>
 
@@ -176,11 +316,17 @@ const Recipe = () => {
                         </ul>
 
                         <div className="recipe-meta">
+                            <p className="author-label">
+                                Автор рецепту:{' '}
+                                <span className="author-name" onClick={handleAuthorClick}>
+                                {recipe.user.display_name}
+                            </span>
+                            </p>
                             <p className="recipe-time">
-                                Час приготування: {recipe.time} хв.
+                                Час приготування: <span>{recipe.time} хв.</span>
                             </p>
                             <p className="recipe-calories">
-                                Калорійність (на 100 гр. продукту): {caloriesPer100g} ккал.
+                                Калорійність (на 100 гр. продукту): <span>{caloriesPer100g} ккал.</span>
                             </p>
                             <div className="recipe-rating">
                                 <span className="review-count">{recipe.reviews.length}</span>
@@ -190,6 +336,24 @@ const Recipe = () => {
                                 </span>
                             </div>
                         </div>
+
+                        {/* Кнопка добавления в план - показываем только для авторизованных пользователей */}
+                        {isAuthenticated && user && (
+                            <div className="add-to-plan-button">
+                                {isAddingToPlan ? (
+                                    <Spinner animation="border" size="sm" role="status">
+                                        <span className="visually-hidden">Загрузка...</span>
+                                    </Spinner>
+                                ) : (
+                                    <Button
+                                        text={isInPlan ? "Заплановано до приготування" : "Запланувати приготування"}
+                                        onClick={handleAddToPlanClick}
+                                        isActive={!isInPlan} // isActive=true если рецепта еще нет в плане
+                                        size="sm"
+                                    />
+                                )}
+                            </div>
+                        )}
                     </div>
                 </Col>
             </Row>

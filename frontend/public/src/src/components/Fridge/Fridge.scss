@@ -1,0 +1,40 @@
+// Файл components/Fridge/Fridge.scss
+@use '../../styles/variables' as *;
+
+.fridge-page {
+  padding: 20px 0;
+
+  .fridge-title {
+    text-align: center;
+    margin-bottom: 30px;
+    color: $text-color;
+    font-weight: 600;
+    font-size: 18px;
+  }
+
+  .fridge-content {
+    min-height: calc(100vh - 150px);
+  }
+
+  .fridge-left-panel,
+  .fridge-right-panel {
+    padding: 0 15px 15px 15px;
+
+    .panel-container {
+      background-color: white;
+      padding: 20px;
+      height: 100%;
+
+      .placeholder-text {
+        color: $placeholder-color;
+        font-style: italic;
+        text-align: center;
+        margin-top: 50px;
+      }
+    }
+  }
+
+  .fridge-right-panel {
+    padding: 0;
+  }
+}

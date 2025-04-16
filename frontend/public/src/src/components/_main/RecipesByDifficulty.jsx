@@ -1,9 +1,14 @@
 import React from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import RecipeCardById from "../Recipe/cards/byId/RecipeCardById.jsx";
+import {useNavigate} from "react-router-dom";
 
 const RecipesByDifficulty = () => {
-    // Функция для обработки клика
+    const navigate = useNavigate();
+    const handleDifficultyClick = (difficulty_min, difficulty_max, e) => {
+        e?.stopPropagation(); // Опционально, если нужно предотвратить всплытие
+        navigate(`/recipes?difficulty_min=${difficulty_min}&difficulty_max=${difficulty_max}`);
+    };
 
     return (
         <Container fluid className="mt-5">
@@ -13,7 +18,7 @@ const RecipesByDifficulty = () => {
                     <RecipeCardById
                         recipeId={20}
                         showAuthor={false}
-                        /*onClick={handleRecipeClick}*/
+                        onClick={() => handleDifficultyClick(1, 3)}
                         name={"Швидкі страви для кожного"}
                     />
                 </Col>
@@ -22,7 +27,7 @@ const RecipesByDifficulty = () => {
                     <RecipeCardById
                         recipeId={18}
                         showAuthor={false}
-                        /*onClick={handleRecipeClick}*/
+                        onClick={() => handleDifficultyClick(4, 6)}
                         name={"Трішки складніше - ще смачніше"}
                     />
                 </Col>
@@ -31,7 +36,7 @@ const RecipesByDifficulty = () => {
                     <RecipeCardById
                         recipeId={15}
                         showAuthor={false}
-                        /*onClick={handleRecipeClick}*/
+                        onClick={() => handleDifficultyClick(7, 10)}
                         name={"Випробуй свої кулінарні навички"}
                     />
                 </Col>

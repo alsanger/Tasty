@@ -13,6 +13,10 @@ import Main from "./components/_main/Main";
 import CountryButtonsNavigation from "./components/CountryButtonsNavigation/CountryButtonsNavigation.jsx";
 import RecipesPage from "./components/_recipesPage/RecipesPage.jsx";
 import ProfilePage from "./components/_profilePage/ProfilePage.jsx";
+import AddRecipe from "./components/Recipe/AddRecipe/AddRecipe.jsx";
+import Fridge from "./components/Fridge/Fridge.jsx";
+import {ModalProvider} from "./contexts/ModalContext.jsx";
+import {RecipesProvider} from "./contexts/RecipesContext.jsx";
 
 // Компонент-обертка для условного отображения CountryButtonsNavigation
 const AppContent = () => {
@@ -35,7 +39,9 @@ const AppContent = () => {
                     <Route exact path="/" element={<Main/>}/> {/* Главная страница */}
                     <Route path="/recipe/:id" element={<Recipe/>}/> {/* Страница рецепта */}
                     <Route path="/recipes" element={<RecipesPage/>}/> {/* Страница с рецептами */}
-                    <Route path="/profile-page/:id" element={<ProfilePage/>}/> {/* Страница профиля пользователя */}
+                    <Route path="/profile/:id" element={<ProfilePage/>}/> {/* Страница профиля пользователя */}
+                    <Route path="/add-recipe" element={<AddRecipe/>}/> {/* Страница добавления рецепта */}
+                    <Route path="/fridge" element={<Fridge/>}/> {/* Страница "Холодильник" */}
                 </Routes>
             </div>
             <Footer/>
@@ -47,7 +53,11 @@ function App() {
     return (
         <BrowserRouter>
             <UserProvider>
-                <AppContent />
+                <ModalProvider>
+                    <RecipesProvider>
+                        <AppContent/>
+                    </RecipesProvider>
+                </ModalProvider>
             </UserProvider>
         </BrowserRouter>
     );

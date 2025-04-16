@@ -8,8 +8,8 @@ import { useUser } from '../../../contexts/UserContext';
 import './UserProfileRecipes.scss';
 
 const UserProfileRecipes = ({ userData, currentUserId }) => {
-    const isOwnProfile = userData?.id === currentUserId;
-
+    const {user, isAuthenticated} = useUser();
+    const isOwnProfile = isAuthenticated && userData?.id === currentUserId;
     const [activeTab, setActiveTab] = useState('publications');
     const [recipes, setRecipes] = useState([]);
     const [loading, setLoading] = useState(true);

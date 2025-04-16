@@ -1,5 +1,4 @@
-import React, {useEffect, useState} from 'react';
-import CountryButtonsNavigation from "../CountryButtonsNavigation/CountryButtonsNavigation.jsx";
+import React from 'react';
 import './Main.scss';
 import CategoryCarousel from "../Сategory/CategoryCarousel.jsx";
 import ImageUploader from "../_common/ImageUploader/index.js";
@@ -29,7 +28,7 @@ const Main = () => {
 
             <ImageUploader
                 endpoint={ENDPOINTS.IMAGE.UPLOAD_USER_AVATAR}
-                id={user.id}
+                id={user?.id}
                 button={{ text: 'Загрузить аватар' }}
             />
             <ImageUploader

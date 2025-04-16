@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "rc-slider": "^11.1.8"
+    "rc-slider": "^11.1.8",
+    "react-toastify": "^11.0.5"
   }
 }

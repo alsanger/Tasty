@@ -62,7 +62,7 @@
 }
 
 .recipe-description {
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
   line-height: 1.6;
   font-size: 1rem;
 }
@@ -102,8 +102,25 @@
 
 // Метаинформация про рецепт
 .recipe-meta {
-  .recipe-time, .recipe-calories {
+  font-weight: 500;
+
+  .author-label {
+    .author-name {
+      color: $primary-color;
+      cursor: pointer;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .author-label, .recipe-time, .recipe-calories {
     margin-bottom: 0.5rem;
+
+    span {
+      font-weight: 400;
+    }
   }
 
   .recipe-rating {
@@ -128,6 +145,10 @@
       }
     }
   }
+}
+
+.add-to-plan-button {
+  margin-top: 20px;
 }
 
 // Стили для компонента шагов рецепта

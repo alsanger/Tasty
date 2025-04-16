@@ -1,0 +1,131 @@
+// Файл components/Recipe/cards/RecipeCardToList.scss
+@use '../../../styles/variables' as *;
+
+.recipe-card-to-list-container {
+  .recipe-card-to-list {
+    width: 100%;
+    height: 100%;
+    border: none;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    transition: transform 0.2s ease;
+    //box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+
+    &:hover {
+      transform: scale(1.02);
+    }
+
+    // Контейнер для изображения
+    .recipe-image-container {
+      width: 130px;
+      height: 100%;
+      flex-shrink: 0;
+
+      .recipe-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+      }
+    }
+
+    // Блок с информацией о рецепте
+    .recipe-details {
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+      justify-content: space-between;
+
+      // Название рецепта
+      .recipe-name {
+        margin-bottom: 6px;
+        font-size: 18px;
+        font-weight: 600;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      // Информация об ингредиентах
+      .recipe-ingredients {
+        font-size: 14px;
+        margin-bottom: 8px;
+
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        &.all-available {
+          color: #2E8B57; // Зеленый цвет для доступных ингредиентов
+          font-weight: 500;
+        }
+
+        &.missing {
+          color: #667;
+
+          &::first-line {
+            color: #667;
+            font-weight: normal;
+          }
+
+          .missing-ingredients {
+            color: #dc3545;  // Красный цвет для текста после "не вистачає:"
+          }
+        }
+      }
+
+      // Нижняя часть карточки с временем и рейтингом
+      .recipe-footer {
+        margin-top: auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        // Блок с временем приготовления
+        .recipe-time {
+          display: flex;
+          align-items: center;
+          font-size: 14px;
+          color: #666;
+
+          .time-icon {
+            margin-right: 4px;
+            font-size: 16px;
+          }
+        }
+
+        // Блок с рейтингом
+        .recipe-rating {
+          display: flex;
+          align-items: center;
+
+          .stars {
+            display: flex;
+            margin-right: 4px;
+
+            .star-filled {
+              color: #FFD700; // Золотой цвет для заполненных звезд
+              font-size: 14px;
+            }
+
+            .star-empty {
+              color: #D3D3D3; // Светло-серый цвет для пустых звезд
+              font-size: 14px;
+            }
+          }
+
+          .reviews-count {
+            font-size: 14px;
+            color: #666;
+          }
+        }
+      }
+    }
+  }
+}

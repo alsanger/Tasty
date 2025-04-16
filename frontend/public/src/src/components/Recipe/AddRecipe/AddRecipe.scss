@@ -1,0 +1,144 @@
+// Файл src/components/recipe/AddRecipe.scss
+@use '../../../styles/variables.scss' as *;
+
+.add-recipe-container {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+
+  h2 {
+    margin-bottom: 1.5rem;
+    color: $text-color;
+  }
+
+  .form-control, .form-select {
+    @include form-control-base;
+  }
+
+  textarea.form-control {
+    min-height: 120px;
+  }
+
+  /* Стили для группы кнопок */
+  .button-group {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+
+    > * {
+      width: 180px;
+      flex: 0 0 auto;
+      min-width: 0;
+    }
+  }
+
+  /* Стили для Bootstrap кнопки отправки */
+  .submit-btn {
+    background-color: $primary-color;
+    border-color: $primary-color;
+    padding: 0.375rem 0.75rem;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background-color: #07BE6FFF;
+      border-color: #07BE6FFF;
+    }
+
+    &:active {
+      background-color: #068C53FF;
+      border-color: #068C53FF;
+    }
+
+    &:disabled {
+      opacity: 0.65;
+    }
+  }
+
+  .time-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+
+    .form-control {
+      padding-right: 40px;
+      appearance: textfield;
+      -moz-appearance: textfield;
+
+      &::-webkit-outer-spin-button,
+      &::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+    }
+
+    .time-suffix {
+      position: absolute;
+      right: 12px;
+      color: $placeholder-color;
+    }
+  }
+
+  .ingredient-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.75rem;
+
+    .ingredient-select {
+      flex: 1;
+      margin-right: 10px;
+    }
+
+    .ingredient-quantity {
+      width: 100px;
+      margin-right: 10px;
+      appearance: textfield;
+      -moz-appearance: textfield;
+
+      &::-webkit-outer-spin-button,
+      &::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+    }
+
+    .remove-ingredient-btn {
+      color: #dc3545;
+      padding: 0;
+
+      &:hover {
+        color: #AF2A37FF;
+      }
+    }
+  }
+
+  .recipe-image-wrapper {
+    width: 100%;
+    height: 200px;
+    border: 1px solid $border-color;
+    border-radius: 8px;
+    overflow: hidden;
+
+    .recipe-image-label {
+      display: block;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+
+      .recipe-image-placeholder {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #f8f9fa;
+        color: $placeholder-color;
+      }
+
+      .recipe-image-preview {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+  }
+}

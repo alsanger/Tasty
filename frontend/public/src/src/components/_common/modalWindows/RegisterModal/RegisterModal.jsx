@@ -1,15 +1,17 @@
 import {useState} from 'react';
-import {userApi} from '../../../utils/fetchApi/index.js';
+import {userApi} from '../../../../utils/fetchApi/index.js';
 import {Modal, Form, Spinner} from 'react-bootstrap';
-import Input from '../../_common/Input/Input.jsx';
-import Button from '../../_common/Button/Button.jsx';
+import Input from '../../Input/Input.jsx';
+import Button from '../../Button/Button.jsx';
 import './RegisterModal.scss';
-import logo from '../../../assets/images/logo.svg';
-import {useUser} from "../../../contexts/UserContext.jsx";
+import logo from '../../../../assets/images/logo.svg';
+import {useUser} from "../../../../contexts/UserContext.jsx";
 import {validateRegisterForm} from "./RegisterModalValidation.js";
+import {useModal} from "../../../../contexts/ModalContext.jsx";
 
-const RegisterModal = ({show, onHide, onShowLogin}) => {
+const RegisterModal = ({show, onHide}) => {
     const {login} = useUser();
+    const { showModal } = useModal();
 
     const [formData, setFormData] = useState({
         display_name: '',
@@ -32,62 +34,17 @@ const RegisterModal = ({show, onHide, onShowLogin}) => {
         }));
     };
 
+    const handleLoginClick = () => {
+        onHide(); // Закрываем текущее модальное окно
+        showModal('login'); // Открываем модальное окно входа
+    };
+
     const validateForm = () => {
         const { isValid, errors: newErrors } = validateRegisterForm(formData);
         setErrors(newErrors);
         return isValid;
     };
 
-    /*const handleSubmit = async (e) => {
-        e.preventDefault();
-
-        if (!validateForm()) {
-            return;
-        }
-
-        setLoading(true);
-        try {
-            console.log("start")
-            const response = await userApi.register(formData);
-
-            console.log("end")
-            console.log(response.data)
-
-                //if (response.data) {
-                //await login(response.data);
-                //setErrors({});
-                //window.location.href = '/?registration=success';
-            //} else {
-                //throw new Error('Неверный формат ответа от сервера');
-            //}
-
-
-        } catch (err) {
-            console.error("Ошибка при регистрации:", err);
-
-            if (err.response?.data) {
-                const { message, errors } = err.response.data;
-
-                const serverErrors = {};
-                if (message) {
-                    serverErrors.general = message; // Общее сообщение об ошибке
-                }
-                if (errors) {
-                    Object.entries(errors).forEach(([key, messages]) => {
-                        serverErrors[key] = Array.isArray(messages) ? messages.join('. ') : messages;
-                    });
-                }
-
-                setErrors(serverErrors); // Устанавливаем ошибки в состояние
-            } else {
-                setErrors({
-                    general: "Помилка з'єднання з сервером. Спробуйте пізніше."
-                });
-            }
-        } finally {
-            setLoading(false);
-        }
-    };*/
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -279,10 +236,7 @@ const RegisterModal = ({show, onHide, onShowLogin}) => {
                     <span>Вже маєте аккаунт?</span>
                     <button
                         className="login-link"
-                        onClick={() => {
-                            handleClose();
-                            onShowLogin();
-                        }}
+                        onClick={handleLoginClick}
                     >
                         Увійдіть!
                     </button>

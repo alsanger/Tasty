@@ -1,3 +1,4 @@
+// Файл components/_common/SearchBar/SearchBar.jsx
 import { useState } from 'react';
 import { Form, InputGroup, Button } from 'react-bootstrap';
 import { FaSearch } from 'react-icons/fa';

@@ -1,4 +1,4 @@
-// categoryApi.js
+// Файл utils/fetchApi/categoryApi.js
 import { get, post, put, remove } from './baseApi.js';
 import { ENDPOINTS } from '../constants.js';
 

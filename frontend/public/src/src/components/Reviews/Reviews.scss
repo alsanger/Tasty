@@ -1,5 +1,5 @@
 // Файл components/Reviews/Reviews.scss
-@import '../../styles/variables.scss';
+@use '../../styles/variables.scss' as *;
 
 .reviews-container {
   width: 100%;
