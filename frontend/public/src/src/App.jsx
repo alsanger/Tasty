@@ -17,6 +17,7 @@ import AddRecipe from "./components/Recipe/AddRecipe/AddRecipe.jsx";
 import Fridge from "./components/Fridge/Fridge.jsx";
 import {ModalProvider} from "./contexts/ModalContext.jsx";
 import {RecipesProvider} from "./contexts/RecipesContext.jsx";
+import EditProfile from "./components/_profilePage/EditProfile/EditProfile.jsx";
 
 // Компонент-обертка для условного отображения CountryButtonsNavigation
 const AppContent = () => {
@@ -40,6 +41,7 @@ const AppContent = () => {
                     <Route path="/recipe/:id" element={<Recipe/>}/> {/* Страница рецепта */}
                     <Route path="/recipes" element={<RecipesPage/>}/> {/* Страница с рецептами */}
                     <Route path="/profile/:id" element={<ProfilePage/>}/> {/* Страница профиля пользователя */}
+                    <Route path="/edit-profile" element={<EditProfile/>}/> {/* Страница редактирования профиля пользователя */}
                     <Route path="/add-recipe" element={<AddRecipe/>}/> {/* Страница добавления рецепта */}
                     <Route path="/fridge" element={<Fridge/>}/> {/* Страница "Холодильник" */}
                 </Routes>

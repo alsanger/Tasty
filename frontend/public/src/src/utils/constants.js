@@ -8,6 +8,8 @@ export const ENDPOINTS = {
     REGISTER: '/v1/users',
     USERS: '/v1/users',
     USER_DETAIL: (id) => `/v1/users/${id}`,
+    USER_UPDATE: (id) => `/v1/users/${id}`,
+    USER_DELETE: (id) => `/v1/users/${id}`,
     USER_ROLES: (id) => `/v1/roles/${id}`,
     USER_FOLLOWERS: (id) => `/v1/users/${id}/followers`,
     USER_FOLLOWING: (id) => `/v1/users/${id}/following`,

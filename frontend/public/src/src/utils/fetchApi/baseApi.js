@@ -44,32 +44,6 @@ export const get = async (endpoint, params = {}) => {
 };
 
 // POST запрос
-/*export const post = async (endpoint, data, isFormData = false) => {
-    try {
-        const headers = isFormData ? getHeaders(undefined) : getHeaders();
-        const body = isFormData ? data : JSON.stringify(data);
-
-        const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-            method: 'POST',
-            headers: headers,
-            body: body,
-        });
-        console.log('POST', response);
-
-        const responseData = await response.json();
-        // console.log('POST data', responseData);
-
-        if (!response.ok) {
-            throw new Error(responseData.message || `Ошибка: ${response.status}`);
-        }
-
-        return responseData;
-    } catch (error) {
-        console.error('Ошибка при выполнении POST-запроса:', error);
-        throw error;
-    }
-};*/
-// POST запрос
 export const post = async (endpoint, data, isFormData = false) => {
     try {
         let headers = {};

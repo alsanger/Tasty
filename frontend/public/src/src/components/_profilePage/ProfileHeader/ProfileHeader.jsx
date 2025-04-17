@@ -10,9 +10,10 @@ import {BASE_URL} from "../../../utils/constants.js";
 import {followUser, unfollowUser} from '../../../utils/fetchApi/followerApi';
 import {logout} from "../../../utils/fetchApi/userApi.js";
 import {useUser} from "../../../contexts/UserContext.jsx";
+import { useNavigate } from 'react-router-dom';
 
 const ProfileHeader = ({userData, currentUserId}) => {
-
+    const navigate = useNavigate();
     const {user, isAuthenticated} = useUser();
     // Проверяем, свой ли профиль просматривает пользователь
     const isOwnProfile = userData.id === currentUserId;
@@ -38,7 +39,7 @@ const ProfileHeader = ({userData, currentUserId}) => {
     const handleButtonClick = async () => {
         if (isOwnProfile) {
             console.log('Редактирование профиля');
-            // Здесь будет редирект на страницу редактирования профиля
+            navigate(`/edit-profile`);
         } else {
             try {
                 if (isFollowing) {

@@ -59,7 +59,8 @@ class ImageUploadController extends Controller
         $user->avatar_url = "/storage/$imageUrl";
         $user->save();
 
-        return response()->json(['image_url' => $imageUrl]);
+        return response()->json(['image_url' => "/storage/$imageUrl"]);
+        //return response()->json(['image_url' => $imageUrl]);
     }
 
     // Загрузка изображения категории
@@ -86,7 +87,8 @@ class ImageUploadController extends Controller
             $category->save();
         }
 
-        return response()->json(['image_url' => $imageUrl]);
+        return response()->json(['image_url' => "/storage/$imageUrl"]);
+        //return response()->json(['image_url' => $imageUrl]);
     }
 
     // Загрузка основного изображения рецепта
@@ -116,7 +118,8 @@ class ImageUploadController extends Controller
         $recipe->image_url = "/storage/$imageUrl";
         $recipe->save();
 
-        return response()->json(['image_url' => $imageUrl]);
+        return response()->json(['image_url' => "/storage/$imageUrl"]);
+        //return response()->json(['image_url' => $imageUrl]);
     }
 
     // Загрузка изображения шага рецепта
@@ -160,7 +163,8 @@ class ImageUploadController extends Controller
         $recipeStep->image_url = "/storage/$imageUrl";
         $recipeStep->save();
 
-        return response()->json(['image_url' => $imageUrl]);
+        return response()->json(['image_url' => "/storage/$imageUrl"]);
+        //return response()->json(['image_url' => $imageUrl]);
     }
 
 

@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Storage;
 
 class ImageUploadService
 {
-    public function saveImage(UploadedFile $file, string $path): ?string
+    /*public function saveImage(UploadedFile $file, string $path): ?string
     {
         try {
             $directory = dirname($path);
@@ -21,6 +21,40 @@ class ImageUploadService
                 Storage::disk('public')->delete($path);
             }
 
+            $file->storeAs($path);
+
+            return $path;
+        } catch (\Exception $e) {
+            Log::error('Ошибка при сохранении изображения: ' . $e->getMessage());
+            return null;
+        }
+    }*/
+    public function saveImage(UploadedFile $file, string $path): ?string
+    {
+        try {
+            $directory = dirname($path);
+            $filename = basename($path);
+            $filenameWithoutExt = pathinfo($filename, PATHINFO_FILENAME);
+
+            // Создаем директорию, если она не существует
+            if (!Storage::disk('public')->exists($directory)) {
+                Storage::disk('public')->makeDirectory($directory);
+            }
+
+            // Удаляем все существующие файлы с таким же именем, но возможно разными расширениями
+            $existingFiles = Storage::disk('public')->files($directory);
+            foreach ($existingFiles as $existingFile) {
+                $existingFilename = basename($existingFile);
+                $existingFilenameWithoutExt = pathinfo($existingFilename, PATHINFO_FILENAME);
+
+                if ($existingFilenameWithoutExt === $filenameWithoutExt) {
+                    Log::info("Удаляем существующий файл: {$existingFile}");
+                    Storage::disk('public')->delete($existingFile);
+                }
+            }
+
+            // Сохраняем новый файл
+            //$file->storeAs('public/' . $directory, $filename);
             $file->storeAs($path);
 
             return $path;

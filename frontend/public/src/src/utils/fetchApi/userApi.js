@@ -20,12 +20,12 @@ export const getUserById = async (userId) => {
 
 // Обновление пользователя
 export const updateUser = async (userId, userData) => {
-    return put(ENDPOINTS.USER_DETAIL(userId), userData);
+    return put(ENDPOINTS.USER_UPDATE(userId), userData);
 };
 
 // Удаление пользователя
 export const deleteUser = async (userId) => {
-    return remove(ENDPOINTS.USER_DETAIL(userId));
+    return remove(ENDPOINTS.USER_DELETE(userId));
 };
 
 // Дополнительные методы, связанные с пользователем
