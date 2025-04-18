@@ -35,6 +35,36 @@
       cursor: not-allowed;
     }
 
+    .password-field, .date-field {
+      position: relative;
+
+      .password-input-container, .date-input-container {
+        position: relative;
+        display: flex;
+        align-items: center;
+      }
+
+      .password-toggle, .date-icon {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        color: $placeholder-color;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &:hover {
+          color: $primary-color;
+        }
+      }
+
+      .date-icon {
+        pointer-events: none;
+      }
+    }
+
     .text-danger {
       color: $border-error-color;
       font-size: 0.875rem;

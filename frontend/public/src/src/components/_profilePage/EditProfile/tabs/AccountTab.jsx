@@ -16,7 +16,9 @@ const AccountTab = ({
     const { logout } = useUser();
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const [passwordError, setPasswordError] = useState('');
     const [confirmPasswordError, setConfirmPasswordError] = useState('');
     const [phoneError, setPhoneError] = useState('');
     const [birthdateError, setBirthdateError] = useState('');
@@ -38,6 +40,16 @@ const AccountTab = ({
             return false;
         }
         setPasswordError('');
+        return true;
+    };
+
+    // Валидация подтверждения пароля
+    const validateConfirmPassword = (value) => {
+        if (password && value !== password) {
+            setConfirmPasswordError('Паролі не співпадають');
+            return false;
+        }
+        setConfirmPasswordError('');
         return true;
     };
 
@@ -155,6 +167,44 @@ const AccountTab = ({
                         readOnly
                         className="readonly-input"
                     />
+                </Form.Group>
+
+                <Form.Group className="mb-3 password-field">
+                    <Form.Label>Пароль</Form.Label>
+                    <div className="password-input-container">
+                        <Form.Control
+                            type={showPassword ? "text" : "password"}
+                            value={password}
+                            onChange={handlePasswordChange}
+                            placeholder="••••••••"
+                            className={passwordError ? 'error' : ''}
+                        />
+                        <div className="password-toggle" onClick={togglePasswordVisibility}>
+                            {showPassword ? <FaEyeSlash /> : <FaEye />}
+                        </div>
+                    </div>
+                    {passwordError && (
+                        <Form.Text className="text-danger">{passwordError}</Form.Text>
+                    )}
+                </Form.Group>
+
+                <Form.Group className="mb-3 password-field">
+                    <Form.Label>Підтвердження паролю</Form.Label>
+                    <div className="password-input-container">
+                        <Form.Control
+                            type={showConfirmPassword ? "text" : "password"}
+                            value={confirmPassword}
+                            onChange={handleConfirmPasswordChange}
+                            placeholder="••••••••"
+                            className={confirmPasswordError ? 'error' : ''}
+                        />
+                        <div className="password-toggle" onClick={toggleConfirmPasswordVisibility}>
+                            {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+                        </div>
+                    </div>
+                    {confirmPasswordError && (
+                        <Form.Text className="text-danger">{confirmPasswordError}</Form.Text>
+                    )}
                 </Form.Group>
 
                 <Form.Group className="mb-3">
