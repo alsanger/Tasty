@@ -1,4 +1,4 @@
-// components/_profilePage/EditProfile/tabs/BasicInfoTab.jsx
+// Файл components/_profilePage/EditProfile/tabs/BasicInfoTab.jsx
 import React, { useState, useRef } from 'react';
 import {Form, Row, Col} from 'react-bootstrap';
 import PropTypes from 'prop-types';

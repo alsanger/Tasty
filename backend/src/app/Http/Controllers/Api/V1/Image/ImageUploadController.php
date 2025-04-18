@@ -56,11 +56,10 @@ class ImageUploadController extends Controller
         }
 
         // Обновление модели пользователя (потом убрать. Возвращаем ссылку и изменения вносятся через update с учетом политик)
-        $user->avatar_url = "/storage/$imageUrl";
-        $user->save();
+        //$user->avatar_url = "/storage/$imageUrl";
+        //$user->save();
 
         return response()->json(['image_url' => "/storage/$imageUrl"]);
-        //return response()->json(['image_url' => $imageUrl]);
     }
 
     // Загрузка изображения категории

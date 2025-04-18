@@ -1,4 +1,4 @@
-// components/_profilePage/EditProfile/EditProfile.scss
+// Файл components/_profilePage/EditProfile/EditProfile.scss
 @use '../../../styles/variables.scss' as *;
 
 .edit-profile-container {
@@ -13,23 +13,24 @@
 
     .sidebar-container {
       width: 250px;
-      padding: 15px;
       background-color: #FFFFFF;
-      border-right: 1px solid $border-color; // Вертикальная разделительная линия
+      border-right: 1px solid $border-color;
 
       .nav-link {
         color: $text-color;
-        border-radius: $border-radius;
-        margin-bottom: 5px;
+        border-radius: 0;
+        //margin-bottom: 5px;
         padding: 10px 15px;
+        text-decoration: none;
 
         &.active {
           background-color: #F7F7F7;
           color: $text-color;
+          text-decoration: none;
         }
 
         &:hover:not(.active) {
-          background-color: $button-hover-color;
+          //background-color: $button-hover-color;
         }
       }
     }

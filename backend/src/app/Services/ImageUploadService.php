@@ -54,7 +54,6 @@ class ImageUploadService
             }
 
             // Сохраняем новый файл
-            //$file->storeAs('public/' . $directory, $filename);
             $file->storeAs($path);
 
             return $path;

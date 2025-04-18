@@ -1,4 +1,4 @@
-// components/_profilePage/EditProfile/EditProfile.jsx
+// Файл components/_profilePage/EditProfile/EditProfile.jsx
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Nav, Tab } from 'react-bootstrap';
 import { useUser } from '../../../contexts/UserContext';
@@ -8,9 +8,10 @@ import BasicInfoTab from './tabs/BasicInfoTab';
 import './EditProfile.scss';
 import {ENDPOINTS} from "../../../utils/constants.js";
 import {uploadImage} from "../../../utils/fetchApi/image.js";
+import AccountTab from "./tabs/AccountTab.jsx";
 
 const EditProfile = () => {
-    const { user } = useUser();
+    const { user, updateUserData } = useUser();
     const [activeKey, setActiveKey] = useState('basic');
     const [profileData, setProfileData] = useState(null);
     const [formData, setFormData] = useState({});
@@ -90,41 +91,68 @@ const EditProfile = () => {
     const handleSave = async () => {
         if (user?.id) {
             try {
-                // Валидация данных перед отправкой...
-
                 setIsLoading(true);
-
+                // Если есть новая аватарка, сначала загружаем её
                 // Если есть новая аватарка, сначала загружаем её
                 if (avatarFile) {
                     try {
-                        // Используем существующий API для загрузки аватарки
                         const response = await uploadImage(avatarFile, ENDPOINTS.IMAGE.UPLOAD_USER_AVATAR, user.id);
                         if (response && response.image_url) {
-                            // Обновляем URL аватарки в formData
-                            setFormData(prev => ({
-                                ...prev,
-                                avatar_url: response.image_url
-                            }));
+                            console.log('Получили новый адрес аватарки: ', response.image_url);
+
+                            // Напрямую используем полученный URL
+                            const updatedData = {
+                                display_name: formData.display_name,
+                                first_name: formData.first_name,
+                                last_name: formData.last_name,
+                                phone: formData.phone,
+                                address: formData.address,
+                                birthdate: formData.birthdate,
+                                avatar_url: response.image_url // Используем новый URL
+                            };
+
+                            await updateUser(user.id, updatedData);
+
+                            // Обновляем UserContext с новой аватаркой
+                            updateUserData({
+                                avatarUrl: response.image_url,
+                                // Добавьте другие поля, которые также могли измениться
+                                displayName: formData.display_name,
+                                firstName: formData.first_name,
+                                lastName: formData.last_name,
+                                phone: formData.phone,
+                                address: formData.address,
+                                birthdate: formData.birthdate
+                            });
                         }
                     } catch (uploadError) {
                         console.error('Ошибка при загрузке аватарки:', uploadError);
-                        // Можно добавить обработку ошибок загрузки
                     }
+                } else {
+                    // Если нет новой аватарки, используем текущие данные
+                    const updatedData = {
+                        display_name: formData.display_name,
+                        first_name: formData.first_name,
+                        last_name: formData.last_name,
+                        phone: formData.phone,
+                        address: formData.address,
+                        birthdate: formData.birthdate,
+                        avatar_url: formData.avatar_url
+                    };
+
+                    await updateUser(user.id, updatedData);
+
+                    // Обновляем UserContext
+                    updateUserData({
+                        avatarUrl: formData.avatar_url,
+                        displayName: formData.display_name,
+                        firstName: formData.first_name,
+                        lastName: formData.last_name,
+                        phone: formData.phone,
+                        address: formData.address,
+                        birthdate: formData.birthdate
+                    });
                 }
-
-                // Создаем объект с данными для отправки
-                const updatedData = {
-                    display_name: formData.display_name,
-                    first_name: formData.first_name,
-                    last_name: formData.last_name,
-                    phone: formData.phone,
-                    address: formData.address,
-                    birthdate: formData.birthdate,
-                    avatar_url: formData.avatar_url
-                };
-                console.log(`updatedData.avatar_url`, { avatar_url: formData.avatar_url });
-
-                await updateUser(user.id, updatedData);
 
                 // Обновляем данные профиля после успешного сохранения
                 const refreshedData = await getUserById(user.id);
@@ -188,11 +216,15 @@ const EditProfile = () => {
                                 />
                             </Tab.Pane>
                             <Tab.Pane eventKey="account">
-                                <h2>Управління аккаунтом</h2>
-                                {/* AccountTab будет добавлен позже */}
+                                <h3>Управління аккаунтом</h3>
+                                <AccountTab
+                                    formData={formData}
+                                    onInputChange={handleInputChange}
+                                    errors={errors}
+                                />
                             </Tab.Pane>
                             <Tab.Pane eventKey="privacy">
-                                <h2>Конфіденційність</h2>
+                                <h3>Конфіденційність</h3>
                                 {/* PrivacyTab будет добавлен позже */}
                             </Tab.Pane>
                         </Tab.Content>

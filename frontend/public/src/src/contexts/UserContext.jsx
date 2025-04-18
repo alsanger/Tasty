@@ -44,6 +44,15 @@ export const UserProvider = ({ children }) => {
         return user?.roles.some(role => role.name === roleName) || false;
     };
 
+    const updateUserData = (updatedUserData) => {
+        // Обновляем только предоставленные поля
+        const updatedUser = { ...user, ...updatedUserData };
+
+        // Обновляем состояние и localStorage
+        setUser(updatedUser);
+        localStorage.setItem('userData', JSON.stringify(updatedUser));
+    };
+
     return (
         <UserContext.Provider value={{
             user,
@@ -51,7 +60,8 @@ export const UserProvider = ({ children }) => {
             login,
             logout,
             isAuthenticated: !!token,
-            hasRole
+            hasRole,
+            updateUserData
         }}>
             {children}
         </UserContext.Provider>
