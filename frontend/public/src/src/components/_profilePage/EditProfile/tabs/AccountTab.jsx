@@ -7,13 +7,14 @@ import Input from '../../../_common/Input/Input';
 import Button from '../../../_common/Button/Button';
 import { useUser } from '../../../../contexts/UserContext';
 import './AccountTab.scss';
+import {deleteUser, logout} from "../../../../utils/fetchApi/userApi.js";
 
 const AccountTab = ({
                         formData,
                         onInputChange,
                         errors
                     }) => {
-    const { logout } = useUser();
+    const { user, logout } = useUser();
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const [password, setPassword] = useState('');
@@ -141,28 +142,59 @@ const AccountTab = ({
     };
 
     // Обработчик выхода из аккаунта
-    const handleLogout = () => {
-        logout();
-        window.location.href = "/";
+    const handleLogout = async () => {
+        try {
+            // 1. Выполняем выход
+            await logout();
+
+            // 2. Очищаем клиентское состояние
+            localStorage.clear(); // Очищаем localStorage (если там есть токен)
+            sessionStorage.clear(); // Аналогично для sessionStorage
+
+            // 3. Сбрасываем кеш запросов
+            if (window.queryClient) {
+                queryClient.clear();
+            }
+
+            // 4. Перенаправляем на главную
+            window.location.href = '/'; // Или '/login' если нужно
+
+        } catch (error) {
+            console.error('Ошибка при выходе:', error);
+        }
     };
 
     // Обработчик удаления аккаунта
-    const handleDeleteAccount = () => {
-        if (window.confirm('Ви впевнені, що хочете видалити свій аккаунт? Ця дія не може бути скасована.')) {
-            // Здесь будет вызов API для удаления аккаунта
-            logout();
-            window.location.href = "/";
+    const handleDeleteAccount = async () => {
+        if (window.confirm('Ви впевнені, що хочете видалити свій аккаунт?')) {
+            try {
+                // 1. Сначала удаляем аккаунт (пока токен действителен)
+                await deleteUser(user.id);
+
+                // 2. Затем выходим (отправляем POST на /logout)
+                await logout();
+
+                // 3. Дополнительная очистка
+                sessionStorage.clear();
+                if (window.queryClient) queryClient.clear();
+                window.location.href = '/';
+            } catch (error) {
+                console.error('Ошибка при удалении:', error);
+                // Показываем пользователю сообщение об ошибке
+                alert('Не вдалося видалити акаунт. Спробуйте ще раз.');
+            }
         }
     };
 
     return (
         <div className="account-tab">
+            <h3>Управління аккаунтом</h3>
             <Form className="account-info-form">
                 <Form.Group className="mb-3">
                     <Form.Label>Електронна пошта</Form.Label>
                     <Form.Control
                         type="email"
-                        value={formData.email || ''}
+                        value={user.email || ''}
                         disabled
                         readOnly
                         className="readonly-input"
@@ -239,23 +271,41 @@ const AccountTab = ({
                 </Form.Group>
 
                 <div className="section-divider">
-                    <h4>Вийти з аккаунту</h4>
-                    <p>Завершіть сеанс на цьому пристрої. Для повторного входу знадобиться ваша електронна пошта та пароль.</p>
-                    <Button
-                        text="Вийти"
-                        onClick={handleLogout}
-                        variant="default"
-                    />
+                    <Row className="align-items-center">
+                        <Col md={8}>
+                            <div>
+                                <h4>Вийти з аккаунту</h4>
+                                <p>Завершіть сеанс на цьому пристрої. Для повторного входу знадобиться ваша електронна пошта та пароль.</p>
+                            </div>
+                        </Col>
+                        <Col md={4} className="button-col">
+                            <Button
+                                text="Вийти"
+                                className="logout-button custom-button"
+                                onClick={handleLogout}
+                                variant="default"
+                            />
+                        </Col>
+                    </Row>
                 </div>
 
                 <div className="section-divider delete-account">
-                    <h4>Видалення аккаунту та данних</h4>
-                    <p>Безповоротне видалення данних та всього, що пов'язано з обліковим записом.</p>
-                    <Button
-                        text="Видалити аккаунт"
-                        onClick={handleDeleteAccount}
-                        variant="default"
-                    />
+                    <Row className="align-items-center">
+                        <Col md={8}>
+                            <div>
+                                <h4>Видалення аккаунту та данних</h4>
+                                <p>Безповоротне видалення данних та всього, що пов'язано з обліковим записом.</p>
+                            </div>
+                        </Col>
+                        <Col md={4} className="button-col">
+                            <Button
+                                text="Видалити аккаунт"
+                                className="delete-button custom-button"
+                                onClick={handleDeleteAccount}
+                                variant="default"
+                            />
+                        </Col>
+                    </Row>
                 </div>
             </Form>
         </div>

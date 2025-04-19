@@ -49,6 +49,7 @@ const BasicInfoTab = ({
 
     return (
         <div className="basic-info-tab">
+            <h3>Основна інформація</h3>
             <div className="avatar-section">
                 <div className="avatar-container">
                     {avatarUrl ? (

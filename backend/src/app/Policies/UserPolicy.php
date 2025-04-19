@@ -34,8 +34,8 @@ class UserPolicy
 
     public function delete(User $user, User $model): bool
     {
-        // Администратор может удалять любого пользователя, кроме себя
-        return $this->isAdmin($user) && $user->id !== $model->id;
+        // Пользователь может удалить только себя, а администратор любого пользователя
+        return $user->id === $model->id || $this->isAdmin($user);
     }
 
     public function follow(User $user, User $targetUser): bool

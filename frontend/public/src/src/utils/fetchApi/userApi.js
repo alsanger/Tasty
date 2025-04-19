@@ -36,8 +36,20 @@ export const login = async (credentials) => {
 
 // Выход из системы
 export const logout = async () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
+    try {
+        // Отправляем POST запрос на выход
+        await post(ENDPOINTS.LOGOUT, {});
+
+        // Очищаем локальное хранилище
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+    } catch (error) {
+        console.error('Ошибка при выходе:', error);
+        // В любом случае очищаем хранилище
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        throw error;
+    }
 };
 
 // Получение ролей пользователя

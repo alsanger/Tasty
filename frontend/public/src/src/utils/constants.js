@@ -5,6 +5,7 @@ export const API_BASE_URL = `${BASE_URL}/api`;
 export const ENDPOINTS = {
     // Аутентификация и пользователи
     LOGIN: '/v1/login',
+    LOGOUT: '/v1/logout',
     REGISTER: '/v1/users',
     USERS: '/v1/users',
     USER_DETAIL: (id) => `/v1/users/${id}`,

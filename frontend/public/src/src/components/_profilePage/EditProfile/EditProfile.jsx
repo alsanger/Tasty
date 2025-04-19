@@ -1,17 +1,18 @@
 // Файл components/_profilePage/EditProfile/EditProfile.jsx
-import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Nav, Tab } from 'react-bootstrap';
-import { useUser } from '../../../contexts/UserContext';
-import { getUserById, updateUser } from '../../../utils/fetchApi/userApi';
+import React, {useState, useEffect} from 'react';
+import {Container, Row, Col, Nav, Tab} from 'react-bootstrap';
+import {useUser} from '../../../contexts/UserContext';
+import {getUserById, updateUser} from '../../../utils/fetchApi/userApi';
 import Button from '../../_common/Button/Button';
 import BasicInfoTab from './tabs/BasicInfoTab';
 import './EditProfile.scss';
 import {ENDPOINTS} from "../../../utils/constants.js";
 import {uploadImage} from "../../../utils/fetchApi/image.js";
 import AccountTab from "./tabs/AccountTab.jsx";
+import PrivacyTab from "./tabs/PrivacyTab.jsx";
 
 const EditProfile = () => {
-    const { user, updateUserData } = useUser();
+    const {user, updateUserData} = useUser();
     const [activeKey, setActiveKey] = useState('basic');
     const [profileData, setProfileData] = useState(null);
     const [formData, setFormData] = useState({});
@@ -42,7 +43,11 @@ const EditProfile = () => {
                         address: userData.address || '',
                         birthdate: userData.birthdate || '',
                         avatar_url: userData.avatar_url || '',
-                        description: ''
+                        description: '',
+
+                        private_profile: userData.private_profile || false,
+                        comments_enabled: userData.comments_enabled || false,
+                        mentions_setting: userData.mentions_setting || 'all'
                     };
 
                     setFormData(initialFormData);
@@ -61,7 +66,7 @@ const EditProfile = () => {
     // Обработчик изменения данных формы
     const handleInputChange = (name, value) => {
         setFormData(prev => {
-            const newData = { ...prev, [name]: value };
+            const newData = {...prev, [name]: value};
             // Проверяем наличие изменений
             setHasChanges(JSON.stringify(newData) !== originalData || tempAvatarPreview !== null);
             return newData;
@@ -205,7 +210,6 @@ const EditProfile = () => {
                     <div className="content-container">
                         <Tab.Content>
                             <Tab.Pane eventKey="basic">
-                                <h3>Основна інформація</h3>
                                 <BasicInfoTab
                                     formData={formData}
                                     onInputChange={handleInputChange}
@@ -216,7 +220,6 @@ const EditProfile = () => {
                                 />
                             </Tab.Pane>
                             <Tab.Pane eventKey="account">
-                                <h3>Управління аккаунтом</h3>
                                 <AccountTab
                                     formData={formData}
                                     onInputChange={handleInputChange}
@@ -224,8 +227,11 @@ const EditProfile = () => {
                                 />
                             </Tab.Pane>
                             <Tab.Pane eventKey="privacy">
-                                <h3>Конфіденційність</h3>
-                                {/* PrivacyTab будет добавлен позже */}
+                                <PrivacyTab
+                                    formData={formData}
+                                    onInputChange={handleInputChange}
+                                    errors={errors}
+                                />
                             </Tab.Pane>
                         </Tab.Content>
                     </div>

@@ -180,15 +180,6 @@ const ProfileHeader = ({userData, currentUserId}) => {
                                     isActive={buttonIsActive}
                                 />
                             )}
-
-                            {isAuthenticated && user && isOwnProfile && (
-                            <Button
-                                className="button"
-                                text="Вийти з профілю"
-                                onClick={logoutButtonClick}
-                                isActive={false}
-                            />
-                            )}
                         </div>
                     </Col>
                 </Row>
