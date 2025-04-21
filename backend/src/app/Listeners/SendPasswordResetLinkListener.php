@@ -9,20 +9,6 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Password;
 
-/*class SendPasswordResetLinkListener implements ShouldQueue
-{
-    use InteractsWithQueue;
-
-    public $tries = 3;
-    public $timeout = 60;
-
-    public function handle(PasswordResetRequestedEvent $event)
-    {
-        Password::sendResetLink(
-            ['email' => $event->user->email]
-        );
-    }
-}*/
 
 class SendPasswordResetLinkListener implements ShouldQueue
 {

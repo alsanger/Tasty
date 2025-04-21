@@ -33,7 +33,11 @@ class StoreIngredientRequest extends FormRequest
                 'required',
                 'string',
                 'max:255',
-                'unique:ingredients,name', // Проверка на уникальность названия ингредиента
+            ],
+            'unit_weight' => [
+                'nullable',
+                'numeric',
+                'min:0', // Количество должно быть положительным или 0
             ],
             'calories' => [
                 'nullable',
@@ -42,34 +46,4 @@ class StoreIngredientRequest extends FormRequest
             ],
         ];
     }
-
-    /**
-     * Get custom attribute names for validator errors.
-     *
-     * @return array<string, string>
-     */
-    /*public function attributes(): array
-    {
-        return [
-            'unit_id' => 'единица измерения',
-            'name' => 'название',
-            'calories' => 'калории',
-        ];
-    }*/
-
-    /**
-     * Get the custom error messages for validation rules.
-     *
-     * @return array<string, string>
-     */
-    /*public function messages(): array
-    {
-        return [
-            'unit_id.exists' => 'Указанная единица измерения не существует.',
-            'name.required' => 'Название ингредиента обязательно.',
-            'name.unique' => 'Ингредиент с таким названием уже существует.',
-            'calories.numeric' => 'Количество калорий должно быть числом.',
-            'calories.min' => 'Количество калорий не может быть отрицательным.',
-        ];
-    }*/
 }

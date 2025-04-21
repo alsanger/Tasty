@@ -34,7 +34,11 @@ class UpdateIngredientRequest extends FormRequest
                 'required',
                 'string',
                 'max:255',
-                Rule::unique('ingredients', 'name')->ignore($this->route('ingredient')?->id), // Уникальность с исключением текущего ингредиента по его ID
+            ],
+            'unit_weight' => [
+                'nullable',
+                'numeric',
+                'min:0', // Количество должно быть положительным или 0
             ],
             'calories' => [
                 'nullable',

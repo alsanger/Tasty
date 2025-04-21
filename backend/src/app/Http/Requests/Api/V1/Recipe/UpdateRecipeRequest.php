@@ -59,8 +59,8 @@ class UpdateRecipeRequest extends FormRequest
             ],
             'ingredients.*.quantity' => [
                 'required',
-                'integer', // Проверка, что количество является целым числом
-                'min:1', // Минимальное количество должно быть 1
+                'numeric',
+                'min:0.01',
             ],
         ];
     }

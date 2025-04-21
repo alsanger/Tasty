@@ -121,7 +121,7 @@ const RecipesPage = () => {
                 requestData.current_user_id = user.id;
             }
 
-            requestData.per_page = 10;
+            requestData.per_page = 100;
             requestData.order_by = 'name';
             requestData.order_direction = 'asc';
 

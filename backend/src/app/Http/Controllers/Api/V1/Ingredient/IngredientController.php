@@ -9,12 +9,10 @@ use App\Http\Resources\Api\V1\Ingredient\IngredientCollection;
 use App\Http\Resources\Api\V1\Ingredient\IngredientResource;
 use App\Models\Ingredient;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
 
 class IngredientController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index(): IngredientCollection
     {
         $ingredients = Ingredient::query()
@@ -24,28 +22,20 @@ class IngredientController extends Controller
         return new IngredientCollection($ingredients);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(StoreIngredientRequest $request): IngredientResource
     {
         $this->authorize('create', Ingredient::class);
-
+Log::info($request);
         $ingredient = Ingredient::create($request->validated());
         return new IngredientResource($ingredient->load('unit'));
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Ingredient $ingredient): IngredientResource
     {
         return new IngredientResource($ingredient->load('unit'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+
     public function update(UpdateIngredientRequest $request, Ingredient $ingredient): IngredientResource
     {
         $this->authorize('update', $ingredient);
@@ -54,9 +44,6 @@ class IngredientController extends Controller
         return new IngredientResource($ingredient->load('unit'));
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Ingredient $ingredient): JsonResponse
     {
         $this->authorize('delete', $ingredient);

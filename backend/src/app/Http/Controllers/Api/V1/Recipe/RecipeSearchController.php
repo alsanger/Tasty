@@ -93,17 +93,6 @@ class RecipeSearchController extends Controller
             $query->whereRaw('LOWER(name) like ?', ['%' . strtolower($request->name) . '%']);
         }
 
-        /*// Поиск по 'user_id'
-        if ($request->filled('user_id')) {
-            // Если user_id — это массив
-            if (is_array($request->user_id)) {
-                $query->whereIn('user_id', $request->user_id);
-            } // Если user_id — это одно значение
-            else {
-                $query->where('user_id', $request->user_id);
-            }
-        }*/
-
         // Поиск по 'authors' или 'user_id'
         if ($request->filled('authors')) {
             $query->whereIn('user_id', $request->authors);
@@ -150,12 +139,12 @@ class RecipeSearchController extends Controller
             }
         }
 
-        // Фильтр по калорийности
+        // Фильтр по калорийности на 100 г готового блюда
         if ($request->filled('min_calories')) {
             $query->whereHas('ingredients', function ($q) use ($request) {
                 $q->select('recipe_id')
                     ->groupBy('recipe_id')
-                    ->havingRaw('SUM(ingredients.calories * ingredient_recipe.quantity) >= ?', [$request->min_calories]);
+                    ->havingRaw('(SUM(ingredients.calories * ingredients.unit_weight * ingredient_recipe.quantity / 100) / SUM(ingredients.unit_weight * ingredient_recipe.quantity)) * 100 >= ?', [$request->min_calories]);
             });
         }
 
@@ -163,7 +152,7 @@ class RecipeSearchController extends Controller
             $query->whereHas('ingredients', function ($q) use ($request) {
                 $q->select('recipe_id')
                     ->groupBy('recipe_id')
-                    ->havingRaw('SUM(ingredients.calories * ingredient_recipe.quantity) <= ?', [$request->max_calories]);
+                    ->havingRaw('(SUM(ingredients.calories * ingredients.unit_weight * ingredient_recipe.quantity / 100) / SUM(ingredients.unit_weight * ingredient_recipe.quantity)) * 100 <= ?', [$request->max_calories]);
             });
         }
 

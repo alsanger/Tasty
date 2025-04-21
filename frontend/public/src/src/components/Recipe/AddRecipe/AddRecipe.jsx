@@ -13,6 +13,7 @@ import {RiDeleteBinLine} from 'react-icons/ri';
 import RecipeStepsForm from '../RecipeStepsForm/RecipeStepsForm';
 import {useUser} from '../../../contexts/UserContext';
 import './AddRecipe.scss';
+import {useNavigate} from "react-router-dom";
 
 const AddRecipe = () => {
     const {user} = useUser();
@@ -36,6 +37,7 @@ const AddRecipe = () => {
     const [recipeImage, setRecipeImage] = useState(null);
     const [recipeImagePreview, setRecipeImagePreview] = useState(null);
     const [showIngredients, setShowIngredients] = useState(false);
+    const navigate = useNavigate();
 
     // Состояние для шагов рецепта
     const [recipeSteps, setRecipeSteps] = useState([]);
@@ -209,6 +211,7 @@ const AddRecipe = () => {
             const response = await createRecipe(formData);
 
             toast.success('Рецепт доданий!');
+            navigate(`/profile/${user.id}`);
 
             // Сбрасываем форму после успешного создания
             setRecipeForm({
@@ -373,8 +376,7 @@ const AddRecipe = () => {
                                         <option value="">Виберіть інгредієнт</option>
                                         {ingredientsList.map(item => (
                                             <option key={item.id} value={item.id}>
-                                                <span className="ingredient-name">{item.name}&nbsp;</span>
-                                                <span className="ingredient-unit">({item.unit?.short_name})</span>
+                                                {item.name} {item.unit?.short_name ? `(${item.unit.short_name})` : ''}
                                             </option>
                                         ))}
                                     </Form.Select>

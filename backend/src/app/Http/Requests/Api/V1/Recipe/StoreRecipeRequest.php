@@ -62,11 +62,11 @@ class StoreRecipeRequest extends FormRequest
                 'required',
                 'exists:ingredients,id',
             ],
-            'ingredients.*.quantity' => [
+           /* 'ingredients.*.quantity' => [
                 'required',
-                'integer',
-                'min:1',
-            ],
+                'numeric',
+                'min:0.01',
+            ],*/
 
             // Правила для шагов приготовления с поддержкой загрузки файлов
             'recipeSteps' => [

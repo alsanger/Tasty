@@ -195,19 +195,25 @@ const Recipe = () => {
         if (!recipe.ingredients || recipe.ingredients.length === 0) return 0;
 
         let totalCalories = 0;
-        let totalWeight = 0;
+        let totalWeightInGrams = 0;
 
         recipe.ingredients.forEach(ingredient => {
-            const calories = parseFloat(ingredient.calories);
-            const quantity = parseFloat(ingredient.quantity);
+            // Расчет веса ингредиента в граммах
+            const weightInGrams = parseFloat(ingredient.unit_weight) * parseFloat(ingredient.quantity);
 
-            if (!isNaN(calories) && !isNaN(quantity)) {
-                totalCalories += calories * quantity;
-                totalWeight += quantity;
+            // Расчет калорий для данного ингредиента
+            const ingredientCalories = (parseFloat(ingredient.calories) * weightInGrams) / 100;
+
+            if (!isNaN(weightInGrams) && !isNaN(ingredientCalories)) {
+                totalCalories += ingredientCalories;
+                totalWeightInGrams += weightInGrams;
             }
         });
+        console.log('Общая калорийность:', totalCalories);
+        console.log('Общий вес в граммах:', totalWeightInGrams);
 
-        return totalWeight > 0 ? Math.round(totalCalories / totalWeight * 100) : 0;
+        // Расчет калорийности на 100г готового продукта
+        return totalWeightInGrams > 0 ? Math.round(totalCalories / totalWeightInGrams * 100) : 0;
     };
 
     const caloriesPer100g = calculateCaloriesPer100g();
