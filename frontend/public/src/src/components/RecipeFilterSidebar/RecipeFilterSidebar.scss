@@ -1,0 +1,196 @@
+// components/RecipeFilterSidebar.scss
+@use "../../styles/variables" as *;
+
+.recipe-filter-sidebar {
+  width: 100%;
+  //font-family: var(--font-family);
+  border: 1px solid $border-color;
+  border-left: none;
+  border-radius: 10px;
+
+  // Переопределяем все горизонтальные линии
+  hr, .divider, .accordion-divider {
+    display: none !important;
+  }
+
+  // Убираем все видимые бордеры внутри контейнера
+  * {
+    &:before, &:after {
+      border-top: none !important;
+      border-bottom: none !important;
+    }
+  }
+
+  // Стили аккордеона
+  .accordion {
+    // Переопределяем правило для стилизации разделителей
+    &:before, &:after {
+      display: none !important;
+    }
+
+    .accordion-item {
+      border: none !important;
+      border-top: none !important;
+      border-bottom: none !important;
+      margin: 0 !important;
+      padding: 0 !important;
+
+      // Убираем отступы, которые могут создавать визуальные разделители
+      &:before, &:after {
+        display: none !important;
+      }
+
+      &:not(:first-child) {
+        margin-top: 0 !important;
+      }
+    }
+
+    .accordion-header {
+      border: none !important;
+
+      &:before, &:after {
+        display: none !important;
+      }
+    }
+
+    .accordion-button {
+      background-color: transparent;
+      padding: 1rem;
+      font-size: 16px;
+      font-weight: 500;
+      font-family: h3, sans-serif;
+      border: none !important;
+      box-shadow: none !important;
+
+      &:focus, &:active, &:hover {
+        box-shadow: none !important;
+        border: none !important;
+      }
+
+      &:not(.collapsed) {
+        color: inherit;
+        background-color: transparent;
+        border: none !important;
+      }
+
+      &::after {
+        background-size: 1rem;
+      }
+    }
+
+    .accordion-collapse {
+      border: none !important;
+
+      &:before, &:after {
+        display: none !important;
+      }
+    }
+
+    .accordion-body {
+      padding: 0 1rem 1rem;
+      border: none !important;
+
+      &:before, &:after {
+        display: none !important;
+      }
+    }
+  }
+
+  .filter-section {
+    margin-bottom: 0.5rem;
+
+    .form-check-input {
+      &:checked {
+        background-color: $primary-color;
+        border-color: $primary-color;
+      }
+      box-shadow: none !important;
+    }
+
+    .ingredients-list,
+    .authors-list,
+    .cuisines-list {
+      max-height: 200px;
+      overflow-y: auto;
+      margin-top: 10px;
+      padding-right: 5px;
+    }
+
+    .form-check {
+      margin-bottom: 0.5rem;
+
+      .form-check-label {
+        color: inherit;
+      }
+    }
+  }
+
+  .calories-inputs {
+    display: flex;
+    align-items: center;
+
+    input[type="number"] {
+      /* Приховуємо стрілки для числового інпуту */
+      -moz-appearance: textfield;
+
+      &::-webkit-outer-spin-button,
+      &::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+    }
+  }
+
+  .difficulty-slider {
+    padding: 0 10px;
+    margin: 20px 0;
+
+    // Полное переопределение стилей слайдера
+    .rc-slider-rail {
+      background-color: #e9e9e9;
+    }
+
+    .rc-slider-track {
+      background-color: $primary-color !important;
+    }
+
+    .rc-slider-handle {
+      border-color: $primary-color !important;
+      background-color: $primary-color !important;
+
+      &:active, &:hover, &:focus {
+        border-color: $primary-color !important;
+        box-shadow: 0 0 5px $primary-color !important;
+      }
+    }
+
+    .rc-slider-dot {
+      border-color: #e9e9e9;
+
+      &.rc-slider-dot-active {
+        border-color: $primary-color !important;
+      }
+    }
+  }
+}
+
+// Глобальное переопределение стилей Bootstrap для этого проекта
+body {
+  // Скрываем все горизонтальные разделители в Bootstrap компонентах
+  .accordion, .accordion-item, .accordion-header, .accordion-button, .accordion-collapse {
+    border-top: none !important;
+    border-bottom: none !important;
+    box-shadow: none !important;
+  }
+
+  // Переопределяем стили для аккордеона Bootstrap
+  .accordion {
+    --bs-accordion-border-width: 0 !important;
+    --bs-accordion-border-color: transparent !important;
+
+    .accordion-item {
+      --bs-accordion-border-width: 0 !important;
+      --bs-accordion-border-color: transparent !important;
+    }
+  }
+}

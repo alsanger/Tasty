@@ -1,0 +1,25 @@
+// Файл components/_common/Input/Input.scss
+@use '../../../styles/variables' as *;
+
+.custom-input {
+  position: relative;
+  width: 100%;
+
+  .form-control {
+    @include form-control-base; // Подключаем общий стиль
+
+    &:hover {
+      border-color: $primary-color;
+    }
+
+    &.error {
+      border-color: $border-error-color; // Красный бордер при ошибке
+    }
+  }
+
+  .text-danger {
+    color: $border-error-color; // Красный текст ошибки
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+  }
+}

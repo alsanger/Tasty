@@ -1,8 +1,10 @@
+// Файл styles/variables.scss:
 // Цвета
 $primary-color: #06A561;
 $secondary-color: #454545;
 $text-color: #333;
-$placeholder-color: #fafafa;
+$text-color-light: #efefef;
+$placeholder-color: #aeaeae;
 $background-color: #efefef;
 $hover-color: #202020;
 
@@ -15,6 +17,7 @@ $button-active-hover-color: #07be6f;
 $button-active-press-color:#068c53;
 
 $border-color: #E6E6E6;
+$border-error-color: #ff0000;
 
 // Радиусы и размеры
 $border-radius: 6px;
@@ -130,6 +133,7 @@ $transition: all 0.2s ease;
   font-size: $font-size-small;
   border-radius: $border-radius-large;
   transition: $transition;
+  background-color: $button-default-color;
 
   &:focus {
     box-shadow: none;

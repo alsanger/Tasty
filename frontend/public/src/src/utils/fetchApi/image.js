@@ -1,27 +1,18 @@
-import { get, uploadFile, remove } from './baseApi';
-import { ENDPOINTS } from '../constants';
-
-// Получение изображений
-export const getImages = async (type, id, recipeStepId = null) => {
-    return await get(ENDPOINTS.IMAGE.GET, {
-        type,
-        id,
-        recipe_step_id: recipeStepId
-    });
-};
+//Файл image.js:
+import {remove, uploadFile} from './baseApi';
+import {ENDPOINTS} from '../constants';
 
 // Загрузка изображения
-export const uploadImage = async (file, type, id, recipeStepId = null) => {
-    const data = {
-        type,
-        id
-    };
+export const uploadImage = async (file, endpoint, id) => {
+    const data = { id };
 
-    if (recipeStepId) {
-        data.recipe_step_id = recipeStepId;
-    }
+    return await uploadFile(endpoint, file, data);
+};
 
-    return await uploadFile(ENDPOINTS.IMAGE.UPLOAD, file, data);
+export const uploadImageForRecipeStep = async (file, endpoint, id, recipe_id) => {
+    const data = { id, recipe_id };
+
+    return await uploadFile(endpoint, file, data);
 };
 
 // Удаление изображения

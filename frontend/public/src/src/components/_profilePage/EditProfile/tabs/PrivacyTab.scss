@@ -1,0 +1,112 @@
+// Файл components/_profilePage/EditProfile/tabs/PrivacyTab.scss
+@use '../../../../styles/variables.scss' as *;
+
+.privacy-tab {
+  // Увеличиваем размер шрифта для всего компонента
+  font-size: 15px;
+
+  h3 {
+    font-size: 22px;
+  }
+
+  .privacy-section {
+    margin-bottom: 30px;
+
+    h4 {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 15px;
+    }
+
+    .privacy-option {
+      display: flex;
+      justify-content: space-between;
+      align-items: center; // Центрирование по вертикали
+
+      .privacy-option-text {
+        flex: 1;
+        padding-right: 20px;
+
+        p {
+          margin-bottom: 5px;
+          font-size: 15px;
+          color: $text-color;
+        }
+
+        .sub-description {
+          font-size: 14px;
+          color: $placeholder-color;
+        }
+      }
+
+      // Стилизация переключателей (тумблеров)
+      .form-check {
+        margin-right: 10px;
+      }
+
+      .form-check-input {
+        width: 40px;  // Увеличиваем размер переключателя
+        height: 22px; // Увеличиваем высоту
+        border-radius: 20px;
+        background-color: #e9ecef;
+        border: 1px solid #ced4da;
+
+        &:checked {
+          background-color: $primary-color;
+          border-color: $primary-color;
+        }
+
+        &:focus {
+          box-shadow: none;
+          border-color: $primary-color;
+        }
+      }
+    }
+
+    // Стилизация радио-кнопок
+    .mentions-options {
+      .mentions-label {
+        font-weight: 500;
+        margin-bottom: 8px;
+        font-size: 16px;
+      }
+
+      .mentions-description {
+        font-size: 15px;
+        color: $text-color;
+        margin-bottom: 12px;
+      }
+
+      .radio-options {
+        margin-top: 15px;
+
+        .custom-radio {
+          margin-bottom: 12px;
+          display: flex;
+          align-items: center;
+
+          .form-check-input {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+
+            &:checked {
+              background-color: $primary-color;
+              border-color: $primary-color;
+            }
+
+            &:focus {
+              box-shadow: none;
+              border-color: $primary-color;
+            }
+          }
+
+          .form-check-label {
+            font-size: 15px;
+            color: $text-color;
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,10 +1,11 @@
+// Файл utils/fetchApi/userApi.js
 import {get, post, put, remove} from './baseApi.js';
 import {ENDPOINTS} from '../constants.js';
 
 // CRUD операции
 // Создание пользователя (уже есть в примере как register)
 export const register = async (userData) => {
-    return post(ENDPOINTS.REGISTER, userData);
+    return await post(ENDPOINTS.REGISTER, userData);
 };
 
 // Получение списка пользователей
@@ -19,12 +20,12 @@ export const getUserById = async (userId) => {
 
 // Обновление пользователя
 export const updateUser = async (userId, userData) => {
-    return put(ENDPOINTS.USER_DETAIL(userId), userData);
+    return put(ENDPOINTS.USER_UPDATE(userId), userData);
 };
 
 // Удаление пользователя
 export const deleteUser = async (userId) => {
-    return remove(ENDPOINTS.USER_DETAIL(userId));
+    return remove(ENDPOINTS.USER_DELETE(userId));
 };
 
 // Дополнительные методы, связанные с пользователем
@@ -35,8 +36,20 @@ export const login = async (credentials) => {
 
 // Выход из системы
 export const logout = async () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
+    try {
+        // Отправляем POST запрос на выход
+        await post(ENDPOINTS.LOGOUT, {});
+
+        // Очищаем локальное хранилище
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+    } catch (error) {
+        console.error('Ошибка при выходе:', error);
+        // В любом случае очищаем хранилище
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        throw error;
+    }
 };
 
 // Получение ролей пользователя

@@ -1,0 +1,89 @@
+// Файл components/_profilePage/ProfileHeader/ProfileHeader.scss
+.profile-header {
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+
+  .profile-background {
+    width: 100%;
+    height: 230px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+    border-radius: 8px;
+  }
+
+  .profile-content {
+    position: relative;
+    margin-top: -80px;
+    padding-bottom: 20px;
+  }
+
+  .avatar-container {
+    margin-bottom: 15px;
+
+    .profile-avatar {
+      width: 105px;
+      height: 105px;
+      border: 4px solid white;
+      object-fit: cover;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .default-avatar-container {
+      display: inline-block;
+      width: 105px;
+      height: 105px;
+      border-radius: 50%;
+      background-color: #f0f0f0;
+      border: 4px solid white;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+
+      .profile-avatar {
+        width: 100%;
+        height: 100%;
+        color: #a1a1a1;
+      }
+    }
+  }
+
+  .profile-info {
+    text-align: center;
+
+    .profile-name {
+      font-size: 18px;
+      margin-bottom: 5px;
+    }
+
+    .display-name {
+      color: #a1a1a1;
+      margin-bottom: 10px;
+    }
+
+    .followers-section {
+      margin-bottom: 15px;
+      align-items: center;
+
+      .follow-link {
+        cursor: pointer;
+        font-weight: 200;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+
+      .separator {
+        margin: 0 8px;
+        color: #999;
+      }
+    }
+  }
+
+  .custom-button {
+    min-width: 180px;
+    border-radius: 20px;
+  }
+}

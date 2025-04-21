@@ -1,26 +1,6 @@
 version: "3.8"
 
 services:
-  tasty.redis:
-    image: redis:latest
-    container_name: tasty.redis
-    restart: always
-    ports:
-      - "6379:6379"
-    networks:
-      - tasty_network
-
-  tasty.admin:
-    image: karasovvvvvv2/tasty-admin:latest
-    build:
-      context: frontend/admin
-      dockerfile: Dockerfile
-    container_name: tasty.admin
-    ports:
-      - "5173:5173"
-    networks:
-      - tasty_network
-
   tasty.public:
     image: karasovvvvvv2/tasty-public:latest
     build:
@@ -42,8 +22,6 @@ services:
       - "8000:8000"
     volumes:
       - ./backend/storage/app/public:/app/storage
-    depends_on:
-      - tasty.redis
     networks:
       - tasty_network
 
@@ -69,7 +47,6 @@ services:
     depends_on:
       - tasty.api
       - tasty.queue
-      - tasty.admin
       - tasty.public
     networks:
       - tasty_network

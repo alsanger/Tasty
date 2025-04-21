@@ -1,0 +1,111 @@
+// Файл components/_profilePage/EditProfile/tabs/AccountTab.scss
+@use '../../../../styles/variables.scss' as *;
+
+.account-tab {
+  .account-info-form {
+    .form-label {
+      font-weight: 500;
+      margin-bottom: 5px;
+    }
+
+    .form-control {
+      background-color: #fff !important;
+      border: 1px solid $border-color;
+      border-radius: $border-radius;
+      height: 38px;
+      padding: 8px 12px;
+      transition: $transition;
+
+      &:focus {
+        box-shadow: none;
+        border-color: $primary-color;
+      }
+
+      &.error {
+        border-color: $border-error-color;
+      }
+
+      &::placeholder {
+        color: $placeholder-color;
+      }
+    }
+
+    .readonly-input {
+      background-color: #F7F7F7 !important;
+      cursor: not-allowed;
+    }
+
+    .password-field, .date-field {
+      position: relative;
+
+      .password-input-container, .date-input-container {
+        position: relative;
+        display: flex;
+        align-items: center;
+      }
+
+      .password-toggle, .date-icon {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        color: $placeholder-color;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &:hover {
+          color: $primary-color;
+        }
+      }
+
+      .date-icon {
+        pointer-events: none;
+      }
+    }
+
+    .text-danger {
+      color: $border-error-color;
+      font-size: 0.875rem;
+      margin-top: 0.25rem;
+    }
+
+    .section-divider {
+      margin-top: 30px;
+      padding-top: 20px;
+
+      h4 {
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 8px;
+      }
+
+      p {
+        color: $text-color;
+        font-size: 14px;
+        margin-bottom: 0;
+      }
+
+      .button-col {
+        display: flex;
+        align-items: center;
+      }
+
+      .custom-button {
+        border-radius: 20px !important;
+      }
+
+      &.delete-account {
+        .delete-button {
+          color: $border-error-color;
+          border-color: $border-error-color;
+
+          &:hover {
+            background-color: rgba($border-error-color, 0.05);
+          }
+        }
+      }
+    }
+  }
+}

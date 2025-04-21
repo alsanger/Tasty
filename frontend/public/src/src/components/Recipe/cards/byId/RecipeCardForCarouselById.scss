@@ -1,0 +1,141 @@
+// Файл components/Recipe/cards/RecipeCardForCarouselById.scss
+@use '../../../../styles/variables' as *;
+
+.recipe-card-horizontal-container {
+  width: 200px; // Фиксированная ширина
+  height: 350px; // Фиксированная высота
+
+  .recipe-card-horizontal {
+    width: 100%;
+    height: 100%;
+    border: none;
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s ease;
+
+    &:hover {
+      transform: scale(1.02);
+    }
+
+    // Контейнер для изображения
+    .recipe-image-container {
+      position: relative;
+      width: 100%;
+      // Задаем высоту для картинки, оставляя место для остального контента
+      height: 65%; // Примерно 65% высоты для изображения
+
+      .recipe-image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+      }
+
+      // Кнопка "Избранное" с сердечком
+      .favorite-button {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background-color: rgba(255, 255, 255, 0.7);
+        border-radius: 50%;
+        width: 36px;
+        height: 36px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        z-index: 2;
+
+        .favorite-icon {
+          font-size: 20px;
+          color: $primary-color;
+        }
+      }
+    }
+
+    // Блок с информацией о рецепте
+    .recipe-details {
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+      height: 35%;
+
+      // Название рецепта
+      .recipe-name {
+        margin-bottom: 6px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        height: 20px;
+      }
+
+      // Список ингредиентов
+      .recipe-ingredients {
+        font-size: 13px;
+        color: #666;
+        margin-bottom: 8px;
+        display: -webkit-box;
+        -webkit-line-clamp: 2; // Ограничение в две строки
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        line-height: 1.3;
+        height: 34px; // Фиксированная высота для двух строк
+      }
+
+      // Нижняя часть карточки с временем и рейтингом
+      .recipe-footer {
+        margin-top: auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        // Блок с временем приготовления
+        .recipe-time {
+          display: flex;
+          align-items: center;
+          font-size: 13px;
+          color: #666;
+
+          .time-icon {
+            margin-right: 4px;
+            font-size: 15px;
+          }
+        }
+
+        // Блок с рейтингом
+        .recipe-rating {
+          display: flex;
+          align-items: center;
+
+          .stars {
+            display: flex;
+            margin-right: 4px;
+
+            .star-filled {
+              color: #FFD700; // Золотой цвет для заполненных звезд
+              font-size: 13px;
+            }
+
+            .star-empty {
+              color: #D3D3D3; // Светло-серый цвет для пустых звезд
+              font-size: 13px;
+            }
+          }
+
+          .reviews-count {
+            font-size: 13px;
+            color: #666;
+          }
+        }
+      }
+    }
+  }
+}

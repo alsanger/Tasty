@@ -1,0 +1,49 @@
+// Файл Category.scss
+.category-item {
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  display: block;
+  width: 100%;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+}
+
+.category-card {
+  border: none;
+  border-radius: 8px;
+  overflow: hidden;
+  text-align: center;
+  background: white;
+}
+
+.category-image-container {
+  height: 110px;
+  width: 100px;
+  margin: 0 auto;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  padding: 0;              // Влияет на размер картинки
+}
+
+.category-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.category-body {
+  padding: 10px;
+}
+
+.category-title {
+  font-size: 16px;
+  margin-top: 10px;
+  font-weight: 500;
+  color: #333;
+}

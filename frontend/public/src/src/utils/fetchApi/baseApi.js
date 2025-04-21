@@ -1,5 +1,6 @@
-// baseApi.js
+// Файл utils/fetchApi/baseApi.js:
 import { API_BASE_URL } from '../constants';
+import axios from 'axios';
 
 // Функция для формирования заголовков запроса
 const getHeaders = (contentType = 'application/json') => {
@@ -45,7 +46,20 @@ export const get = async (endpoint, params = {}) => {
 // POST запрос
 export const post = async (endpoint, data, isFormData = false) => {
     try {
-        const headers = isFormData ? getHeaders(undefined) : getHeaders();
+        let headers = {};
+
+        if (isFormData) {
+            // Для FormData не указываем Content-Type,
+            // чтобы браузер сам установил правильный заголовок с boundary
+            const token = localStorage.getItem('token');
+            if (token) {
+                headers['Authorization'] = `Bearer ${token}`;
+            }
+        } else {
+            // Для обычных JSON-запросов используем стандартные заголовки
+            headers = getHeaders();
+        }
+
         const body = isFormData ? data : JSON.stringify(data);
 
         const response = await fetch(`${API_BASE_URL}${endpoint}`, {
@@ -53,6 +67,7 @@ export const post = async (endpoint, data, isFormData = false) => {
             headers: headers,
             body: body,
         });
+        console.log('POST', response);
 
         const responseData = await response.json();
 
@@ -121,15 +136,30 @@ export const remove = async (endpoint, data = null) => {
 
 // Специальный метод для загрузки файлов
 export const uploadFile = async (endpoint, file, data = {}) => {
-    const formData = new FormData();
-    formData.append('image', file);
+    try {
+        const formData = new FormData();
+        formData.append('image', file);
 
-    // Добавляем остальные данные в formData
-    Object.keys(data).forEach(key => {
-        if (data[key] !== null && data[key] !== undefined) {
-            formData.append(key, data[key]);
-        }
-    });
+        // Добавляем остальные данные в formData
+        Object.keys(data).forEach(key => {
+            if (data[key] !== null && data[key] !== undefined) {
+                formData.append(key, data[key]);
+            }
+        });
 
-    return post(endpoint, formData, true);
+        // Получаем токен из localStorage
+        const token = localStorage.getItem('token');
+
+        const response = await axios.post(`${API_BASE_URL}${endpoint}`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+        return response.data;
+    } catch (error) {
+        console.error('Ошибка при загрузке файла:', error);
+        throw new Error(error.response?.data?.message || `Ошибка: ${error.response?.status}`);
+    }
 };

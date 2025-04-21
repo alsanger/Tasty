@@ -1,0 +1,66 @@
+// Файл Footer.scss:
+@use '../../styles/variables' as *;
+
+.site-footer {
+  width: 100%;
+  padding: 20px 10px;
+  background-color: $primary-color;
+  color: white;
+  margin-top: auto;
+
+  .footer-content {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin: 0 auto;
+    padding: 0 15px;
+  }
+
+  .logo-container {
+    flex-shrink: 0;
+    width: auto;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+
+    img {
+      height: 44px;
+      width: auto;
+      filter: brightness(0) invert(1);
+    }
+
+    .copyright {
+      font-size: 14px;
+      white-space: nowrap; /* Запрещаем перенос текста на новую строку */
+      margin: auto 25px;
+    }
+  }
+
+  .links-container {
+    flex-grow: 1;
+    display: flex;
+    gap: 20px;
+
+    .footer-link {
+      color: white;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .social-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding-right: 15px;
+
+    .social-icon {
+      color: white;
+      font-size: 24px;
+    }
+  }
+}

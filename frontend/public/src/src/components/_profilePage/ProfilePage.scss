@@ -1,0 +1,18 @@
+// Файл components/_profilePage/ProfilePage.scss
+.profile-page-container {
+  padding: 0;
+  margin-top: 20px;
+  margin-bottom: 50px;
+
+  .loading-container, .error-container {
+    min-height: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .spinner-border {
+    width: 3rem;
+    height: 3rem;
+  }
+}

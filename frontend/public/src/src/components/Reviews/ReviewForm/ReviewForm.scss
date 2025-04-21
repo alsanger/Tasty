@@ -1,0 +1,72 @@
+// Файл components/Reviews/ReviewsForm/ReviewForm.scss
+@use '../../../styles/variables.scss' as *;
+@use "sass:color";
+
+.review-form {
+  width: 49%;
+
+  .star-rating {
+    display: flex;
+    margin-bottom: 15px;
+
+    .star-icon {
+      cursor: pointer;
+      margin-right: 5px;
+      transition: color 0.2s ease;
+
+      &:hover {
+        transform: scale(1.1);
+      }
+    }
+  }
+
+  h3 {
+    color: $text-color;
+    margin-bottom: 15px;
+    font-weight: 600;
+  }
+
+  .review-input-form {
+    .review-input-group {
+      position: relative;
+
+      .review-textarea {
+        resize: none;
+        min-height: 100px;
+        border-radius: 12px;
+        border-color: $border-color;
+        padding-right: 50px;
+        background-color: #f5f5f5; // Светло-серый фон
+        color: #6c757d; // Серый цвет текста до активации
+
+        &::placeholder {
+          color: #a0a0a0; // Цвет placeholder
+        }
+
+        &:focus {
+          background-color: white;
+          border-color: $primary-color;
+          box-shadow: none; // Убираем тень
+          color: $text-color; // Возвращаем стандартный цвет текста при активации
+        }
+      }
+
+      .send-review-btn {
+        position: absolute;
+        right: 10px;
+        bottom: 10px;
+        background: none;
+        border: none;
+
+        svg {
+          color: $primary-color;
+          transition: color 0.3s ease;
+
+          &:hover {
+            color: color.scale($primary-color, $lightness: -10%);
+          }
+        }
+      }
+    }
+  }
+}

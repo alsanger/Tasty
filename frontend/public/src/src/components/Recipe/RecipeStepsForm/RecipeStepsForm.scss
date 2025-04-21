@@ -1,0 +1,74 @@
+// Файл src/components/recipe/RecipeStepsForm.scss
+@use '../../../styles/variables.scss' as *;
+
+.recipe-steps-form {
+
+  .recipe-step-item {
+    margin-bottom: 1.5rem;
+
+    .step-description {
+      position: relative;
+
+      .form-control {
+        @include form-control-base;
+        padding-right: 30px;
+      }
+
+      .remove-step-btn {
+        position: absolute;
+        right: 5px;
+        top: 35px;
+        color: #dc3545;
+        padding: 5px;
+
+        &:hover {
+          color: #AF2A37FF;
+        }
+      }
+    }
+
+    .step-image-wrapper {
+      width: 100%;
+      height: 200px;
+      border: 1px solid $border-color;
+      border-radius: 8px;
+      overflow: hidden;
+
+      .step-image-label {
+        display: block;
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
+
+        .step-image-placeholder {
+          width: 100%;
+          height: 100%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background-color: #f8f9fa;
+          color: $placeholder-color;
+        }
+
+        .step-image-preview {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+      }
+    }
+  }
+
+  .add-step {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+
+    > * {
+      width: 180px;
+      flex: 0 0 auto;
+      min-width: 0;
+    }
+  }
+}

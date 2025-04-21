@@ -1,3 +1,4 @@
+// Файл main.scss:
 @use 'variables' as *;
 @use "sass:color";
 
@@ -5,7 +6,6 @@ body {
   margin: 0;
   padding: 0;
   font-family: 'Raleway', 'Arial', sans-serif;
-  background-color: #f8f9fa;
 }
 
 .app {

@@ -1,0 +1,147 @@
+// components/Recipe/RecipeWithIngredients.scss
+@use "../../styles/variables.scss" as *;
+
+.recipe-container {
+  margin: 30px 20px;
+  padding: 0;
+}
+
+// Стилизация левой колонки с изображением рецепта
+.recipe-image-col {
+  position: relative;
+  padding: 0;
+
+  .image-container {
+    position: relative;
+
+    img {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+      border-radius: 20px;
+    }
+
+    .favorite-btn {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      z-index: 10;
+
+      .heart-icon {
+        font-size: 35px;
+        color: $primary-color;
+
+        &.filled {
+          fill: $primary-color;
+        }
+      }
+    }
+  }
+}
+
+// Стилизация правой колонки с информацией о рецепте
+.recipe-info-col {
+  padding: 0 2rem;
+
+  .recipe-info {
+    position: sticky;
+    top: 0;
+    padding: 0;
+  }
+}
+
+// Стилизация заголовка рецепта
+.recipe-title {
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+
+  // Тут можно добавить свои настройки шрифта:
+  // font-size: 2.5rem;
+  // line-height: 1.2;
+  // font-family: 'Your Font', sans-serif;
+  // color: #333;
+}
+
+.recipe-description {
+  margin-bottom: 2rem;
+  line-height: 1.6;
+  font-size: 1rem;
+}
+
+// Стилизация секции ингредиентов
+.ingredients-title {
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+}
+
+.ingredients-list {
+  list-style-type: none;
+  padding: 0;
+  margin-bottom: 2rem;
+}
+
+.ingredient-item {
+  display: flex;
+  align-items: baseline;
+  margin-bottom: 0.5rem;
+
+  .ingredient-name {
+    flex-shrink: 0;
+  }
+
+  .ingredient-dots {
+    flex-grow: 1;
+    margin: 0 0.5rem;
+    border-bottom: 1px dotted #ccc;
+  }
+
+  .ingredient-quantity {
+    flex-shrink: 0;
+    text-align: right;
+  }
+}
+
+// Метаинформация про рецепт
+.recipe-meta {
+  .recipe-time, .recipe-calories {
+    margin-bottom: 0.5rem;
+  }
+
+  .recipe-rating {
+    display: flex;
+    align-items: center;
+    margin-top: 1rem;
+
+    .review-count {
+      margin-right: 0.5rem;
+    }
+
+    .message-icon {
+      margin-right: 0.75rem;
+    }
+
+    .rating-stars {
+      display: flex;
+
+      .star-icon {
+        color: #FFD700;
+        margin-right: 0.25rem;
+      }
+    }
+  }
+}
+
+// Медиа запросы для адаптивности
+@media (max-width: 768px) {
+  .recipe-info-col {
+    padding: 0 1rem;
+
+    .recipe-info {
+      position: relative;
+      top: auto;
+    }
+  }
+}

@@ -1,0 +1,185 @@
+// Файл components/_common/Button/Button.scss
+@use '../../../styles/variables' as *;
+
+.custom-button {
+  @include button-base;
+
+  // Добавляем для всех кнопок базовые стили flexbox
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+
+  // Дефолтные цвета для неактивной кнопки
+  --button-default-color: #{$button-default-color};
+  --button-hover-color: #{$button-hover-color};
+  --button-active-color: #{$button-active-color};
+
+  // Дефолтные цвета для активной кнопки
+  --button-active-default-color: #{$button-active-default-color};
+  --button-active-hover-color: #{$button-active-hover-color};
+  --button-active-press-color: #{$button-active-press-color};
+
+  // Цвет бордера
+  --button-border-color: #{$border-color};
+
+  background-color: var(--button-default-color) !important;
+  border: 1px solid var(--button-border-color) !important; // Добавляем бордер
+  color: $text-color !important;
+
+  &:not(.header-icon-button) {
+    &:hover, &:focus {
+      background-color: var(--button-hover-color) !important;
+      border-color: var(--button-hover-color) !important; // Изменяем цвет бордера при наведении
+      /*color: white !important;*/
+      box-shadow: none;
+    }
+
+    &:active {
+      background-color: var(--button-active-color) !important;
+      border-color: var(--button-active-color) !important; // Изменяем цвет бордера при активации
+      /*color: white !important;*/
+    }
+
+    &.active {
+      background-color: var(--button-active-default-color) !important;
+      border-color: var(--button-active-default-color) !important; // Изменяем цвет бордера для активной кнопки
+      color: white !important;
+
+      &:hover {
+        background-color: var(--button-active-hover-color) !important;
+        border-color: var(--button-active-hover-color) !important; // Изменяем цвет бордера при наведении на активную кнопку
+      }
+
+      &:active {
+        background-color: var(--button-active-press-color) !important;
+        border-color: var(--button-active-press-color) !important; // Изменяем цвет бордера при активации активной кнопки
+      }
+    }
+
+    &.icon-only {
+      @include button-icon;
+      border: 1px solid var(--button-border-color) !important; // Бордер для icon-only
+
+      // Явно устанавливаем размеры
+      width: 38px;
+      height: 38px;
+      padding: 0;
+
+      &:hover {
+        border-color: var(--button-hover-color) !important; // Изменяем цвет бордера при наведении
+      }
+
+      &:active {
+        border-color: var(--button-active-color) !important; // Изменяем цвет бордера при активации
+      }
+
+      &.active {
+        border-color: var(--button-active-default-color) !important; // Бордер для активной icon-only
+
+        &:hover {
+          border-color: var(--button-active-hover-color) !important; // Изменяем цвет бордера при наведении на активную icon-only
+        }
+
+        &:active {
+          border-color: var(--button-active-press-color) !important; // Изменяем цвет бордера при активации активной icon-only
+        }
+      }
+    }
+  }
+
+  &.header-icon-button {
+    color: $secondary-color;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    background-color: transparent !important;
+    border: none !important; // Убираем бордер для header-icon-button
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+      color: var(--button-hover-color);
+      background-color: transparent !important;
+    }
+
+    &:active {
+      color: var(--button-active-color);
+    }
+
+    &.active {
+      color: var(--button-active-default-color);
+
+      &:hover {
+        color: var(--button-active-hover-color);
+      }
+
+      &:active {
+        color: var(--button-active-press-color);
+      }
+    }
+
+    .button-icon {
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  .button-icon {
+    transition: inherit;
+    width: $icon-size;
+    height: $icon-size;
+    vertical-align: middle;
+  }
+
+  .button-text {
+    white-space: nowrap;
+    vertical-align: middle;
+    display: inline;
+    margin-left: 4px;
+  }
+
+  &.avatar-button {
+    @include button-icon;
+    overflow: hidden;
+    padding: 0;
+    width: 38px;
+    height: 38px;
+    border-radius: 50% !important;
+    border: 1px solid $primary-color !important;
+    background-color: transparent !important;
+
+    // Сделаем плавный переход для бордера
+    transition: border-width 0.2s ease-in-out;
+
+    &:hover, &:focus {
+      border-width: 2px !important;
+      background-color: transparent !important;
+    }
+
+    &:active {
+      background-color: transparent !important;
+    }
+
+    // Убираем изменение цветов для активного состояния
+    &.active {
+      background-color: transparent !important;
+
+      &:hover, &:focus {
+        background-color: transparent !important;
+      }
+
+      &:active {
+        background-color: transparent !important;
+      }
+    }
+
+    .avatar-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+  }
+}

@@ -1,0 +1,59 @@
+// components/Recipe/RecipeSteps/RecipeSteps.scss
+@use "../../../styles/variables.scss" as *;
+
+.recipe-steps {
+  // Основной контейнер для всех шагов рецепта
+  margin-bottom: 20px;
+}
+
+.recipe-step-item {
+  // Контейнер для одного шага рецепта
+  margin-bottom: 15px;
+}
+
+.recipe-step-content {
+  // Блок с номером шага и его описанием
+  display: flex;
+  position: relative;
+  background-color: $button-default-color; // Фон блока с описанием шага
+  border-radius: 20px; // Закругленные углы
+  padding: 15px 15px 15px 60px; // Отступ слева для номера шага
+  margin-bottom: 10px;
+}
+
+.recipe-step-number {
+  // Круг с номером шага
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 30px;
+  height: 30px;
+  border: 1px solid $primary-color; // Рамка круга с цветом primary
+  border-radius: 50%; // Круглая форма
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $primary-color; // Цвет текста номера шага
+  background-color: transparent; // Прозрачный фон
+}
+
+.recipe-step-description {
+  // Текст описания шага
+  font-size: 16px;
+  line-height: 1.5;
+  text-align: justify;
+}
+
+.recipe-step-image {
+  // Контейнер для изображения шага
+  margin-top: 10px;
+  text-align: center;
+
+  img {
+    // Изображение шага
+    border-radius: 20px; // Закругленные углы
+    max-width: 100%; // Максимальная ширина - 100% контейнера
+    height: auto; // Автоматическая высота для сохранения пропорций
+  }
+}
