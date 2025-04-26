@@ -7,12 +7,15 @@ use App\Http\Requests\Api\V1\User\CustomEmailVerificationRequest;
 use App\Jobs\SendVerificationEmailJob;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class EmailVerificationController extends Controller
 {
     // Проверка статуса верификации
     public function notice(Request $request)
     {
+        Log::info("В методе notice - EmailVerificationController");
+
         $request->validate([
             'email' => 'required|email'
         ]);
@@ -41,6 +44,7 @@ class EmailVerificationController extends Controller
     // Верификация email
     public function verify(CustomEmailVerificationRequest $request)
     {
+        Log::info("В методе verify - EmailVerificationController");
         $request->fulfill();
 
         $user = $request->resolveUser();
@@ -55,6 +59,8 @@ class EmailVerificationController extends Controller
     // Отправка ссылки для верификации email
     public function sendVerificationEmail(Request $request)
     {
+        Log::info("В методе sendVerificationEmail - EmailVerificationController");
+
         $request->validate([
             'email' => 'required|email'
         ]);

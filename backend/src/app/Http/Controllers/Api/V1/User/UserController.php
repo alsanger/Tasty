@@ -63,8 +63,8 @@ class UserController extends Controller
         }
 
         // Запускаем событие регистрации (для отправки письма с верификацией)
+        Log::info('Отправка события Registered из UserController для пользователя: ' . $user->email);
         event(new Registered($user));
-        //dispatch(new SendWelcomeEmailJob($user));
 
         // Создаем токен для пользователя
         $tokenName = $user->email . " API Token";

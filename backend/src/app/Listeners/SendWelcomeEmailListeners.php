@@ -2,8 +2,6 @@
 
 namespace App\Listeners;
 
-namespace App\Listeners;
-
 use App\Events\UserRegisteredEvent;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
@@ -19,7 +17,8 @@ class SendWelcomeEmailListeners implements ShouldQueue
 
     public function handle(UserRegisteredEvent $event)
     {
-        event(new Registered($event->user));
+        //event(new Registered($event->user));
+        Log::info('Отправка приветственного письма для пользователя: ' . $event->user->email);
     }
 
     public function failed(UserRegisteredEvent $event, \Throwable $exception)
